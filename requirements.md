@@ -3,6 +3,9 @@
 WHEN a user runs policy_writer/main.py
 THE SYSTEM SHALL produce cybersecurity policies for 20 sample companies compliant with their specificied compliance frameworks by prompting various Ai's with a standard prompt via the litellm python sdk
 
+WHEN a user runs policy_writer/main.py
+THE SYSTEM SHALL place the created policies into a subfolder under results, context, short prompt results accordingly, within a subfolder of the name of the LLM being tested, and accordingly for its long prompt attempt
+
 WHEN a user runs policy_evaluator/main.py
 THE SYSTEM SHALL validate the generated policies from policy_writer for completeness and adherence to the specified standards.
 

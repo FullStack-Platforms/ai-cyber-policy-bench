@@ -2,15 +2,15 @@ catalog:
   uuid: 8f951563-795a-4654-a745-f867493a3c69
   metadata:
     title: Cybersecurity Maturity Model Certification (CMMC) Assessment Guide - Level 1
-    published: '2024-09-01T00:00:00Z'
-    last-modified: '2025-07-26T15:22:40PDT'
-    version: '2.13'
+    published: "2024-09-01T00:00:00Z"
+    last-modified: "2025-07-26T15:22:40-07:00"
+    version: "2.13"
     oscal-version: 1.1.2
     remarks: |
-      [cite_start]The contents of this document do not have the force and effect of law and are not meant to bind the public in any way. [cite: 9]
-      [cite_start]This document is intended only to provide clarity to the public regarding existing requirements under the law or departmental policies. [cite: 10]
-      [cite_start][DISTRIBUTION STATEMENT A] Approved for public release. [cite: 11]
-      [cite_start]Copyright 2024 DEPARTMENT OF DEFENSE CHIEF INFORMATION OFFICER [cite: 3, 6]
+      The contents of this document do not have the force and effect of law and are not meant to bind the public in any way.
+      This document is intended only to provide clarity to the public regarding existing requirements under the law or departmental policies.
+      [DISTRIBUTION STATEMENT A] Approved for public release.
+      Copyright 2024 DEPARTMENT OF DEFENSE CHIEF INFORMATION OFFICER
   groups:
     - id: ac
       uuid: 2a2d48d3-4a16-434a-91d1-13755494d935
@@ -22,119 +22,119 @@ catalog:
           parts:
             - name: statement
               prose: |
-                [cite_start]Limit information system access to authorized users, processes acting on behalf of authorized users, or devices (including other information systems). [cite: 216]
+                Limit information system access to authorized users, processes acting on behalf of authorized users, or devices (including other information systems).
             - name: guidance
-              prose: 'Determine if:'
+              prose: "Determine if:"
               parts:
                 - name: objective-a
-                  [cite_start]prose: authorized users are identified; [cite: 220]
+                  prose: authorized users are identified;
                 - name: objective-b
-                  [cite_start]prose: processes acting on behalf of authorized users are identified; [cite: 222]
+                  prose: processes acting on behalf of authorized users are identified;
                 - name: objective-c
-                  [cite_start]prose: devices (and other systems) authorized to connect to the system are identified; [cite: 224]
+                  prose: devices (and other systems) authorized to connect to the system are identified;
                 - name: objective-d
-                  [cite_start]prose: system access is limited to authorized users; [cite: 225]
+                  prose: system access is limited to authorized users;
                 - name: objective-e
-                  [cite_start]prose: system access is limited to processes acting on behalf of authorized users; [cite: 227]
+                  prose: system access is limited to processes acting on behalf of authorized users;
                 - name: objective-f
-                  [cite_start]prose: system access is limited to authorized devices (including other systems). [cite: 229]
+                  prose: system access is limited to authorized devices (including other systems).
             - name: overview
               prose: |
                 **Discussion [NIST SP 800-171 REV. 2]:**
-                [cite_start]Access control policies (e.g., identity or role-based policies, control matrices, and cryptography) control access between active entities or subjects (i.e., users or processes acting on behalf of users) and passive entities or objects (e.g., devices, files, records, and domains) in systems. [cite: 248] [cite_start]Access enforcement mechanisms can be employed at the application and service level to provide increased information security. [cite: 249] [cite_start]Other systems include systems internal and external to the organization. [cite: 250] [cite_start]This requirement focuses on account management for systems and applications. [cite: 250] [cite_start]The definition of and enforcement of access authorizations, other than those determined by account type (e.g., privileged verses non-privileged) are addressed in [AC.L1-b.1.ii](#ac_l1_b_1_ii). [cite: 251]
+                Access control policies (e.g., identity or role-based policies, control matrices, and cryptography) control access between active entities or subjects (i.e., users or processes acting on behalf of users) and passive entities or objects (e.g., devices, files, records, and domains) in systems. Access enforcement mechanisms can be employed at the application and service level to provide increased information security. Other systems include systems internal and external to the organization. This requirement focuses on account management for systems and applications. The definition of and enforcement of access authorizations, other than those determined by account type (e.g., privileged verses non-privileged) are addressed in AC.L1-b.1.ii.
 
                 **Further Discussion:**
-                [cite_start]Identify users, processes, and devices that are allowed to use company computers and can log on to the company network. [cite: 253] [cite_start]Automated updates and other automatic processes should be associated with the user who initiated (authorized) the process. [cite: 254] [cite_start]Limit the devices (e.g., printers) that can be accessed by company computers. [cite: 255] [cite_start]Set up your system so that only authorized users, processes, and devices can access the company network. [cite: 256] [cite_start]This requirement, AC.L1-b.1.i, controls system access based on user, process, or device identity. [cite: 257] [cite_start]AC.L1-b.1.i leverages [IA.L1-b.1.v](#ia_l1_b_1_v) which provides a vetted and trusted identity for access control. [cite: 258]
+                Identify users, processes, and devices that are allowed to use company computers and can log on to the company network. Automated updates and other automatic processes should be associated with the user who initiated (authorized) the process. Limit the devices (e.g., printers) that can be accessed by company computers. Set up your system so that only authorized users, processes, and devices can access the company network. This requirement, AC.L1-b.1.i, controls system access based on user, process, or device identity. AC.L1-b.1.i leverages IA.L1-b.1.v which provides a vetted and trusted identity for access control.
 
                 **Key References:**
-                - [cite_start]FAR Clause 52.204-21 b.1.i [cite: 274]
-                - [cite_start]NIST SP 800-171 Rev. 2 3.1.1 [cite: 275]
+                - FAR Clause 52.204-21 b.1.i
+                - NIST SP 800-171 Rev. 2 3.1.1
         - id: ac_l1_b_1_ii
           uuid: d2a1c0d5-5d4c-4a37-9755-9a86a63520e7
           title: Transaction & Function Control [FCI Data]
           parts:
             - name: statement
-              [cite_start]prose: Limit information system access to the types of transactions and functions that authorized users are permitted to execute. [cite: 280, 281]
+              prose: Limit information system access to the types of transactions and functions that authorized users are permitted to execute.
             - name: guidance
-              prose: 'Determine if:'
+              prose: "Determine if:"
               parts:
                 - name: objective-a
-                  [cite_start]prose: the types of transactions and functions that authorized users are permitted to execute are defined; and [cite: 284]
+                  prose: the types of transactions and functions that authorized users are permitted to execute are defined; and
                 - name: objective-b
-                  [cite_start]prose: system access is limited to the defined types of transactions and functions for authorized users. [cite: 285]
+                  prose: system access is limited to the defined types of transactions and functions for authorized users.
             - name: overview
               prose: |
                 **Discussion [NIST SP 800-171 REV. 2]:**
-                [cite_start]Organizations may choose to define access privileges or other attributes by account, by type of account, or a combination of both. [cite: 296] [cite_start]System account types include individual, shared, group, system, anonymous, guest, emergency, developer, manufacturer, vendor, and temporary. [cite: 297] [cite_start]Other attributes required for authorizing access include restrictions on time-of-day, day-of-week, and point-of-origin. [cite: 298]
+                Organizations may choose to define access privileges or other attributes by account, by type of account, or a combination of both. System account types include individual, shared, group, system, anonymous, guest, emergency, developer, manufacturer, vendor, and temporary. Other attributes required for authorizing access include restrictions on time-of-day, day-of-week, and point-of-origin.
 
                 **Further Discussion:**
-                [cite_start]Limit users to only the information systems, roles, or applications they are permitted to use and require for their roles and responsibilities. [cite: 306] [cite_start]Limit access to applications and data based on authorized users' roles and responsibilities. [cite: 307] [cite_start]Common types of functions a user can be assigned are create, read, update, and delete. [cite: 308]
+                Limit users to only the information systems, roles, or applications they are permitted to use and require for their roles and responsibilities. Limit access to applications and data based on authorized users' roles and responsibilities. Common types of functions a user can be assigned are create, read, update, and delete.
 
                 **Key References:**
-                - [cite_start]FAR Clause 52.204-21 b.1.ii [cite: 319]
-                - [cite_start]NIST SP 800-171 Rev. 2 3.1.2 [cite: 320]
+                - FAR Clause 52.204-21 b.1.ii
+                - NIST SP 800-171 Rev. 2 3.1.2
         - id: ac_l1_b_1_iii
           uuid: 1d63a8a3-93d3-4665-b53d-2f08a46b514d
           title: External Connections [FCI Data]
           parts:
             - name: statement
-              [cite_start]prose: Verify and control/limit connections to and use of external information systems. [cite: 325]
+              prose: Verify and control/limit connections to and use of external information systems.
             - name: guidance
-              prose: 'Determine if:'
+              prose: "Determine if:"
               parts:
                 - name: objective-a
-                  [cite_start]prose: connections to external systems are identified; [cite: 328]
+                  prose: connections to external systems are identified;
                 - name: objective-b
-                  [cite_start]prose: the use of external systems is identified; [cite: 329]
+                  prose: the use of external systems is identified;
                 - name: objective-c
-                  [cite_start]prose: connections to external systems are verified; [cite: 330]
+                  prose: connections to external systems are verified;
                 - name: objective-d
-                  [cite_start]prose: the use of external systems is verified; [cite: 338]
+                  prose: the use of external systems is verified;
                 - name: objective-e
-                  [cite_start]prose: connections to external systems are controlled/limited; and [cite: 339]
+                  prose: connections to external systems are controlled/limited; and
                 - name: objective-f
-                  [cite_start]prose: the use of external systems is controlled/limited. [cite: 337]
+                  prose: the use of external systems is controlled/limited.
             - name: overview
               prose: |
                 **Discussion [NIST SP 800-171 REV. 2]:**
-                [cite_start]External systems are systems or components of systems for which organizations typically have no direct supervision and authority over the application of security requirements and controls. [cite: 351] [cite_start]External systems include personally owned systems, components, or devices and privately-owned computing and communications devices resident in commercial or public facilities. [cite: 352] [cite_start]This requirement also addresses the use of external systems for the processing, storage, or transmission of FCI, including accessing cloud services. [cite: 358] [cite_start]From the perspective of a given system, other systems within the organization may be considered "external" to that system. [cite: 368]
+                External systems are systems or components of systems for which organizations typically have no direct supervision and authority over the application of security requirements and controls. External systems include personally owned systems, components, or devices and privately-owned computing and communications devices resident in commercial or public facilities. This requirement also addresses the use of external systems for the processing, storage, or transmission of FCI, including accessing cloud services. From the perspective of a given system, other systems within the organization may be considered "external" to that system.
 
                 **Further Discussion:**
-                [cite_start]Control and manage connections between your company network and outside networks. [cite: 370] [cite_start]Tools to manage connections include firewalls and connection allow/deny lists. [cite: 372] [cite_start]Control and limit access to corporate networks from personally owned devices such as laptops, tablets, and phones. [cite: 374]
+                Control and manage connections between your company network and outside networks. Tools to manage connections include firewalls and connection allow/deny lists. Control and limit access to corporate networks from personally owned devices such as laptops, tablets, and phones.
 
                 **Key References:**
-                - [cite_start]FAR Clause 52.204-21 b.1.iii [cite: 391]
-                - [cite_start]NIST SP 800-171 Rev. 2 3.1.20 [cite: 392]
+                - FAR Clause 52.204-21 b.1.iii
+                - NIST SP 800-171 Rev. 2 3.1.20
         - id: ac_l1_b_1_iv
           uuid: c7b4e05b-80d4-4b5a-93e1-7d1a2f6c9d0f
           title: Control Public Information [FCI Data]
           parts:
             - name: statement
-              [cite_start]prose: Control information posted or processed on publicly accessible information systems. [cite: 397]
+              prose: Control information posted or processed on publicly accessible information systems.
             - name: guidance
-              prose: 'Determine if:'
+              prose: "Determine if:"
               parts:
                 - name: objective-a
-                  [cite_start]prose: individuals authorized to post or process information on publicly accessible systems are identified; [cite: 401]
+                  prose: individuals authorized to post or process information on publicly accessible systems are identified;
                 - name: objective-b
-                  [cite_start]prose: procedures to ensure [FCI] is not posted or processed on publicly accessible systems are identified; [cite: 404]
+                  prose: procedures to ensure FCI is not posted or processed on publicly accessible systems are identified;
                 - name: objective-c
-                  [cite_start]prose: a review process is in place prior to posting of any content to publicly accessible systems; [cite: 405]
+                  prose: a review process is in place prior to posting of any content to publicly accessible systems;
                 - name: objective-d
-                  [cite_start]prose: content on publicly accessible systems is reviewed to ensure that it does not include [FCI]; and [cite: 407]
+                  prose: content on publicly accessible systems is reviewed to ensure that it does not include FCI; and
                 - name: objective-e
-                  [cite_start]prose: mechanisms are in place to remove and address improper posting of [FCI]. [cite: 410]
+                  prose: mechanisms are in place to remove and address improper posting of FCI.
             - name: overview
               prose: |
                 **Discussion [NIST SP 800-171 REV. 2]:**
-                [cite_start]The public is not authorized access to nonpublic information (e.g., information protected under the Privacy Act, FCI, and proprietary information). [cite: 422] [cite_start]This requirement addresses systems that are controlled by the organization and accessible to the public, typically without identification or authentication. [cite: 428]
+                The public is not authorized access to nonpublic information (e.g., information protected under the Privacy Act, FCI, and proprietary information). This requirement addresses systems that are controlled by the organization and accessible to the public, typically without identification or authentication.
 
                 **Further Discussion:**
-                [cite_start]Only government officials can be authorized to publicly release FCI. [cite: 432] [cite_start]Do not allow FCI to become public - always safeguard the confidentiality of FCI by controlling the posting of FCI on company-controlled websites or public forums. [cite: 433] [cite_start]It is important to know which users are allowed to publish information on publicly accessible systems, like your company website, and implement a review process before posting such information. [cite: 434]
+                Only government officials can be authorized to publicly release FCI. Do not allow FCI to become public - always safeguard the confidentiality of FCI by controlling the posting of FCI on company-controlled websites or public forums. It is important to know which users are allowed to publish information on publicly accessible systems, like your company website, and implement a review process before posting such information.
 
                 **Key References:**
-                - [cite_start]FAR Clause 52.204-21 b.1.iv [cite: 445]
-                - [cite_start]NIST SP 800-171 Rev. 2 3.1.22 [cite: 446]
+                - FAR Clause 52.204-21 b.1.iv
+                - NIST SP 800-171 Rev. 2 3.1.22
     - id: ia
       uuid: 5e6a3d3a-0e1b-4d2f-8c44-4e4b1d2f4e4b
       title: Identification and Authentication (IA)
@@ -144,53 +144,53 @@ catalog:
           title: Identification [FCI Data]
           parts:
             - name: statement
-              [cite_start]prose: Identify information system users, processes acting on behalf of users, or devices. [cite: 452]
+              prose: Identify information system users, processes acting on behalf of users, or devices.
             - name: guidance
-              prose: 'Determine if:'
+              prose: "Determine if:"
               parts:
                 - name: objective-a
-                  [cite_start]prose: system users are identified; [cite: 456]
+                  prose: system users are identified;
                 - name: objective-b
-                  [cite_start]prose: processes acting on behalf of users are identified; and [cite: 458]
+                  prose: processes acting on behalf of users are identified; and
                 - name: objective-c
-                  [cite_start]prose: devices accessing the system are identified. [cite: 460]
+                  prose: devices accessing the system are identified.
             - name: overview
               prose: |
                 **Discussion [NIST SP 800-171 REV. 2]:**
-                [cite_start]Common device identifiers include media access control (MAC), Internet Protocol (IP) addresses, or device-unique token identifiers. [cite: 471] [cite_start]Typically, individual identifiers are the user names associated with the system accounts assigned to those individuals. [cite: 473] [cite_start]NIST SP 800-63-3 provides guidance on digital identities. [cite: 481]
+                Common device identifiers include media access control (MAC), Internet Protocol (IP) addresses, or device-unique token identifiers. Typically, individual identifiers are the user names associated with the system accounts assigned to those individuals. NIST SP 800-63-3 provides guidance on digital identities.
 
                 **Further Discussion:**
-                [cite_start]Individual, unique identifiers (e.g., user names) should be assigned to all users and processes that access company systems. [cite: 483] [cite_start]Authorized devices also should have unique identifiers. [cite: 484] [cite_start]This requirement, IA.L1-b.1.v, provides a vetted and trusted identity that supports the access control mechanism required by [AC.L1-b.1.i](#ac_l1_b_1_i). [cite: 485]
+                Individual, unique identifiers (e.g., user names) should be assigned to all users and processes that access company systems. Authorized devices also should have unique identifiers. This requirement, IA.L1-b.1.v, provides a vetted and trusted identity that supports the access control mechanism required by AC.L1-b.1.i.
 
                 **Key References:**
-                - [cite_start]FAR Clause 52.204-21 b.1.v [cite: 494]
-                - [cite_start]NIST SP 800-171 Rev. 2 3.5.1 [cite: 495]
+                - FAR Clause 52.204-21 b.1.v
+                - NIST SP 800-171 Rev. 2 3.5.1
         - id: ia_l1_b_1_vi
           uuid: 2f08a46b-514d-4665-b53d-1d63a8a393d3
           title: Authentication [FCI Data]
           parts:
             - name: statement
-              [cite_start]prose: Authenticate (or verify) the identities of those users, processes, or devices, as a prerequisite to allowing access to organizational information systems. [cite: 500, 501]
+              prose: Authenticate (or verify) the identities of those users, processes, or devices, as a prerequisite to allowing access to organizational information systems.
             - name: guidance
-              prose: 'Determine if:'
+              prose: "Determine if:"
               parts:
                 - name: objective-a
-                  [cite_start]prose: the identity of each user is authenticated or verified as a prerequisite to system access; [cite: 504]
+                  prose: the identity of each user is authenticated or verified as a prerequisite to system access;
                 - name: objective-b
-                  [cite_start]prose: the identity of each process acting on behalf of a user is authenticated or verified as a prerequisite to system access; and [cite: 505]
+                  prose: the identity of each process acting on behalf of a user is authenticated or verified as a prerequisite to system access; and
                 - name: objective-c
-                  [cite_start]prose: the identity of each device accessing or connecting to the system is authenticated or verified as a prerequisite to system access. [cite: 507]
+                  prose: the identity of each device accessing or connecting to the system is authenticated or verified as a prerequisite to system access.
             - name: overview
               prose: |
                 **Discussion [NIST SP 800-171 REV. 2]:**
-                [cite_start]Individual authenticators include the following: passwords, key cards, cryptographic devices, and one-time password devices. [cite: 518] Developers ship system components with factory default authentication credentials to allow for initial installation and configuration. [cite_start]Default authentication credentials are often well known, easily discoverable, and present a significant security risk. [cite: 521, 527] [cite_start]NIST SP 800-63-3 provides guidance on digital identities. [cite: 531]
+                Individual authenticators include the following passwords, key cards, cryptographic devices, and one-time password devices. Developers ship system components with factory default authentication credentials to allow for initial installation and configuration. Default authentication credentials are often well known, easily discoverable, and present a significant security risk. NIST SP 800-63-3 provides guidance on digital identities.
 
                 **Further Discussion:**
-                [cite_start]Before a person or device is given system access, verify that the user or device is who or what it claims to be. [cite: 533] [cite_start]This verification is called authentication. [cite: 534] [cite_start]A default username and password should be immediately changed to something unique. [cite: 536]
+                Before a person or device is given system access, verify that the user or device is who or what it claims to be. This verification is called authentication. A default username and password should be immediately changed to something unique.
 
                 **Key References:**
-                - [cite_start]FAR Clause 52.204-21 b.1.vi [cite: 557]
-                - [cite_start]NIST SP 800-171 Rev. 2 3.5.2 [cite: 558]
+                - FAR Clause 52.204-21 b.1.vi
+                - NIST SP 800-171 Rev. 2 3.5.2
     - id: mp
       uuid: c7d1a2f6-c9d0-4b5a-93e1-80d4e05b80d4
       title: Media Protection (MP)
@@ -200,25 +200,25 @@ catalog:
           title: Media Disposal [FCI Data]
           parts:
             - name: statement
-              [cite_start]prose: Sanitize or destroy information system media containing Federal Contract Information before disposal or release for reuse. [cite: 564]
+              prose: Sanitize or destroy information system media containing Federal Contract Information before disposal or release for reuse.
             - name: guidance
-              prose: 'Determine if:'
+              prose: "Determine if:"
               parts:
                 - name: objective-a
-                  [cite_start]prose: system media containing [FCI] is sanitized or destroyed before disposal; and [cite: 567]
+                  prose: system media containing FCI is sanitized or destroyed before disposal; and
                 - name: objective-b
-                  [cite_start]prose: system media containing [FCI] is sanitized before it is released for reuse. [cite: 568]
+                  prose: system media containing FCI is sanitized before it is released for reuse.
             - name: overview
               prose: |
                 **Discussion [NIST SP 800-171 REV. 2]:**
-                [cite_start]This requirement applies to all system media, digital and non-digital, subject to disposal or reuse. [cite: 579] [cite_start]The sanitization process removes information from the media such that the information cannot be retrieved or reconstructed. [cite: 581] [cite_start]Sanitization techniques, including clearing, purging, cryptographic erase, and destruction, prevent the disclosure of information to unauthorized individuals when such media is released for reuse or disposal. [cite: 582] [cite_start]NIST SP 800-88 provides guidance on media sanitization. [cite: 591]
+                This requirement applies to all system media, digital and non-digital, subject to disposal or reuse. The sanitization process removes information from the media such that the information cannot be retrieved or reconstructed. Sanitization techniques, including clearing, purging, cryptographic erase, and destruction, prevent the disclosure of information to unauthorized individuals when such media is released for reuse or disposal. NIST SP 800-88 provides guidance on media sanitization.
 
                 **Further Discussion:**
-                [cite_start]Media can include a broad range of items that store information, including paper documents, disks, tapes, digital photography, USB drives, CDs, DVDs, and mobile phones. [cite: 593] [cite_start]If there is FCI, you or someone in your company should either shred or destroy the device before disposal so it cannot be read; or clean or purge the information, if you want to reuse the device. [cite: 595, 596, 597]
+                Media can include a broad range of items that store information, including paper documents, disks, tapes, digital photography, USB drives, CDs, DVDs, and mobile phones. If there is FCI, you or someone in your company should either shred or destroy the device before disposal so it cannot be read; or clean or purge the information, if you want to reuse the device.
 
                 **Key References:**
-                - [cite_start]FAR Clause 52.204-21 b.1.vii [cite: 606]
-                - [cite_start]NIST SP 800-171 Rev. 2 3.8.3 [cite: 607]
+                - FAR Clause 52.204-21 b.1.vii
+                - NIST SP 800-171 Rev. 2 3.8.3
     - id: pe
       uuid: 1e8c4459-e6a3-4f9e-8d3a-0e1b1d2f4e4b
       title: Physical Protection (PE)
@@ -228,63 +228,63 @@ catalog:
           title: Limit Physical Access [FCI Data]
           parts:
             - name: statement
-              [cite_start]prose: Limit physical access to organizational information systems, equipment, and the respective operating environments to authorized individuals. [cite: 613]
+              prose: Limit physical access to organizational information systems, equipment, and the respective operating environments to authorized individuals.
             - name: guidance
-              prose: 'Determine if:'
+              prose: "Determine if:"
               parts:
                 - name: objective-a
-                  [cite_start]prose: authorized individuals allowed physical access are identified; [cite: 616]
+                  prose: authorized individuals allowed physical access are identified;
                 - name: objective-b
-                  [cite_start]prose: physical access to organizational systems is limited to authorized individuals; [cite: 621]
+                  prose: physical access to organizational systems is limited to authorized individuals;
                 - name: objective-c
-                  [cite_start]prose: physical access to equipment is limited to authorized individuals; and [cite: 622]
+                  prose: physical access to equipment is limited to authorized individuals; and
                 - name: objective-d
-                  [cite_start]prose: physical access to operating environments is limited to authorized individuals. [cite: 623]
+                  prose: physical access to operating environments is limited to authorized individuals.
             - name: overview
               prose: |
                 **Discussion [NIST SP 800-171 REV. 2]:**
-                [cite_start]This requirement applies to employees, individuals with permanent physical access authorization credentials, and visitors. [cite: 633] [cite_start]Limiting physical access to equipment may include placing equipment in locked rooms or other secured areas and allowing access to authorized individuals only, and placing equipment in locations that can be monitored by organizational personnel. [cite: 642]
+                This requirement applies to employees, individuals with permanent physical access authorization credentials, and visitors. Limiting physical access to equipment may include placing equipment in locked rooms or other secured areas and allowing access to authorized individuals only, and placing equipment in locations that can be monitored by organizational personnel.
 
                 **Further Discussion:**
-                [cite_start]This addresses the company's physical space (e.g., office, testing environments, equipment rooms), technical assets, and non-technical assets that need to be protected from unauthorized physical access. [cite: 645] [cite_start]Specific environments are limited to authorized employees, and access is controlled with badges, electronic locks, physical key locks, etc. [cite: 646]
+                This addresses the company's physical space (e.g., office, testing environments, equipment rooms), technical assets, and non-technical assets that need to be protected from unauthorized physical access. Specific environments are limited to authorized employees, and access is controlled with badges, electronic locks, physical key locks, etc.
 
                 **Key References:**
-                - [cite_start]FAR Clause 52.204-21 b.1.viii [cite: 659]
-                - [cite_start]NIST SP 800-171 Rev. 2 3.10.1 [cite: 660]
+                - FAR Clause 52.204-21 b.1.viii
+                - NIST SP 800-171 Rev. 2 3.10.1
         - id: pe_l1_b_1_ix
           uuid: 5d4c2a1c-0d5d-4a37-9755-9a86a63520e7
           title: Manage Visitors & Physical Access [FCI Data]
           parts:
             - name: statement
-              [cite_start]prose: Escort visitors and monitor visitor activity; maintain audit logs of physical access; and control and manage physical access devices. [cite: 665]
+              prose: Escort visitors and monitor visitor activity; maintain audit logs of physical access; and control and manage physical access devices.
             - name: guidance
-              prose: 'Determine if:'
+              prose: "Determine if:"
               parts:
                 - name: objective-a
-                  [cite_start]prose: visitors are escorted; [cite: 669]
+                  prose: visitors are escorted;
                 - name: objective-b
-                  [cite_start]prose: visitor activity is monitored; [cite: 671]
+                  prose: visitor activity is monitored;
                 - name: objective-c
-                  [cite_start]prose: audit logs of physical access are maintained; [cite: 673]
+                  prose: audit logs of physical access are maintained;
                 - name: objective-d
-                  [cite_start]prose: physical access devices are identified; [cite: 675]
+                  prose: physical access devices are identified;
                 - name: objective-e
-                  [cite_start]prose: physical access devices are controlled; and [cite: 677]
+                  prose: physical access devices are controlled; and
                 - name: objective-f
-                  [cite_start]prose: physical access devices are managed. [cite: 679]
+                  prose: physical access devices are managed.
             - name: overview
               prose: |
                 **Discussion [NIST SP 800-171 REV. 2]:**
-                [cite_start]Individuals with permanent physical access authorization credentials are not considered visitors. [cite: 691] [cite_start]Organizations have flexibility in the types of audit logs employed. [cite: 698] [cite_start]Physical access devices include keys, locks, combinations, and card readers. [cite: 702]
+                Individuals with permanent physical access authorization credentials are not considered visitors. Organizations have flexibility in the types of audit logs employed. Physical access devices include keys, locks, combinations, and card readers.
 
                 **Further Discussion:**
-                [cite_start]Do not allow visitors, even those people you know well, to walk around your facility without an escort. [cite: 704] [cite_start]All non-employees should wear special visitor badges and/or are escorted by an employee at all times while on the property. [cite: 705] [cite_start]Make sure you have a record of who accesses your facility (e.g., office, plant, factory). [cite: 706]
+                Do not allow visitors, even those people you know well, to walk around your facility without an escort. All non-employees should wear special visitor badges and/or are escorted by an employee at all times while on the property. Make sure you have a record of who accesses your facility (e.g., office, plant, factory).
 
                 **Key References:**
-                - [cite_start]FAR Clause 52.204-21 b.1.ix [cite: 741]
-                - [cite_start]NIST SP 800-171 Rev. 2 3.10.3 [cite: 742]
-                - [cite_start]NIST SP 800-171 Rev. 2 3.10.4 [cite: 743]
-                - [cite_start]NIST SP 800-171 Rev. 2 3.10.5 [cite: 744]
+                - FAR Clause 52.204-21 b.1.ix
+                - NIST SP 800-171 Rev. 2 3.10.3
+                - NIST SP 800-171 Rev. 2 3.10.4
+                - NIST SP 800-171 Rev. 2 3.10.5
     - id: sc
       uuid: 8d3a0e1b-1d2f-4e4b-8c44-59e6a3d3a0e1
       title: System and Communications Protection (SC)
@@ -294,61 +294,61 @@ catalog:
           title: Boundary Protection [FCI Data]
           parts:
             - name: statement
-              [cite_start]prose: Monitor, control, and protect organizational communications (i.e., information transmitted or received by organizational information systems) at the external boundaries and key internal boundaries of the information systems. [cite: 750]
+              prose: Monitor, control, and protect organizational communications (i.e., information transmitted or received by organizational information systems) at the external boundaries and key internal boundaries of the information systems.
             - name: guidance
-              prose: 'Determine if:'
+              prose: "Determine if:"
               parts:
                 - name: objective-a
-                  [cite_start]prose: the external system boundary is defined; [cite: 753]
+                  prose: the external system boundary is defined;
                 - name: objective-b
-                  [cite_start]prose: key internal system boundaries are defined; [cite: 756]
+                  prose: key internal system boundaries are defined;
                 - name: objective-c
-                  [cite_start]prose: communications are monitored at the external system boundary; [cite: 754]
+                  prose: communications are monitored at the external system boundary;
                 - name: objective-d
-                  [cite_start]prose: communications are controlled at the external system boundary; [cite: 760]
+                  prose: communications are controlled at the external system boundary;
                 - name: objective-e
-                  [cite_start]prose: communications are monitored at key internal boundaries; [cite: 761]
+                  prose: communications are monitored at key internal boundaries;
                 - name: objective-f
-                  [cite_start]prose: communications are controlled at key internal boundaries; [cite: 762]
+                  prose: communications are controlled at key internal boundaries;
                 - name: objective-g
-                  [cite_start]prose: communications are protected at the external system boundary; and [cite: 764]
+                  prose: communications are protected at the external system boundary; and
                 - name: objective-h
-                  [cite_start]prose: communications are protected at key internal boundaries. [cite: 765]
+                  prose: communications are protected at key internal boundaries.
             - name: overview
               prose: |
                 **Discussion [NIST SP 800-171 REV. 2]:**
-                [cite_start]Boundary components include gateways, routers, firewalls, guards, network-based malicious code analysis and virtualization systems, or encrypted tunnels implemented within a system security architecture. [cite: 781] [cite_start]NIST SP 800-41 provides guidance on firewalls and firewall policy. [cite: 786] [cite_start]NIST SP 800-125B provides guidance on security for virtualization technologies. [cite: 786]
+                Boundary components include gateways, routers, firewalls, guards, network-based malicious code analysis and virtualization systems, or encrypted tunnels implemented within a system security architecture. NIST SP 800-41 provides guidance on firewalls and firewall policy. NIST SP 800-125B provides guidance on security for virtualization technologies.
 
                 **Further Discussion:**
-                [cite_start]Your company's IT network or system has boundaries that must be protected. [cite: 789] [cite_start]A firewall stops unwanted traffic on the internet from passing through an outside "fence" to the company's networks and information systems. [cite: 793] [cite_start]It may be wise to monitor, control, or protect one part of the company network from another. [cite: 795]
+                Your company's IT network or system has boundaries that must be protected. A firewall stops unwanted traffic on the internet from passing through an outside "fence" to the company's networks and information systems. It may be wise to monitor, control, or protect one part of the company network from another.
 
                 **Key References:**
-                - [cite_start]FAR Clause 52.204-21 b.1.x [cite: 817]
-                - [cite_start]NIST SP 800-171 Rev. 2 3.13.1 [cite: 818]
+                - FAR Clause 52.204-21 b.1.x
+                - NIST SP 800-171 Rev. 2 3.13.1
         - id: sc_l1_b_1_xi
           uuid: 1d63a8a3-93d3-4665-b53d-2f08a46b514e
           title: Public-Access System Separation [FCI Data]
           parts:
             - name: statement
-              [cite_start]prose: Implement subnetworks for publicly accessible system components that are physically or logically separated from internal networks. [cite: 823]
+              prose: Implement subnetworks for publicly accessible system components that are physically or logically separated from internal networks.
             - name: guidance
-              prose: 'Determine if:'
+              prose: "Determine if:"
               parts:
                 - name: objective-a
-                  [cite_start]prose: publicly accessible system components are identified; and [cite: 826]
+                  prose: publicly accessible system components are identified; and
                 - name: objective-b
-                  [cite_start]prose: subnetworks for publicly accessible system components are physically or logically separated from internal networks. [cite: 827]
+                  prose: subnetworks for publicly accessible system components are physically or logically separated from internal networks.
             - name: overview
               prose: |
                 **Discussion [NIST SP 800-171 REV. 2]:**
-                [cite_start]Subnetworks that are physically or logically separated from internal networks are referred to as demilitarized zones (DMZs). [cite: 838] [cite_start]DMZs are typically implemented with boundary control devices and techniques that include routers, gateways, firewalls, virtualization, or cloud-based technologies. [cite: 839]
+                Subnetworks that are physically or logically separated from internal networks are referred to as demilitarized zones (DMZs). DMZs are typically implemented with boundary control devices and techniques that include routers, gateways, firewalls, virtualization, or cloud-based technologies.
 
                 **Further Discussion:**
-                [cite_start]Publicly accessible systems should be separated from the internal systems that need to be protected. [cite: 847] [cite_start]Internal systems should not be placed on the same network as publicly accessible systems, and access by default from DMZ networks to internal networks should be blocked. [cite: 848]
+                Publicly accessible systems should be separated from the internal systems that need to be protected. Internal systems should not be placed on the same network as publicly accessible systems, and access by default from DMZ networks to internal networks should be blocked.
 
                 **Key References:**
-                - [cite_start]FAR Clause 52.204-21 b.1.xi [cite: 859]
-                - [cite_start]NIST SP 800-171 Rev. 2 3.13.5 [cite: 860]
+                - FAR Clause 52.204-21 b.1.xi
+                - NIST SP 800-171 Rev. 2 3.13.5
     - id: si
       uuid: c7b4e05b-80d4-4b5a-93e1-7d1a2f6c9d10
       title: System and Information Integrity (SI)
@@ -365,80 +365,79 @@ catalog:
               label: Timeframe for flaw correction
           parts:
             - name: statement
-              prose: |
-                Identify, report, and correct information and information system flaws in a timely manner. [cite_start]This is accomplished by identifying flaws within {{ insert: param, si_12_param_1 }}, reporting flaws within {{ insert: param, si_12_param_2 }}, and correcting flaws within {{ insert: param, si_12_param_3 }}. [cite: 866]
+              prose: Identify, report, and correct information and information system flaws in a timely manner.
             - name: guidance
-              prose: 'Determine if:'
+              prose: "Determine if:"
               parts:
                 - name: objective-a
-                  [cite_start]prose: the time within which to identify system flaws is specified; [cite: 869]
+                  prose: the time within which to identify system flaws is specified;
                 - name: objective-b
-                  [cite_start]prose: system flaws are identified within the specified time frame; [cite: 871]
+                  prose: system flaws are identified within the specified time frame;
                 - name: objective-c
-                  [cite_start]prose: the time within which to report system flaws is specified; [cite: 873]
+                  prose: the time within which to report system flaws is specified;
                 - name: objective-d
-                  [cite_start]prose: system flaws are reported within the specified time frame; [cite: 875]
+                  prose: system flaws are reported within the specified time frame;
                 - name: objective-e
-                  [cite_start]prose: the time within which to correct system flaws is specified; and [cite: 877]
+                  prose: the time within which to correct system flaws is specified; and
                 - name: objective-f
-                  [cite_start]prose: system flaws are corrected within the specified time frame. [cite: 879]
+                  prose: system flaws are corrected within the specified time frame.
             - name: overview
               prose: |
                 **Discussion [NIST SP 800-171 REV. 2]:**
-                [cite_start]Security-relevant updates include patches, service packs, hot fixes, and anti-virus signatures. [cite: 899] [cite_start]Organizations can take advantage of available resources such as the Common Weakness Enumeration (CWE) database or Common Vulnerabilities and Exposures (CVE) database in remediating flaws. [cite: 901] [cite_start]NIST SP 800-40 provides guidance on patch management technologies. [cite: 904]
+                Security-relevant updates include patches, service packs, hot fixes, and anti-virus signatures. Organizations can take advantage of available resources such as the Common Weakness Enumeration (CWE) database or Common Vulnerabilities and Exposures (CVE) database in remediating flaws. NIST SP 800-40 provides guidance on patch management technologies.
 
                 **Further Discussion:**
-                [cite_start]OSAs should have a process to review relevant vendor notifications and updates about problems or weaknesses. [cite: 907] [cite_start]After reviewing the information, the OSA should implement a patch management process that allows for software and firmware flaws to be fixed without adversely affecting the system functionality. [cite: 908] [cite_start]OSAs should define the time frames within which flaws are identified, reported, and corrected for all systems. [cite: 909]
+                OSAs should have a process to review relevant vendor notifications and updates about problems or weaknesses. After reviewing the information, the OSA should implement a patch management process that allows for software and firmware flaws to be fixed without adversely affecting the system functionality. OSAs should define the time frames within which flaws are identified, reported, and corrected for all systems.
 
                 **Key References:**
-                - [cite_start]FAR Clause 52.204-21 b.1.xii [cite: 926]
-                - [cite_start]NIST SP 800-171 Rev. 2 3.14.1 [cite: 927]
+                - FAR Clause 52.204-21 b.1.xii
+                - NIST SP 800-171 Rev. 2 3.14.1
         - id: si_l1_b_1_xiii
           uuid: d2a1c0d5-5d4c-4a37-9755-9a86a63520e8
           title: Malicious Code Protection [FCI Data]
           parts:
             - name: statement
-              [cite_start]prose: Provide protection from malicious code at appropriate locations within organizational information systems. [cite: 932]
+              prose: Provide protection from malicious code at appropriate locations within organizational information systems.
             - name: guidance
-              prose: 'Determine if:'
+              prose: "Determine if:"
               parts:
                 - name: objective-a
-                  [cite_start]prose: designated locations for malicious code protection are identified; and [cite: 936]
+                  prose: designated locations for malicious code protection are identified; and
                 - name: objective-b
-                  [cite_start]prose: protection from malicious code at designated locations is provided. [cite: 938]
+                  prose: protection from malicious code at designated locations is provided.
             - name: overview
               prose: |
                 **Discussion [NIST SP 800-171 REV. 2]:**
-                [cite_start]Designated [appropriate] locations include system entry and exit points which may include firewalls, remote access servers, workstations, electronic mail servers, web servers, proxy servers, notebook computers, and mobile devices. [cite: 954] [cite_start]Malicious code includes viruses, worms, Trojan horses, and spyware. [cite: 955, 962] [cite_start]Malicious code protection mechanisms include anti-virus signature definitions and reputation-based technologies. [cite: 965] [cite_start]NIST SP 800-83 provides guidance on malware incident prevention. [cite: 972]
+                Designated [appropriate] locations include system entry and exit points which may include firewalls, remote access servers, workstations, electronic mail servers, web servers, proxy servers, notebook computers, and mobile devices. Malicious code includes viruses, worms, Trojan horses, and spyware. Malicious code protection mechanisms include anti-virus signature definitions and reputation-based technologies. NIST SP 800-83 provides guidance on malware incident prevention.
 
                 **Further Discussion:**
-                [cite_start]Malicious code purposely performs unauthorized activity that undermines the security of an information system. [cite: 974] [cite_start]A designated location may be a network device such as a firewall or an end user's computer. [cite: 975] [cite_start]Consider use of anti-malware tools to stop or lessen the impact of malicious code. [cite: 983]
+                Malicious code purposely performs unauthorized activity that undermines the security of an information system. A designated location may be a network device such as a firewall or an end user's computer. Consider use of anti-malware tools to stop or lessen the impact of malicious code.
 
                 **Key References:**
-                - [cite_start]FAR Clause 52.204-21 b.1.xiii [cite: 994]
-                - [cite_start]NIST SP 800-171 Rev. 2 3.14.2 [cite: 995]
+                - FAR Clause 52.204-21 b.1.xiii
+                - NIST SP 800-171 Rev. 2 3.14.2
         - id: si_l1_b_1_xiv
           uuid: 1d63a8a3-93d3-4665-b53d-2f08a46b514f
           title: Update Malicious Code Protection [FCI Data]
           parts:
             - name: statement
-              [cite_start]prose: Update malicious code protection mechanisms when new releases are available. [cite: 1000]
+              prose: Update malicious code protection mechanisms when new releases are available.
             - name: guidance
-              prose: 'Determine if:'
+              prose: "Determine if:"
               parts:
                 - name: objective-a
-                  [cite_start]prose: malicious code protection mechanisms are updated when new releases are available. [cite: 1003]
+                  prose: malicious code protection mechanisms are updated when new releases are available.
             - name: overview
               prose: |
                 **Discussion [NIST SP 800-171 REV. 2]:**
-                [cite_start]Malicious code protection mechanisms include anti-virus signature definitions and reputation-based technologies. [cite: 1019] [cite_start]A variety of technologies and methods exist to limit or eliminate the effects of malicious code. [cite: 1020]
+                Malicious code protection mechanisms include anti-virus signature definitions and reputation-based technologies. A variety of technologies and methods exist to limit or eliminate the effects of malicious code.
 
                 **Further Discussion:**
-                [cite_start]Malware changes on an hourly or daily basis, and it is important to update detection and protection mechanisms frequently to maintain the effectiveness of the protection. [cite: 1032]
+                Malware changes on an hourly or daily basis, and it is important to update detection and protection mechanisms frequently to maintain the effectiveness of the protection.
 
                 **Key References:**
-                - [cite_start]FAR Clause 52.204-21 b.1.xiv [cite: 1039]
-                - [cite_start]NIST SP 800-171 Rev. 2 3.14.4 [cite: 1040]
+                - FAR Clause 52.204-21 b.1.xiv
+                - NIST SP 800-171 Rev. 2 3.14.4
         - id: si_l1_b_1_xv
           uuid: c7b4e05b-80d4-4b5a-93e1-7d1a2f6c9d11
           title: System & File Scanning [FCI Data]
@@ -447,30 +446,33 @@ catalog:
               label: Frequency of periodic scans
               select:
                 how-many: one
-                choice:
-                  - Daily
-                  - Weekly
-                  - Monthly
+                choices:
+                  - value: daily
+                    label: Daily
+                  - value: weekly
+                    label: Weekly
+                  - value: monthly
+                    label: Monthly
           parts:
             - name: statement
-              [cite_start]prose: Perform periodic scans of the information system and real-time scans of files from external sources as files are downloaded, opened, or executed. [cite: 1045]
+              prose: Perform periodic scans of the information system and real-time scans of files from external sources as files are downloaded, opened, or executed.
             - name: guidance
-              prose: 'Determine if:'
+              prose: "Determine if:"
               parts:
                 - name: objective-a
-                  [cite_start]prose: the frequency for malicious code scans is defined; [cite: 1049]
+                  prose: the frequency for malicious code scans is defined;
                 - name: objective-b
-                  [cite_start]prose: malicious code scans are performed with the defined frequency; and [cite: 1051]
+                  prose: malicious code scans are performed with the defined frequency; and
                 - name: objective-c
-                  [cite_start]prose: real-time malicious code scans of files from external sources as files are downloaded, opened, or executed are performed. [cite: 1053]
+                  prose: real-time malicious code scans of files from external sources as files are downloaded, opened, or executed are performed.
             - name: overview
               prose: |
                 **Discussion [NIST SP 800-171 REV. 2]:**
-                [cite_start]Periodic scans of organizational systems and real-time scans of files from external sources can detect malicious code. [cite: 1070] [cite_start]Malicious code can be inserted into systems in a variety of ways including web accesses, electronic mail, electronic mail attachments, and portable storage devices. [cite: 1077]
+                Periodic scans of organizational systems and real-time scans of files from external sources can detect malicious code. Malicious code can be inserted into systems in a variety of ways including web accesses, electronic mail, electronic mail attachments, and portable storage devices.
 
                 **Further Discussion:**
-                [cite_start]Consider use of anti-malware software to scan for viruses in your computer systems and determine how often scans are conducted at a frequency of {{ insert: param, si_15_param_1 }}. [cite: 1080] [cite_start]Real-time scans look at the system whenever files are downloaded, opened, and saved. [cite: 1081] [cite_start]Periodic scans check previously saved files against updated malware information. [cite: 1082]
+                Consider use of anti-malware software to scan for viruses in your computer systems and determine how often scans are conducted. Real-time scans look at the system whenever files are downloaded, opened, and saved. Periodic scans check previously saved files against updated malware information.
 
                 **Key References:**
-                - [cite_start]FAR Clause 52.204-21 b.1.xv [cite: 1092]
-                - [cite_start]NIST SP 800-171 Rev. 2 3.14.5 [cite: 1093]
+                - FAR Clause 52.204-21 b.1.xv
+                - NIST SP 800-171 Rev. 2 3.14.5

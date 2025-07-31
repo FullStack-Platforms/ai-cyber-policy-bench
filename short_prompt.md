@@ -4,7 +4,7 @@ Create a comprehensive **{policy_type}** for **{organization_name}** in Markdown
 
 ## Required Inputs:
 - **Organization Overview:** Business details, industry, size, structure, tech infrastructure
-- **Compliance Requirements:** Frameworks/regulations (NIST CSF, ISO 27001, HIPAA, GDPR, PCI DSS, CMMC)
+- **Compliance Requirements:** Frameworks/regulations
 - **Policy Parameters:** (Optional) Specific constraints, roles, systems, or data types
 
 ## Output Structure:

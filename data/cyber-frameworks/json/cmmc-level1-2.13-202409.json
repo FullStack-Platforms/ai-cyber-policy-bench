@@ -1,0 +1,296 @@
+{
+  "profile_id": "cmmc-assessment-guide-l1",
+  "title": "CMMC Assessment Guide Level 1",
+  "version": "2.13",
+  "metadata": {
+    "publication_date": "September 2024",
+    "organization": "Department of Defense Chief Information Officer",
+    "document_identifier": "DOD-CIO-00002 (ZRIN 0790-ZA18)"
+  },
+  "requirements": [
+    {
+      "requirement_id": "AC.L1-b.1.i",
+      "title": "Authorized Access Control [FCI Data]",
+      "family": "Access Control (AC)",
+      "objective": "Limit information system access to authorized users, processes acting on behalf of authorized users, or devices (including other information systems).",
+      "policy_statements": [
+        "Limit information system access to authorized users, processes acting on behalf of authorized users, or devices (including other information systems)."
+      ],
+      "verification_criteria": [
+        "Determine if authorized users are identified.",
+        "Determine if processes acting on behalf of authorized users are identified.",
+        "Determine if devices (and other systems) authorized to connect to the system are identified.",
+        "Determine if system access is limited to authorized users.",
+        "Determine if system access is limited to processes acting on behalf of authorized users.",
+        "Determine if system access is limited to authorized devices (including other systems)."
+      ],
+      "mapping": {
+        "FAR Clause": "52.204-21 b.1.i",
+        "NIST SP 800-171 Rev. 2": "3.1.1"
+      }
+    },
+    {
+      "requirement_id": "AC.L1-b.1.ii",
+      "title": "Transaction & Function Control [FCI Data]",
+      "family": "Access Control (AC)",
+      "objective": "Limit information system access to the types of transactions and functions that authorized users are permitted to execute.",
+      "policy_statements": [
+        "Limit information system access to the types of transactions and functions that authorized users are permitted to execute."
+      ],
+      "verification_criteria": [
+        "Determine if the types of transactions and functions that authorized users are permitted to execute are defined.",
+        "Determine if system access is limited to the defined types of transactions and functions for authorized users."
+      ],
+      "mapping": {
+        "FAR Clause": "52.204-21 b.1.ii",
+        "NIST SP 800-171 Rev. 2": "3.1.2"
+      }
+    },
+    {
+      "requirement_id": "AC.L1-b.1.iii",
+      "title": "External Connections [FCI Data]",
+      "family": "Access Control (AC)",
+      "objective": "Verify and control/limit connections to and use of external information systems.",
+      "policy_statements": [
+        "Verify and control/limit connections to and use of external information systems."
+      ],
+      "verification_criteria": [
+        "Determine if connections to external systems are identified.",
+        "Determine if the use of external systems is identified.",
+        "Determine if connections to external systems are verified.",
+        "Determine if the use of external systems is verified.",
+        "Determine if connections to external systems are controlled/limited.",
+        "Determine if the use of external systems is controlled/limited."
+      ],
+      "mapping": {
+        "FAR Clause": "52.204-21 b.1.iii",
+        "NIST SP 800-171 Rev. 2": "3.1.20"
+      }
+    },
+    {
+      "requirement_id": "AC.L1-b.1.iv",
+      "title": "Control Public Information [FCI Data]",
+      "family": "Access Control (AC)",
+      "objective": "Control information posted or processed on publicly accessible information systems.",
+      "policy_statements": [
+        "Control information posted or processed on publicly accessible information systems."
+      ],
+      "verification_criteria": [
+        "Determine if individuals authorized to post or process information on publicly accessible systems are identified.",
+        "Determine if procedures to ensure [FCI] is not posted or processed on publicly accessible systems are identified.",
+        "Determine if a review process is in place prior to posting of any content to publicly accessible systems.",
+        "Determine if content on publicly accessible systems is reviewed to ensure that it does not include [FCI].",
+        "Determine if mechanisms are in place to remove and address improper posting of [FCI]."
+      ],
+      "mapping": {
+        "FAR Clause": "52.204-21 b.1.iv",
+        "NIST SP 800-171 Rev. 2": "3.1.22"
+      }
+    },
+    {
+      "requirement_id": "IA.L1-b.1.v",
+      "title": "Identification [FCI Data]",
+      "family": "Identification and Authentication (IA)",
+      "objective": "Identify information system users, processes acting on behalf of users, or devices.",
+      "policy_statements": [
+        "Identify information system users, processes acting on behalf of users, or devices."
+      ],
+      "verification_criteria": [
+        "Determine if system users are identified.",
+        "Determine if processes acting on behalf of users are identified.",
+        "Determine if devices accessing the system are identified."
+      ],
+      "mapping": {
+        "FAR Clause": "52.204-21 b.1.v",
+        "NIST SP 800-171 Rev. 2": "3.5.1"
+      }
+    },
+    {
+      "requirement_id": "IA.L1-b.1.vi",
+      "title": "Authentication [FCI Data]",
+      "family": "Identification and Authentication (IA)",
+      "objective": "Authenticate (or verify) the identities of those users, processes, or devices, as a prerequisite to allowing access to organizational information systems.",
+      "policy_statements": [
+        "Authenticate (or verify) the identities of those users, processes, or devices, as a prerequisite to allowing access to organizational information systems."
+      ],
+      "verification_criteria": [
+        "Determine if the identity of each user is authenticated or verified as a prerequisite to system access.",
+        "Determine if the identity of each process acting on behalf of a user is authenticated or verified as a prerequisite to system access.",
+        "Determine if the identity of each device accessing or connecting to the system is authenticated or verified as a prerequisite to system access."
+      ],
+      "mapping": {
+        "FAR Clause": "52.204-21 b.1.vi",
+        "NIST SP 800-171 Rev. 2": "3.5.2"
+      }
+    },
+    {
+      "requirement_id": "MP.L1-b.1.vii",
+      "title": "Media Disposal [FCI Data]",
+      "family": "Media Protection (MP)",
+      "objective": "Sanitize or destroy information system media containing Federal Contract Information before disposal or release for reuse.",
+      "policy_statements": [
+        "Sanitize or destroy information system media containing Federal Contract Information before disposal or release for reuse."
+      ],
+      "verification_criteria": [
+        "Determine if system media containing [FCI] is sanitized or destroyed before disposal.",
+        "Determine if system media containing [FCI] is sanitized before it is released for reuse."
+      ],
+      "mapping": {
+        "FAR Clause": "52.204-21 b.1.vii",
+        "NIST SP 800-171 Rev. 2": "3.8.3"
+      }
+    },
+    {
+      "requirement_id": "PE.L1-b.1.viii",
+      "title": "Limit Physical Access [FCI Data]",
+      "family": "Physical Protection (PE)",
+      "objective": "Limit physical access to organizational information systems, equipment, and the respective operating environments to authorized individuals.",
+      "policy_statements": [
+        "Limit physical access to organizational information systems, equipment, and the respective operating environments to authorized individuals."
+      ],
+      "verification_criteria": [
+        "Determine if authorized individuals allowed physical access are identified.",
+        "Determine if physical access to organizational systems is limited to authorized individuals.",
+        "Determine if physical access to equipment is limited to authorized individuals.",
+        "Determine if physical access to operating environments is limited to authorized individuals."
+      ],
+      "mapping": {
+        "FAR Clause": "52.204-21 b.1.viii",
+        "NIST SP 800-171 Rev. 2": "3.10.1"
+      }
+    },
+    {
+      "requirement_id": "PE.L1-b.1.ix",
+      "title": "Manage Visitors & Physical Access [FCI Data]",
+      "family": "Physical Protection (PE)",
+      "objective": "Escort visitors and monitor visitor activity; maintain audit logs of physical access; and control and manage physical access devices.",
+      "policy_statements": [
+        "Escort visitors and monitor visitor activity; maintain audit logs of physical access; and control and manage physical access devices."
+      ],
+      "verification_criteria": [
+        "Determine if visitors are escorted.",
+        "Determine if visitor activity is monitored.",
+        "Determine if audit logs of physical access are maintained.",
+        "Determine if physical access devices are identified.",
+        "Determine if physical access devices are controlled.",
+        "Determine if physical access devices are managed."
+      ],
+      "mapping": {
+        "FAR Clause": "52.204-21 b.1.ix",
+        "NIST SP 800-171 Rev. 2": "3.10.3"
+      }
+    },
+    {
+      "requirement_id": "SC.L1-b.1.x",
+      "title": "Boundary Protection [FCI Data]",
+      "family": "System and Communications Protection (SC)",
+      "objective": "Monitor, control, and protect organizational communications (i.e., information transmitted or received by organizational information systems) at the external boundaries and key internal boundaries of the information systems.",
+      "policy_statements": [
+        "Monitor, control, and protect organizational communications (i.e., information transmitted or received by organizational information systems) at the external boundaries and key internal boundaries of the information systems."
+      ],
+      "verification_criteria": [
+        "Determine if the external system boundary is defined.",
+        "Determine if key internal system boundaries are defined.",
+        "Determine if communications are monitored at the external system boundary.",
+        "Determine if communications are controlled at the external system boundary.",
+        "Determine if communications are monitored at key internal boundaries.",
+        "Determine if communications are controlled at key internal boundaries.",
+        "Determine if communications are protected at the external system boundary.",
+        "Determine if communications are protected at key internal boundaries."
+      ],
+      "mapping": {
+        "FAR Clause": "52.204-21 b.1.x",
+        "NIST SP 800-171 Rev. 2": "3.13.1"
+      }
+    },
+    {
+      "requirement_id": "SC.L1-b.1.xi",
+      "title": "Public-Access System Separation [FCI Data]",
+      "family": "System and Communications Protection (SC)",
+      "objective": "Implement subnetworks for publicly accessible system components that are physically or logically separated from internal networks.",
+      "policy_statements": [
+        "Implement subnetworks for publicly accessible system components that are physically or logically separated from internal networks."
+      ],
+      "verification_criteria": [
+        "Determine if publicly accessible system components are identified.",
+        "Determine if subnetworks for publicly accessible system components are physically or logically separated from internal networks."
+      ],
+      "mapping": {
+        "FAR Clause": "52.204-21 b.1.xi",
+        "NIST SP 800-171 Rev. 2": "3.13.5"
+      }
+    },
+    {
+      "requirement_id": "SI.L1-b.1.xii",
+      "title": "Flaw Remediation [FCI Data]",
+      "family": "System and Information Integrity (SI)",
+      "objective": "Identify, report, and correct information and information system flaws in a timely manner.",
+      "policy_statements": [
+        "Identify, report, and correct information and information system flaws in a timely manner."
+      ],
+      "verification_criteria": [
+        "Determine if the time within which to identify system flaws is specified.",
+        "Determine if system flaws are identified within the specified time frame.",
+        "Determine if the time within which to report system flaws is specified.",
+        "Determine if system flaws are reported within the specified time frame.",
+        "Determine if the time within which to correct system flaws is specified.",
+        "Determine if system flaws are corrected within the specified time frame."
+      ],
+      "mapping": {
+        "FAR Clause": "52.204-21 b.1.xii",
+        "NIST SP 800-171 Rev. 2": "3.14.1"
+      }
+    },
+    {
+      "requirement_id": "SI.L1-b.1.xiii",
+      "title": "Malicious Code Protection [FCI Data]",
+      "family": "System and Information Integrity (SI)",
+      "objective": "Provide protection from malicious code at appropriate locations within organizational information systems.",
+      "policy_statements": [
+        "Provide protection from malicious code at appropriate locations within organizational information systems."
+      ],
+      "verification_criteria": [
+        "Determine if designated locations for malicious code protection are identified.",
+        "Determine if protection from malicious code at designated locations is provided."
+      ],
+      "mapping": {
+        "FAR Clause": "52.204-21 b.1.xiii",
+        "NIST SP 800-171 Rev. 2": "3.14.2"
+      }
+    },
+    {
+      "requirement_id": "SI.L1-b.1.xiv",
+      "title": "Update Malicious Code Protection [FCI Data]",
+      "family": "System and Information Integrity (SI)",
+      "objective": "Update malicious code protection mechanisms when new releases are available.",
+      "policy_statements": [
+        "Update malicious code protection mechanisms when new releases are available."
+      ],
+      "verification_criteria": [
+        "Determine if malicious code protection mechanisms are updated when new releases are available."
+      ],
+      "mapping": {
+        "FAR Clause": "52.204-21 b.1.xiv",
+        "NIST SP 800-171 Rev. 2": "3.14.4"
+      }
+    },
+    {
+      "requirement_id": "SI.L1-b.1.xv",
+      "title": "System & File Scanning [FCI Data]",
+      "family": "System and Information Integrity (SI)",
+      "objective": "Perform periodic scans of the information system and real-time scans of files from external sources as files are downloaded, opened, or executed.",
+      "policy_statements": [
+        "Perform periodic scans of the information system and real-time scans of files from external sources as files are downloaded, opened, or executed."
+      ],
+      "verification_criteria": [
+        "Determine if the frequency for malicious code scans is defined.",
+        "Determine if malicious code scans are performed with the defined frequency.",
+        "Determine if real-time malicious code scans of files from external sources as files are downloaded, opened, or executed are performed."
+      ],
+      "mapping": {
+        "FAR Clause": "52.204-21 b.1.xv",
+        "NIST SP 800-171 Rev. 2": "3.14.5"
+      }
+    }
+  ]
+}

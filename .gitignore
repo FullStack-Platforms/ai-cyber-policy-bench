@@ -20,3 +20,4 @@ venv/
 # System files
 .DS_Store
 Thumbs.db
+convert_to_json.sh

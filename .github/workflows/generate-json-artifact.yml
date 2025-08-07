@@ -1,0 +1,41 @@
+name: Generate JSON Artifact
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "data/prompts/cyber_evals.jsonl"
+
+jobs:
+  generate-json:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install jq
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
+
+      - name: Check if JSONL exists
+        run: |
+          if [ ! -f data/prompts/cyber_evals.jsonl ]; then
+            echo "Error: cyber_evals.jsonl not found"
+            exit 1
+          fi
+
+      - name: Convert JSONL to JSON
+        run: |
+          if ! jq -s '.' data/prompts/cyber_evals.jsonl > data/prompts/cyber_evals.json; then
+            echo "Error: Failed to convert JSONL to JSON"
+            exit 1
+          fi
+
+      - name: Upload JSON artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cyber-evals-json
+          path: data/prompts/cyber_evals.json
+          retention-days: 90

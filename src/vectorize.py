@@ -1,118 +1,143 @@
 import toml
+import json
 from pathlib import Path
 from docling_core.transforms.chunker import HierarchicalChunker
 from docling.document_converter import DocumentConverter
 
-def load_framework_metadata(framework_path):
-    """Load metadata.toml for a framework directory."""
-    metadata_path = framework_path / "metadata.toml"
-    if metadata_path.exists():
-        return toml.load(metadata_path)
-    return None
+# Example usage:
+# ```python
+# from src.vectorize import FrameworkProcessor
+# 
+# # Process all frameworks
+# processor = FrameworkProcessor()
+# all_chunks = processor.process_all_frameworks()
+# processor.print_summary(all_chunks)
+# processor.save_chunks(all_chunks)
+# ```
 
-def process_framework_documents(framework_path, metadata):
-    """Process all documents for a single framework."""
-    converter = DocumentConverter()
-    chunker = HierarchicalChunker()
+class FrameworkProcessor:
+    """Process cybersecurity frameworks into chunks for analysis."""
     
-    framework_name = metadata['framework']['name']
-    documents = metadata['files']['documents']
+    def __init__(self, converter=None, chunker=None):
+        """Initialize with document converter and chunker."""
+        self.converter = converter or DocumentConverter()
+        self.chunker = chunker or HierarchicalChunker()
     
-    framework_chunks = []
+    def load_metadata(self, framework_path):
+        """Load metadata.toml for a framework directory."""
+        metadata_path = framework_path / "metadata.toml"
+        return toml.load(metadata_path) if metadata_path.exists() else None
     
-    for doc_file in documents:
-        doc_path = framework_path / doc_file
-        if doc_path.exists():
+    def process_documents(self, framework_path, metadata):
+        """Process all documents for a single framework."""
+        framework_name = metadata['framework']['name']
+        documents = metadata['files']['documents']
+        
+        framework_chunks = []
+        
+        for doc_file in documents:
+            doc_path = framework_path / doc_file
+            if not doc_path.exists():
+                print(f"Warning: Document {doc_file} not found in {framework_path}")
+                continue
+                
             print(f"Processing {framework_name}: {doc_file}")
             
-            # Convert document
-            doc = converter.convert(str(doc_path)).document
-            
-            # Chunk document
-            chunks = chunker.chunk(doc)
+            # Convert and chunk document
+            doc = self.converter.convert(str(doc_path)).document
+            chunks = self.chunker.chunk(doc)
             
             # Add metadata to each chunk
-            for i, chunk in enumerate(chunks):
-                chunk_data = {
-                    'framework_name': framework_name,
-                    'framework_full_name': metadata['framework']['full_name'],
-                    'framework_type': metadata['framework']['type'],
-                    'document': doc_file,
-                    'chunk_id': f"{framework_name}_{doc_file}_{i+1}",
-                    'text': chunk.text,
-                    'domain': metadata['metadata']['domain'],
-                    'sector': metadata['metadata']['sector']
-                }
-                framework_chunks.append(chunk_data)
-        else:
-            print(f"Warning: Document {doc_file} not found in {framework_path}")
+            framework_chunks.extend(self._create_chunk_data(chunks, metadata, doc_file))
+        
+        return framework_chunks
     
-    return framework_chunks
-
-def process_all_frameworks(frameworks_dir="data/cyber-frameworks"):
-    """Process all frameworks and organize chunks by framework."""
-    frameworks_path = Path(frameworks_dir)
-    all_chunks = {}
+    def _create_chunk_data(self, chunks, metadata, doc_file):
+        """Create chunk data with metadata."""
+        framework_name = metadata['framework']['name']
+        result = []
+        
+        for i, chunk in enumerate(chunks):
+            chunk_data = {
+                'framework_name': framework_name,
+                'framework_full_name': metadata['framework']['full_name'],
+                'framework_type': metadata['framework']['type'],
+                'document': doc_file,
+                'chunk_id': f"{framework_name}_{doc_file}_{i+1}",
+                'text': chunk.text,
+                'domain': metadata['metadata']['domain'],
+                'sector': metadata['metadata']['sector']
+            }
+            result.append(chunk_data)
+            
+        return result
     
-    for framework_dir in frameworks_path.iterdir():
-        if framework_dir.is_dir() and framework_dir.name != "LICENSE":
+    def process_all_frameworks(self, frameworks_dir="data/cyber-frameworks"):
+        """Process all frameworks and organize chunks by framework."""
+        frameworks_path = Path(frameworks_dir)
+        all_chunks = {}
+        
+        for framework_dir in frameworks_path.iterdir():
+            if not (framework_dir.is_dir() and framework_dir.name != "LICENSE"):
+                continue
+                
             print(f"\n=== Processing Framework: {framework_dir.name} ===")
             
-            metadata = load_framework_metadata(framework_dir)
-            if metadata:
-                chunks = process_framework_documents(framework_dir, metadata)
-                framework_name = metadata['framework']['name']
-                all_chunks[framework_name] = {
-                    'metadata': metadata,
-                    'chunks': chunks,
-                    'total_chunks': len(chunks)
-                }
-                print(f"Generated {len(chunks)} chunks for {framework_name}")
-            else:
+            metadata = self.load_metadata(framework_dir)
+            if not metadata:
                 print(f"No metadata.toml found for {framework_dir.name}")
-    
-    return all_chunks
-
-def print_framework_summary(all_chunks):
-    """Print summary of all processed frameworks."""
-    print("\n" + "="*50)
-    print("FRAMEWORK PROCESSING SUMMARY")
-    print("="*50)
-    
-    total_chunks = 0
-    for framework_name, data in all_chunks.items():
-        chunk_count = data['total_chunks']
-        total_chunks += chunk_count
-        framework_type = data['metadata']['framework']['type']
-        print(f"{framework_name}: {chunk_count} chunks ({framework_type})")
-    
-    print(f"\nTotal frameworks: {len(all_chunks)}")
-    print(f"Total chunks: {total_chunks}")
-
-def save_chunks_by_framework(all_chunks, output_dir="output/chunks"):
-    """Save chunks organized by framework to separate files."""
-    output_path = Path(output_dir)
-    output_path.mkdir(parents=True, exist_ok=True)
-    
-    for framework_name, data in all_chunks.items():
-        framework_file = output_path / f"{framework_name.lower().replace(' ', '_')}_chunks.json"
+                continue
+                
+            chunks = self.process_documents(framework_dir, metadata)
+            framework_name = metadata['framework']['name']
+            all_chunks[framework_name] = {
+                'metadata': metadata,
+                'chunks': chunks,
+                'total_chunks': len(chunks)
+            }
+            print(f"Generated {len(chunks)} chunks for {framework_name}")
         
-        # Save framework chunks as JSON
-        import json
-        with open(framework_file, 'w', encoding='utf-8') as f:
-            json.dump(data, f, indent=2, ensure_ascii=False)
+        return all_chunks
+    
+    def print_summary(self, all_chunks):
+        """Print summary of all processed frameworks."""
+        print("\n" + "="*50)
+        print("FRAMEWORK PROCESSING SUMMARY")
+        print("="*50)
         
-        print(f"Saved {len(data['chunks'])} chunks for {framework_name} to {framework_file}")
+        total_chunks = 0
+        for framework_name, data in all_chunks.items():
+            chunk_count = data['total_chunks']
+            total_chunks += chunk_count
+            framework_type = data['metadata']['framework']['type']
+            print(f"{framework_name}: {chunk_count} chunks ({framework_type})")
+        
+        print(f"\nTotal frameworks: {len(all_chunks)}")
+        print(f"Total chunks: {total_chunks}")
+    
+    def save_chunks(self, all_chunks, output_dir="output/chunks"):
+        """Save chunks organized by framework to separate files."""
+        output_path = Path(output_dir)
+        output_path.mkdir(parents=True, exist_ok=True)
+        
+        for framework_name, data in all_chunks.items():
+            framework_file = output_path / f"{framework_name.lower().replace(' ', '_')}_chunks.json"
+            
+            with open(framework_file, 'w', encoding='utf-8') as f:
+                json.dump(data, f, indent=2, ensure_ascii=False)
+            
+            print(f"Saved {len(data['chunks'])} chunks for {framework_name} to {framework_file}")
 
 if __name__ == "__main__":
     # Process all frameworks
-    all_chunks = process_all_frameworks()
+    processor = FrameworkProcessor()
+    all_chunks = processor.process_all_frameworks()
     
     # Print summary
-    print_framework_summary(all_chunks)
+    processor.print_summary(all_chunks)
     
-    # Optionally save to files
-    save_chunks_by_framework(all_chunks)
+    # Save to files
+    processor.save_chunks(all_chunks)
     
     # Example: Access specific framework chunks
     print("\n=== Example: First chunk from NIST CSF ===")

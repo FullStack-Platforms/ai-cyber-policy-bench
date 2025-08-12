@@ -1,0 +1,22 @@
+[framework]
+name = "CMMC"
+full_name = "Cybersecurity Maturity Model Certification"
+standard = "CMMC Level 1"
+version = "2.13"
+organization = "Department of Defense"
+type = "cybersecurity_maturity"
+scope = "defense_contractors"
+
+[source]
+original_url = "https://www.acq.osd.mil/cmmc/"
+conversion_method = "docling"
+original_format = "PDF"
+converted_date = "2025"
+
+[files]
+documents = ["AssessmentGuideL1.md", "ScopingGuideL1v2.md"]
+
+[metadata]
+description = "CMMC Level 1 assessment and scoping guidance for defense contractors"
+domain = "defense_cybersecurity"
+sector = "defense"

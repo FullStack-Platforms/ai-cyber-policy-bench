@@ -1,0 +1,22 @@
+[framework]
+name = "PCI DSS"
+full_name = "Payment Card Industry Data Security Standard"
+standard = "PCI DSS"
+version = "4.0.1"
+organization = "PCI Security Standards Council"
+type = "payment_card_security"
+scope = "payment_card_industry"
+
+[source]
+original_url = "https://www.pcisecuritystandards.org/"
+conversion_method = "docling"
+original_format = "PDF"
+converted_date = "2025"
+
+[files]
+documents = ["PCI-DSS-v4_0_1.md"]
+
+[metadata]
+description = "PCI DSS 4.0.1 requirements and testing procedures for payment card data protection"
+domain = "payment_security"
+sector = "financial_services"

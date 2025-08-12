@@ -1,0 +1,22 @@
+[framework]
+name = "CJIS"
+full_name = "Criminal Justice Information Services"
+standard = "CJIS Security Policy"
+version = "5.8"
+organization = "FBI - Department of Justice"
+type = "law_enforcement_security"
+scope = "criminal_justice_agencies"
+
+[source]
+original_url = "https://www.fbi.gov/services/cjis/cjis-security-policy-resource-center"
+conversion_method = "docling"
+original_format = "PDF"
+converted_date = "2025"
+
+[files]
+documents = ["CJIS-Security-Policy_v5-8_20190601.md"]
+
+[metadata]
+description = "CJIS Security Policy for protecting Criminal Justice Information"
+domain = "law_enforcement_security"
+sector = "law_enforcement"

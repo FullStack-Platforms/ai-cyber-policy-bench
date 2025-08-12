@@ -1,0 +1,22 @@
+[framework]
+name = "FedRAMP"
+full_name = "Federal Risk and Authorization Management Program"
+standard = "RFC-0012 Continuous Vulnerability Management Standard"
+version = "RFC-0012"
+organization = "FedRAMP"
+type = "vulnerability_management"
+scope = "federal_cloud_services"
+
+[source]
+original_url = "https://www.fedramp.gov/"
+conversion_method = "docling"
+original_format = "PDF"
+converted_date = "2025"
+
+[files]
+documents = ["0012-vulnerability-management.md"]
+
+[metadata]
+description = "FedRAMP continuous vulnerability management standard for cloud service providers"
+domain = "cloud_security"
+sector = "government"

@@ -1,0 +1,22 @@
+[framework]
+name = "SOC 2"
+full_name = "System and Organization Controls 2 - Trust Services Criteria"
+standard = "Trust Services Criteria"
+version = "2017 (Revised 2022)"
+organization = "AICPA"
+type = "trust_services"
+scope = "service_organizations"
+
+[source]
+original_url = "https://www.aicpa.org/interestareas/frc/assuranceadvisoryservices/aicpasoc2report"
+conversion_method = "docling"
+original_format = "PDF"
+converted_date = "2025"
+
+[files]
+documents = ["Trust-services-criteria.md"]
+
+[metadata]
+description = "2017 Trust Services Criteria for security, availability, processing integrity, confidentiality, and privacy"
+domain = "service_organization_controls"
+sector = "general"

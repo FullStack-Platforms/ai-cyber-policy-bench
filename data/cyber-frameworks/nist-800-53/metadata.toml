@@ -1,0 +1,22 @@
+[framework]
+name = "NIST 800-53"
+full_name = "NIST Special Publication 800-53"
+standard = "SP 800-53r5"
+version = "Revision 5"
+organization = "National Institute of Standards and Technology"
+type = "security_privacy_controls"
+scope = "information_systems_organizations"
+
+[source]
+original_url = "https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final"
+conversion_method = "docling"
+original_format = "PDF"
+converted_date = "2025"
+
+[files]
+documents = ["NIST.SP.800-53r5.md"]
+
+[metadata]
+description = "NIST 800-53r5 security and privacy controls for information systems and organizations"
+domain = "security_privacy_controls"
+sector = "general"

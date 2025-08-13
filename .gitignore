@@ -26,3 +26,6 @@ convert_to_json.sh
 output/
 vector_db/
 experiment_results/
+
+#config files
+config.cfg

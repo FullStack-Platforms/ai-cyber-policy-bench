@@ -38,14 +38,14 @@ def get_client():
 client = get_client()
 
 # Configuration options
-USE_DYNAMIC_MODELS = True  # Set to False to use FIXED_EVAL_MODELS
+USE_DYNAMIC_MODELS = False  # Set to False to use FIXED_EVAL_MODELS
 CACHE_DURATION_HOURS = 24  # Cache model list for 24 hours
 
 # Default model list (fallback or when USE_DYNAMIC_MODELS is False)
 DEFAULT_EVAL_MODELS = [
-    "anthropic/claude-opus-4",
     "openai/gpt-4o",
     "anthropic/claude-sonnet-4", 
+    "anthropic/claude-opus-4",
     "google/gemini-2.5-flash",
     "deepseek/deepseek-coder-v2",
     "mistralai/mistral-large-2",

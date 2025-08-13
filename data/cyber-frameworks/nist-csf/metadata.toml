@@ -1,0 +1,22 @@
+[framework]
+name = "nist_csf"
+full_name = "NIST Cybersecurity Framework"
+standard = "NIST CSWP 29"
+version = "2.0"
+organization = "National Institute of Standards and Technology"
+type = "cybersecurity_framework"
+scope = "all_organizations"
+
+[source]
+original_url = "https://www.nist.gov/cyberframework"
+conversion_method = "docling"
+original_format = "PDF"
+converted_date = "2025"
+
+[files]
+documents = ["NIST.CSWP.29.md"]
+
+[metadata]
+description = "NIST Cybersecurity Framework 2.0 for managing cybersecurity risks"
+domain = "cybersecurity_governance"
+sector = "general"

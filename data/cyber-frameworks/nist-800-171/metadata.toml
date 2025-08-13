@@ -1,0 +1,22 @@
+[framework]
+name = "nist_800_171"
+full_name = "NIST Special Publication 800-171"
+standard = "SP 800-171r3"
+version = "Revision 3"
+organization = "National Institute of Standards and Technology"
+type = "controlled_unclassified_information"
+scope = "nonfederal_systems"
+
+[source]
+original_url = "https://csrc.nist.gov/publications/detail/sp/800-171/rev-3/final"
+conversion_method = "docling"
+original_format = "PDF"
+converted_date = "2025"
+
+[files]
+documents = ["NIST.SP.800-171r3.md"]
+
+[metadata]
+description = "NIST 800-171r3 for protecting Controlled Unclassified Information in nonfederal systems"
+domain = "information_security"
+sector = "general"

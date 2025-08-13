@@ -1,63 +1,16 @@
-{
-  "input": "Our company policy states: 'All employees must use strong passwords and change them every 90 days.' Which SOC 2 2022 requirement(s) does this map to?",
-  "ideal": "CC6.1 (Logical and Physical Access Controls: Restricts Logical Access) and CC6.2 (Registers and Authorizes New Users, Reviews Validity of Access Credentials)."
-}
-{
-  "input": "Our company policy states: 'All employees must use strong passwords and change them every 180 days.' Which SOC 2 2022 requirement(s) does this map to?",
-  "ideal": "CC6.1 and CC6.2, but the 180-day interval may not fully align with best practices implied by SOC 2, which expects timely credential updates."
-}
-{
-  "input": "The policy document says: 'Management reviews access rights.' What SOC 2 2022 control is relevant?",
-  "ideal": "CC6.3 (Reviews Access Roles and Rules)."
-}
-{
-  "input": "The policy document says: 'Management reviews.' What SOC 2 2022 control is relevant?",
-  "ideal": "Ambiguous; more context is needed to determine the relevant SOC 2 control."
-}
-{
-  "input": "Our policy: 'We encrypt all data in transit.' Which SOC 2 2022 requirement does this support?",
-  "ideal": "CC6.7 (Uses Encryption Technologies to Protect Data in Transmission)."
-}
-{
-  "input": "Our policy: 'We have a ping-pong table in the break room.' Which SOC 2 2022 requirement does this support?",
-  "ideal": "None; this policy is not relevant to SOC 2 2022 requirements."
-}
-{
-  "input": "Policy: 'Incident response plans are tested annually.' What SOC 2 2022 requirement does this map to, and why?",
-  "ideal": "A1.3 (Implements Business Continuity Plan Testing). Because A1.3 requires regular testing of recovery and continuity plans to ensure preparedness."
-}
-{
-  "input": "Policy: 'Employees are trained on privacy annually.' What SOC 2 2022 requirement does this map to, and why?",
-  "ideal": "CC1.4 (Provides Training to Maintain Technical Competencies) and P8.1 (Performs Ongoing Monitoring and Training). Because both require ongoing training to ensure competence and compliance with privacy objectives."
-}
-{
-  "input": "Policy: 'Only authorized users can access company laptops.' Which CMMC Level 1 requirement(s) does this map to?",
-  "ideal": "AC.L1-b.1.i (Authorized Access Control [FCI Data])."
-}
-{
-  "input": "Policy: 'All employees can access company laptops.' Which CMMC Level 1 requirement(s) does this map to?",
-  "ideal": "None; this policy does not align with CMMC Level 1 access control requirements."
-}
-{
-  "input": "Policy: 'The office has a coffee machine available to all staff.' Which CMMC Level 1 requirement(s) does this map to?",
-  "ideal": "None; this policy is not relevant to CMMC Level 1 requirements."
-}
-{
-  "input": "Policy: 'We destroy all media containing sensitive data before disposal.' Which CMMC Level 1 requirement(s) does this map to?",
-  "ideal": "MP.L1-b.1.vii (Media Disposal [FCI Data])."
-}
-{
-  "input": "Policy: 'Visitors must be escorted at all times.' Which CMMC Level 1 requirement(s) does this map to, and why?",
-  "ideal": "PE.L1-b.1.ix (Manage Visitors & Physical Access [FCI Data]). Because this requirement mandates escorting visitors and monitoring visitor activity."
-}
-{
-  "input": "Policy: 'We scan all files from external sources before opening.' Which CMMC Level 1 requirement(s) does this map to, and why?",
-  "ideal": "SI.L1-b.1.xv (System & File Scanning [FCI Data]). Because this requirement specifies real-time scans of files from external sources."
-}
-{
-  "input": "Policy: 'We protect our systems.' Which CMMC Level 1 requirement(s) does this map to?",
-  "ideal": "Ambiguous; more detail is needed to determine the relevant CMMC Level 1 requirement."
-}
-{"input": "Policy: 'We have a ping-pong table in the break room.' Which CMMC Level 1 requirement(s) does this map to?",
-  "ideal": "None; this policy is not relevant to CMMC Level 1 requirements."
-}
+{"id": "efe87238-4f74-42a2-a0e8-9f1e7f8998d9", "question_id": "cyber_eval_001", "input": "Our company policy states: 'All employees must use strong passwords and change them every 90 days.' Which SOC 2 2022 requirement(s) does this map to?", "expected_output": "CC6.1 (Logical and Physical Access Controls: Restricts Logical Access) and CC6.2 (Registers and Authorizes New Users, Reviews Validity of Access Credentials).", "ideal": "CC6.1 (Logical and Physical Access Controls: Restricts Logical Access) and CC6.2 (Registers and Authorizes New Users, Reviews Validity of Access Credentials).", "metadata": {"category": "cybersecurity_compliance", "difficulty": "intermediate", "framework": "soc_2", "question_type": "policy_mapping", "created_at": "2025-08-12T13:59:25.314846", "version": "1.0"}}
+{"id": "4e7d618a-2042-447a-91c5-f8bbb9862f9c", "question_id": "cyber_eval_002", "input": "Our company policy states: 'All employees must use strong passwords and change them every 180 days.' Which SOC 2 2022 requirement(s) does this map to?", "expected_output": "CC6.1 and CC6.2, but the 180-day interval may not fully align with best practices implied by SOC 2, which expects timely credential updates.", "ideal": "CC6.1 and CC6.2, but the 180-day interval may not fully align with best practices implied by SOC 2, which expects timely credential updates.", "metadata": {"category": "cybersecurity_compliance", "difficulty": "intermediate", "framework": "soc_2", "question_type": "policy_mapping", "created_at": "2025-08-12T13:59:25.314860", "version": "1.0"}}
+{"id": "89bcb15b-0966-4fc6-aca2-232ccdbdec94", "question_id": "cyber_eval_003", "input": "The policy document says: 'Management reviews access rights.' What SOC 2 2022 control is relevant?", "expected_output": "CC6.3 (Reviews Access Roles and Rules).", "ideal": "CC6.3 (Reviews Access Roles and Rules).", "metadata": {"category": "cybersecurity_compliance", "difficulty": "intermediate", "framework": "soc_2", "question_type": "policy_mapping", "created_at": "2025-08-12T13:59:25.314867", "version": "1.0"}}
+{"id": "5f3c1431-ca72-40d5-b2e1-a9019206988b", "question_id": "cyber_eval_004", "input": "The policy document says: 'Management reviews.' What SOC 2 2022 control is relevant?", "expected_output": "Ambiguous; more context is needed to determine the relevant SOC 2 control.", "ideal": "Ambiguous; more context is needed to determine the relevant SOC 2 control.", "metadata": {"category": "cybersecurity_compliance", "difficulty": "intermediate", "framework": "soc_2", "question_type": "policy_mapping", "created_at": "2025-08-12T13:59:25.314874", "version": "1.0"}}
+{"id": "36909d7b-bbda-4bc8-b84d-578ad79de25f", "question_id": "cyber_eval_005", "input": "Our policy: 'We encrypt all data in transit.' Which SOC 2 2022 requirement does this support?", "expected_output": "CC6.7 (Uses Encryption Technologies to Protect Data in Transmission).", "ideal": "CC6.7 (Uses Encryption Technologies to Protect Data in Transmission).", "metadata": {"category": "cybersecurity_compliance", "difficulty": "intermediate", "framework": "soc_2", "question_type": "policy_mapping", "created_at": "2025-08-12T13:59:25.314879", "version": "1.0"}}
+{"id": "0982970f-dd3a-4097-8e6d-20258ea8000f", "question_id": "cyber_eval_006", "input": "Our policy: 'We have a ping-pong table in the break room.' Which SOC 2 2022 requirement does this support?", "expected_output": "None; this policy is not relevant to SOC 2 2022 requirements.", "ideal": "None; this policy is not relevant to SOC 2 2022 requirements.", "metadata": {"category": "cybersecurity_compliance", "difficulty": "intermediate", "framework": "soc_2", "question_type": "policy_mapping", "created_at": "2025-08-12T13:59:25.314886", "version": "1.0"}}
+{"id": "ee932212-0db7-4928-9fab-2dac9f3856ba", "question_id": "cyber_eval_007", "input": "Policy: 'Incident response plans are tested annually.' What SOC 2 2022 requirement does this map to, and why?", "expected_output": "A1.3 (Implements Business Continuity Plan Testing). Because A1.3 requires regular testing of recovery and continuity plans to ensure preparedness.", "ideal": "A1.3 (Implements Business Continuity Plan Testing). Because A1.3 requires regular testing of recovery and continuity plans to ensure preparedness.", "metadata": {"category": "cybersecurity_compliance", "difficulty": "intermediate", "framework": "soc_2", "question_type": "policy_mapping", "created_at": "2025-08-12T13:59:25.314892", "version": "1.0"}}
+{"id": "d5ca7d47-ab01-4b53-b063-efb9dd962f2c", "question_id": "cyber_eval_008", "input": "Policy: 'Employees are trained on privacy annually.' What SOC 2 2022 requirement does this map to, and why?", "expected_output": "CC1.4 (Provides Training to Maintain Technical Competencies) and P8.1 (Performs Ongoing Monitoring and Training). Because both require ongoing training to ensure competence and compliance with privacy objectives.", "ideal": "CC1.4 (Provides Training to Maintain Technical Competencies) and P8.1 (Performs Ongoing Monitoring and Training). Because both require ongoing training to ensure competence and compliance with privacy objectives.", "metadata": {"category": "cybersecurity_compliance", "difficulty": "intermediate", "framework": "soc_2", "question_type": "policy_mapping", "created_at": "2025-08-12T13:59:25.314897", "version": "1.0"}}
+{"id": "af9f202e-6145-44cf-a016-b2792c059108", "question_id": "cyber_eval_009", "input": "Policy: 'Only authorized users can access company laptops.' Which CMMC Level 1 requirement(s) does this map to?", "expected_output": "AC.L1-b.1.i (Authorized Access Control [FCI Data]).", "ideal": "AC.L1-b.1.i (Authorized Access Control [FCI Data]).", "metadata": {"category": "cybersecurity_compliance", "difficulty": "intermediate", "framework": "cmmc", "question_type": "policy_mapping", "created_at": "2025-08-12T13:59:25.314903", "version": "1.0"}}
+{"id": "1b532bb8-86d4-41fe-8226-f9ff53b6eefd", "question_id": "cyber_eval_010", "input": "Policy: 'All employees can access company laptops.' Which CMMC Level 1 requirement(s) does this map to?", "expected_output": "None; this policy does not align with CMMC Level 1 access control requirements.", "ideal": "None; this policy does not align with CMMC Level 1 access control requirements.", "metadata": {"category": "cybersecurity_compliance", "difficulty": "intermediate", "framework": "cmmc", "question_type": "policy_mapping", "created_at": "2025-08-12T13:59:25.314909", "version": "1.0"}}
+{"id": "e9491e06-611d-408d-a179-2e24baa0d72e", "question_id": "cyber_eval_011", "input": "Policy: 'The office has a coffee machine available to all staff.' Which CMMC Level 1 requirement(s) does this map to?", "expected_output": "None; this policy is not relevant to CMMC Level 1 requirements.", "ideal": "None; this policy is not relevant to CMMC Level 1 requirements.", "metadata": {"category": "cybersecurity_compliance", "difficulty": "intermediate", "framework": "cmmc", "question_type": "policy_mapping", "created_at": "2025-08-12T13:59:25.314915", "version": "1.0"}}
+{"id": "c5660feb-1380-41cf-8195-c12fe9dcc445", "question_id": "cyber_eval_012", "input": "Policy: 'We destroy all media containing sensitive data before disposal.' Which CMMC Level 1 requirement(s) does this map to?", "expected_output": "MP.L1-b.1.vii (Media Disposal [FCI Data]).", "ideal": "MP.L1-b.1.vii (Media Disposal [FCI Data]).", "metadata": {"category": "cybersecurity_compliance", "difficulty": "intermediate", "framework": "cmmc", "question_type": "policy_mapping", "created_at": "2025-08-12T13:59:25.314921", "version": "1.0"}}
+{"id": "37709dc8-d467-40f9-9358-5557100f3a9c", "question_id": "cyber_eval_013", "input": "Policy: 'Visitors must be escorted at all times.' Which CMMC Level 1 requirement(s) does this map to, and why?", "expected_output": "PE.L1-b.1.ix (Manage Visitors & Physical Access [FCI Data]). Because this requirement mandates escorting visitors and monitoring visitor activity.", "ideal": "PE.L1-b.1.ix (Manage Visitors & Physical Access [FCI Data]). Because this requirement mandates escorting visitors and monitoring visitor activity.", "metadata": {"category": "cybersecurity_compliance", "difficulty": "intermediate", "framework": "cmmc", "question_type": "policy_mapping", "created_at": "2025-08-12T13:59:25.314927", "version": "1.0"}}
+{"id": "fb16c884-6d9e-402e-a776-b9fb9c0c427e", "question_id": "cyber_eval_014", "input": "Policy: 'We scan all files from external sources before opening.' Which CMMC Level 1 requirement(s) does this map to, and why?", "expected_output": "SI.L1-b.1.xv (System & File Scanning [FCI Data]). Because this requirement specifies real-time scans of files from external sources.", "ideal": "SI.L1-b.1.xv (System & File Scanning [FCI Data]). Because this requirement specifies real-time scans of files from external sources.", "metadata": {"category": "cybersecurity_compliance", "difficulty": "intermediate", "framework": "cmmc", "question_type": "policy_mapping", "created_at": "2025-08-12T13:59:25.314932", "version": "1.0"}}
+{"id": "dff7bcd2-afea-4cdc-b72f-bb29b1e96ca9", "question_id": "cyber_eval_015", "input": "Policy: 'We protect our systems.' Which CMMC Level 1 requirement(s) does this map to?", "expected_output": "Ambiguous; more detail is needed to determine the relevant CMMC Level 1 requirement.", "ideal": "Ambiguous; more detail is needed to determine the relevant CMMC Level 1 requirement.", "metadata": {"category": "cybersecurity_compliance", "difficulty": "intermediate", "framework": "cmmc", "question_type": "policy_mapping", "created_at": "2025-08-12T13:59:25.314942", "version": "1.0"}}
+{"id": "5b7dc283-1c16-403a-ab28-889f55f528cb", "question_id": "cyber_eval_016", "input": "Policy: 'We have a ping-pong table in the break room.' Which CMMC Level 1 requirement(s) does this map to?", "expected_output": "None; this policy is not relevant to CMMC Level 1 requirements.", "ideal": "None; this policy is not relevant to CMMC Level 1 requirements.", "metadata": {"category": "cybersecurity_compliance", "difficulty": "intermediate", "framework": "cmmc", "question_type": "policy_mapping", "created_at": "2025-08-12T13:59:25.314948", "version": "1.0"}}

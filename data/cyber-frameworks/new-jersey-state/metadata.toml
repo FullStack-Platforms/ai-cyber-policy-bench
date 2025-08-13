@@ -1,0 +1,22 @@
+[framework]
+name = "new_jersey_state"
+full_name = "New Jersey Statewide Information Security Manual"
+standard = "New Jersey Executive Branch Information Security Manual"
+version = "Current"
+organization = "State of New Jersey"
+type = "state_information_security"
+scope = "new_jersey_state_government"
+
+[source]
+original_url = "https://www.state.nj.us/"
+conversion_method = "docling"
+original_format = "PDF"
+converted_date = "2025"
+
+[files]
+documents = ["NJ_Statewide_Information_Security_Manual_NOGLOSSARY.md"]
+
+[metadata]
+description = "New Jersey statewide information security manual for executive branch agencies"
+domain = "state_government_security"
+sector = "state_government"

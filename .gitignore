@@ -21,3 +21,11 @@ venv/
 .DS_Store
 Thumbs.db
 convert_to_json.sh
+
+# Output Files
+output/
+vector_db/
+experiment_results/
+
+#config files
+config.cfg

@@ -1,0 +1,22 @@
+[framework]
+name = "hipaa"
+full_name = "Health Insurance Portability and Accountability Act"
+standard = "HIPAA Security Rule"
+version = "2024 NPRM, SP 800-66r2"
+organization = "HHS, NIST"
+type = "healthcare_security"
+scope = "healthcare_organizations"
+
+[source]
+original_url = "https://www.hhs.gov/hipaa/"
+conversion_method = "docling"
+original_format = "PDF"
+converted_date = "2025"
+
+[files]
+documents = ["2024-30983.md", "NIST.SP.800-66r2.md"]
+
+[metadata]
+description = "HIPAA Security Rule for protecting electronic protected health information"
+domain = "healthcare_security"
+sector = "healthcare"

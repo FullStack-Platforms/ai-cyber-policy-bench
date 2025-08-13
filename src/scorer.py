@@ -219,8 +219,8 @@ Respond with JSON in this format:
                         scoring_methods
                     )
                     
-                    # Add scores to result
-                    result_with_scores = result.copy()
+                    # Add scores to result (create a copy of the dict)
+                    result_with_scores = dict(result)
                     result_with_scores['scores'] = {
                         method.value: {
                             'score': scoring_result.accuracy_score,
@@ -248,8 +248,8 @@ Respond with JSON in this format:
                     
                 except Exception as e:
                     print(f"  Error scoring result {i + 1}: {e}")
-                    # Add result with zero score
-                    result_with_scores = result.copy()
+                    # Add result with zero score (create a copy of the dict)
+                    result_with_scores = dict(result)
                     result_with_scores['accuracy_score'] = 0.0
                     result_with_scores['scores'] = {'error': str(e)}
                     scored_model_results.append(result_with_scores)

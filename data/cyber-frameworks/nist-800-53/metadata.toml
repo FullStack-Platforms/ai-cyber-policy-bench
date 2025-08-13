@@ -1,5 +1,5 @@
 [framework]
-name = "NIST 800-53"
+name = "nist_800_53"
 full_name = "NIST Special Publication 800-53"
 standard = "SP 800-53r5"
 version = "Revision 5"

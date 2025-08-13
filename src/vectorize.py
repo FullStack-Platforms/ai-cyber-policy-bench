@@ -127,6 +127,26 @@ class FrameworkProcessor:
                 json.dump(data, f, indent=2, ensure_ascii=False)
             
             print(f"Saved {len(data['chunks'])} chunks for {framework_name} to {framework_file}")
+    
+    def initialize_vector_db(self, all_chunks, db_path=None):
+        """Initialize vector database with processed chunks using separate collections."""
+        try:
+            from .db import VectorDatabase
+        except ImportError:
+            from src.db import VectorDatabase
+        
+        print("\n=== Initializing Vector Database ===")
+        db = VectorDatabase(db_path=db_path)
+        db.add_chunks(all_chunks)
+        
+        # Print statistics
+        stats = db.get_collection_stats()
+        print(f"Vector database initialized with {stats['num_collections']} collections")
+        print(f"Total chunks: {stats['total_chunks']}")
+        for framework, count in stats['frameworks'].items():
+            print(f"  {framework}: {count} chunks")
+        
+        return db
 
 if __name__ == "__main__":
     # Process all frameworks

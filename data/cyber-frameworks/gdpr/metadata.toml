@@ -1,5 +1,5 @@
 [framework]
-name = "GDPR"
+name = "gdpr"
 full_name = "General Data Protection Regulation"
 standard = "Regulation (EU) 2016/679"
 version = "2016/679"

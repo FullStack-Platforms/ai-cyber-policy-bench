@@ -15,12 +15,16 @@ Usage:
     python poc_runner.py --models 2 --questions 3 --setup-db
 """
 
+import os
 import asyncio
 import argparse
 import json
 from pathlib import Path
 from typing import Dict, List
 import configparser
+
+# Fix tokenizer parallelism warning
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 # Load configuration
 config = configparser.ConfigParser()

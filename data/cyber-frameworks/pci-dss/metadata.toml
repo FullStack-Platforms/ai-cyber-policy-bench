@@ -1,5 +1,5 @@
 [framework]
-name = "PCI DSS"
+name = "pci_dss"
 full_name = "Payment Card Industry Data Security Standard"
 standard = "PCI DSS"
 version = "4.0.1"

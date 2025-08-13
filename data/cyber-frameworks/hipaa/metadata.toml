@@ -1,5 +1,5 @@
 [framework]
-name = "HIPAA"
+name = "hipaa"
 full_name = "Health Insurance Portability and Accountability Act"
 standard = "HIPAA Security Rule"
 version = "2024 NPRM, SP 800-66r2"

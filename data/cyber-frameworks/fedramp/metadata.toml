@@ -1,5 +1,5 @@
 [framework]
-name = "FedRAMP"
+name = "fedramp"
 full_name = "Federal Risk and Authorization Management Program"
 standard = "RFC-0012 Continuous Vulnerability Management Standard"
 version = "RFC-0012"

@@ -8,8 +8,12 @@ import time
 from dataclasses import dataclass
 from enum import Enum
 
-from .db import VectorDatabase
-from .benchmark import get_eval_models, client
+try:
+    from .db import VectorDatabase
+    from .benchmark import get_eval_models, client
+except ImportError:
+    from src.db import VectorDatabase
+    from src.benchmark import get_eval_models, client
 
 class EvaluationMode(Enum):
     NO_CONTEXT = "no_context"
@@ -94,12 +98,49 @@ Please provide a precise answer based on the context provided. Be specific about
         else:
             return f"Question: {question}\n\nPlease provide a precise answer based on your knowledge of cybersecurity frameworks and compliance requirements."
     
+    def detect_frameworks_in_question(self, question: str) -> List[str]:
+        """Detect which frameworks are mentioned in the evaluation question."""
+        question_lower = question.lower()
+        detected_frameworks = []
+        
+        # Framework detection patterns that return standardized names
+        framework_patterns = {
+            'nist_csf': ['nist csf', 'nist cybersecurity framework', 'csf'],
+            'soc_2': ['soc 2', 'soc2', 'soc-2', 'trust services'],
+            'cmmc': ['cmmc', 'cybersecurity maturity model certification'],
+            'nist_800_53': ['nist 800-53', '800-53', 'nist sp 800-53'],
+            'nist_800_171': ['nist 800-171', '800-171', 'nist sp 800-171'],
+            'pci_dss': ['pci dss', 'pci', 'payment card industry'],
+            'hipaa': ['hipaa', 'health insurance portability'],
+            'gdpr': ['gdpr', 'general data protection regulation'],
+            'fedramp': ['fedramp', 'federal risk and authorization'],
+            'cjis': ['cjis', 'criminal justice information services'],
+            'new_jersey_state': ['new jersey', 'nj state']
+        }
+        
+        for framework_name, patterns in framework_patterns.items():
+            if any(pattern in question_lower for pattern in patterns):
+                detected_frameworks.append(framework_name)
+        
+        return detected_frameworks
+    
     def get_vector_context(self, question: str, n_results: int = 3) -> Optional[str]:
-        """Retrieve relevant context from vector database."""
+        """Retrieve relevant context from vector database with intelligent framework detection."""
         if not self.vector_db:
             return None
-            
-        results = self.vector_db.search(question, n_results=n_results)
+        
+        # Detect frameworks mentioned in the question
+        detected_frameworks = self.detect_frameworks_in_question(question)
+        
+        # If specific frameworks detected, search those collections
+        if detected_frameworks:
+            results = self.vector_db.search(question, n_results=n_results, frameworks=detected_frameworks)
+            print(f"Detected frameworks: {detected_frameworks}, found {len(results)} results")
+        else:
+            # Fall back to searching all frameworks
+            results = self.vector_db.search(question, n_results=n_results)
+            print(f"No specific frameworks detected, searching all collections, found {len(results)} results")
+        
         if not results:
             return None
             
@@ -111,25 +152,31 @@ Please provide a precise answer based on the context provided. Be specific about
         return "\n\n".join(context_parts)
     
     def get_raw_file_context(self, question: str, framework_files: Dict[str, str]) -> Optional[str]:
-        """Get relevant raw file context by searching for framework mentions in question."""
-        # Simple heuristic: look for framework keywords in the question
-        question_lower = question.lower()
+        """Get relevant raw file context by detecting framework mentions in question."""
+        # Use the same framework detection logic
+        detected_frameworks = self.detect_frameworks_in_question(question)
         relevant_frameworks = []
         
-        framework_keywords = {
-            'soc': 'soc2-trust-services',
-            'soc 2': 'soc2-trust-services',
+        # Map standardized framework names to directory names
+        framework_to_dir = {
+            'nist_csf': 'nist-csf',
+            'soc_2': 'soc2-trust-services',
             'cmmc': 'cmmc',
-            'nist': 'nist-csf',
-            'pci': 'pci-dss',
+            'nist_800_53': 'nist-800-53',
+            'nist_800_171': 'nist-800-171',
+            'pci_dss': 'pci-dss',
             'hipaa': 'hipaa',
             'gdpr': 'gdpr',
-            'fedramp': 'fedramp'
+            'fedramp': 'fedramp',
+            'cjis': 'cjis',
+            'new_jersey_state': 'new-jersey-state'
         }
         
-        for keyword, framework_key in framework_keywords.items():
-            if keyword in question_lower and framework_key in framework_files:
-                relevant_frameworks.append(framework_files[framework_key])
+        # Get content for detected frameworks
+        for framework_name in detected_frameworks:
+            framework_dir = framework_to_dir.get(framework_name)
+            if framework_dir and framework_dir in framework_files:
+                relevant_frameworks.append(framework_files[framework_dir])
         
         if relevant_frameworks:
             return "\n\n".join(relevant_frameworks)
@@ -170,7 +217,7 @@ Please provide a precise answer based on the context provided. Be specific about
     
     async def run_evaluation(self, models: List[str], questions: List[Dict], 
                            modes: List[EvaluationMode], 
-                           output_dir: str = "experiment_results") -> Dict[str, List[EvaluationResult]]:
+                           output_dir: str = "experiment_results") -> Dict[str, List[Dict]]:
         """Run complete evaluation across models, questions, and modes."""
         results = {}
         framework_files = None
@@ -181,7 +228,7 @@ Please provide a precise answer based on the context provided. Be specific about
         
         # Initialize vector DB if needed
         if EvaluationMode.VECTOR_DB in modes and not self.vector_db:
-            print("Initializing vector database...")
+            print("Initializing vector database with multi-collection support...")
             self.vector_db = VectorDatabase.initialize_from_chunks()
         
         total_evaluations = len(models) * len(questions) * len(modes)
@@ -218,11 +265,28 @@ Please provide a precise answer based on the context provided. Be specific about
             results[model_name] = model_results
             print(f"  Completed {model_name}: {len(model_results)} results")
         
+        # Convert results to dict format for downstream compatibility
+        dict_results = {}
+        for model_name, model_results in results.items():
+            dict_results[model_name] = [
+                {
+                    'question': r.question,
+                    'ideal_answer': r.ideal_answer,
+                    'model_response': r.model_response,
+                    'model_name': r.model_name,
+                    'evaluation_mode': r.evaluation_mode.value,
+                    'context_provided': r.context_provided,
+                    'accuracy_score': r.accuracy_score,
+                    'timestamp': r.timestamp
+                }
+                for r in model_results
+            ]
+        
         # Save results
         self.save_results(results, output_dir)
         print(f"\nEvaluation complete! Results saved to {output_dir}")
         
-        return results
+        return dict_results
     
     def save_results(self, results: Dict[str, List[EvaluationResult]], output_dir: str) -> None:
         """Save evaluation results to files."""

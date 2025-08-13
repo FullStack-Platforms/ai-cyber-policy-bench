@@ -1,5 +1,5 @@
 [framework]
-name = "CJIS"
+name = "cjis"
 full_name = "Criminal Justice Information Services"
 standard = "CJIS Security Policy"
 version = "5.8"

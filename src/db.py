@@ -12,8 +12,8 @@ config.read('config.cfg')
 class VectorDatabase:
     """Vector database for storing and retrieving cybersecurity framework chunks."""
     
-    def __init__(self, db_path: str = None, collection_name: str = "cyber_frameworks"):
-        """Initialize the vector database."""
+    def __init__(self, db_path: str = None):
+        """Initialize the vector database with multi-collection support."""
         if db_path is None:
             db_path = config.get('Vector Database', 'db_path', fallback='./vector_db')
         self.db_path = Path(db_path)
@@ -21,27 +21,43 @@ class VectorDatabase:
         
         # Initialize ChromaDB
         self.client = chromadb.PersistentClient(path=str(self.db_path))
-        self.collection_name = collection_name
         
         # Initialize embedding model
         self.embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
         
-        # Get or create collection
+        # Store collections by framework name
+        self.collections = {}
+    
+    def get_or_create_collection(self, framework_name: str) -> chromadb.Collection:
+        """Get or create a collection for a specific framework."""
+        # Framework names are already standardized, use them directly as collection names
+        collection_name = framework_name
+        
+        if collection_name in self.collections:
+            return self.collections[collection_name]
+            
         try:
-            self.collection = self.client.get_collection(collection_name)
+            collection = self.client.get_collection(collection_name)
         except:
-            self.collection = self.client.create_collection(
+            collection = self.client.create_collection(
                 name=collection_name,
-                metadata={"hnsw:space": "cosine"}
+                metadata={"hnsw:space": "cosine", "framework": framework_name}
             )
+        
+        self.collections[collection_name] = collection
+        return collection
     
     def add_chunks(self, chunks_data: Dict[str, Any]) -> None:
-        """Add framework chunks to the vector database."""
-        documents = []
-        metadatas = []
-        ids = []
+        """Add framework chunks to separate collections by framework."""
+        total_chunks = 0
         
-        for framework_data in chunks_data.values():
+        for framework_name, framework_data in chunks_data.items():
+            collection = self.get_or_create_collection(framework_name)
+            
+            documents = []
+            metadatas = []
+            ids = []
+            
             for chunk in framework_data['chunks']:
                 documents.append(chunk['text'])
                 metadatas.append({
@@ -53,74 +69,133 @@ class VectorDatabase:
                     'sector': chunk['sector']
                 })
                 ids.append(chunk['chunk_id'])
-        
-        # Generate embeddings
-        embeddings = self.embedding_model.encode(documents).tolist()
-        
-        # Add to collection in batches
-        batch_size = 100
-        for i in range(0, len(documents), batch_size):
-            batch_docs = documents[i:i+batch_size]
-            batch_meta = metadatas[i:i+batch_size]
-            batch_ids = ids[i:i+batch_size]
-            batch_emb = embeddings[i:i+batch_size]
             
-            self.collection.add(
-                documents=batch_docs,
-                metadatas=batch_meta,
-                ids=batch_ids,
-                embeddings=batch_emb
-            )
+            if documents:
+                # Generate embeddings
+                embeddings = self.embedding_model.encode(documents).tolist()
+                
+                # Add to collection in batches
+                batch_size = 100
+                for i in range(0, len(documents), batch_size):
+                    batch_docs = documents[i:i+batch_size]
+                    batch_meta = metadatas[i:i+batch_size]
+                    batch_ids = ids[i:i+batch_size]
+                    batch_emb = embeddings[i:i+batch_size]
+                    
+                    collection.add(
+                        documents=batch_docs,
+                        metadatas=batch_meta,
+                        ids=batch_ids,
+                        embeddings=batch_emb
+                    )
+                
+                total_chunks += len(documents)
+                print(f"Added {len(documents)} chunks to {framework_name} collection")
         
-        print(f"Added {len(documents)} chunks to vector database")
+        print(f"Total chunks added: {total_chunks}")
     
-    def search(self, query: str, n_results: int = 5, framework_filter: Optional[str] = None) -> List[Dict]:
-        """Search for relevant chunks based on query."""
-        where_clause = {}
-        if framework_filter:
-            where_clause = {"framework_name": framework_filter}
+    def search(self, query: str, n_results: int = 5, frameworks: Optional[List[str]] = None) -> List[Dict]:
+        """Search for relevant chunks across specified frameworks or all frameworks."""
+        all_results = []
         
-        results = self.collection.query(
-            query_texts=[query],
-            n_results=n_results,
-            where=where_clause if where_clause else None
-        )
+        # If no frameworks specified, search all available collections
+        if not frameworks:
+            available_frameworks = []
+            for collection in self.client.list_collections():
+                available_frameworks.append(collection.name)
+            frameworks = available_frameworks
         
-        formatted_results = []
-        if results['documents'][0]:
-            for i, doc in enumerate(results['documents'][0]):
-                formatted_results.append({
-                    'text': doc,
-                    'metadata': results['metadatas'][0][i],
-                    'distance': results['distances'][0][i] if 'distances' in results else None
-                })
+        for framework_name in frameworks:
+            try:
+                collection = self.get_or_create_collection(framework_name)
+                if collection.count() == 0:
+                    continue
+                    
+                results = collection.query(
+                    query_texts=[query],
+                    n_results=n_results
+                )
+                
+                if results['documents'][0]:
+                    for i, doc in enumerate(results['documents'][0]):
+                        all_results.append({
+                            'text': doc,
+                            'metadata': results['metadatas'][0][i],
+                            'distance': results['distances'][0][i] if 'distances' in results else None,
+                            'framework': framework_name
+                        })
+            except Exception as e:
+                print(f"Warning: Could not search {framework_name} collection: {e}")
+                continue
         
-        return formatted_results
+        # Sort by distance (lower is better) and limit to n_results
+        all_results.sort(key=lambda x: x.get('distance', float('inf')))
+        return all_results[:n_results]
+    
+    def search_framework(self, query: str, framework_name: str, n_results: int = 5) -> List[Dict]:
+        """Search within a specific framework collection."""
+        try:
+            collection = self.get_or_create_collection(framework_name)
+            if collection.count() == 0:
+                return []
+                
+            results = collection.query(
+                query_texts=[query],
+                n_results=n_results
+            )
+            
+            formatted_results = []
+            if results['documents'][0]:
+                for i, doc in enumerate(results['documents'][0]):
+                    formatted_results.append({
+                        'text': doc,
+                        'metadata': results['metadatas'][0][i],
+                        'distance': results['distances'][0][i] if 'distances' in results else None,
+                        'framework': framework_name
+                    })
+            
+            return formatted_results
+        except Exception as e:
+            print(f"Warning: Could not search {framework_name} collection: {e}")
+            return []
     
     def get_collection_stats(self) -> Dict[str, Any]:
-        """Get statistics about the collection."""
-        count = self.collection.count()
+        """Get statistics about all collections."""
+        total_chunks = 0
+        frameworks = {}
+        collection_details = {}
         
-        # Get sample of metadata to analyze frameworks
-        if count > 0:
-            sample = self.collection.get(limit=min(count, 1000))
-            frameworks = {}
-            for meta in sample['metadatas']:
-                fw_name = meta['framework_name']
-                frameworks[fw_name] = frameworks.get(fw_name, 0) + 1
-        else:
-            frameworks = {}
+        # Get stats from all existing collections
+        for collection_name in self.client.list_collections():
+            try:
+                collection = self.client.get_collection(collection_name.name)
+                count = collection.count()
+                total_chunks += count
+                
+                # Get framework name from metadata or collection name
+                framework_name = collection_name.name
+                if hasattr(collection_name, 'metadata') and collection_name.metadata:
+                    framework_name = collection_name.metadata.get('framework', collection_name.name)
+                
+                frameworks[framework_name] = count
+                collection_details[collection_name.name] = {
+                    'framework': framework_name,
+                    'chunks': count
+                }
+            except Exception as e:
+                print(f"Warning: Could not get stats for collection {collection_name.name}: {e}")
         
         return {
-            'total_chunks': count,
+            'total_chunks': total_chunks,
             'frameworks': frameworks,
-            'collection_name': self.collection_name
+            'collections': collection_details,
+            'num_collections': len(collection_details)
         }
     
     @classmethod
     def initialize_from_chunks(cls, chunks_file_dir: str = "output/chunks", 
                              db_path: str = None) -> 'VectorDatabase':
-        """Initialize database from existing chunk files."""
+        """Initialize database from existing chunk files with separate collections."""
         db = cls(db_path=db_path)
         
         chunks_path = Path(chunks_file_dir)
@@ -133,9 +208,9 @@ class VectorDatabase:
                 framework_name = framework_data['metadata']['framework']['name']
                 all_chunks[framework_name] = framework_data
         
-        # Add chunks to database
+        # Add chunks to database (now creates separate collections)
         if all_chunks:
             db.add_chunks(all_chunks)
-            print(f"Initialized database with {len(all_chunks)} frameworks")
+            print(f"Initialized database with {len(all_chunks)} frameworks in separate collections")
         
         return db

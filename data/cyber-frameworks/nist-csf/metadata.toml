@@ -1,5 +1,5 @@
 [framework]
-name = "NIST CSF"
+name = "nist_csf"
 full_name = "NIST Cybersecurity Framework"
 standard = "NIST CSWP 29"
 version = "2.0"

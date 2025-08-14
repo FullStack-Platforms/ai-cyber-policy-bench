@@ -40,10 +40,8 @@ jobs:
           echo "[OpenAI]" >> config.cfg
           echo "api_key = $OPENAI_API_KEY" >> config.cfg
         else
-          echo "Warning: No API keys available, using mock configuration"
-          echo "" >> config.cfg
-          echo "[OpenRouter]" >> config.cfg
-          echo "api_key = test-key-for-ci" >> config.cfg
+          echo "Error: No API keys available. Please set OPENROUTER_API_KEY or OPENAI_API_KEY secrets."
+          exit 1
         fi
     
     - name: Setup vector database

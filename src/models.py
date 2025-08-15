@@ -185,12 +185,12 @@ class ModelManager(BaseComponent):
                 "deepseek/deepseek-v3",
                 "qwen/qwen3-coder",
                 "z-ai/glm-4.5",
-                "openai/gpt-4o-mini",
+                "gpt-5-mini",
                 "moonshotai/kimi-k2",
                 "google/gemini-2.5-flash",
                 "google/gemini-2.5-pro",
-                "openai/gpt-5",
-                "openai/gpt-4o",
+                "gpt-5-chat",
+                "gpt-4.1",
                 "anthropic/claude-sonnet-4",
                 "x-ai/grok-4",
                 "anthropic/claude-3.7-sonnet",
@@ -207,7 +207,7 @@ class ModelManager(BaseComponent):
             # Fallback if config is missing
             return [
                 "moonshotai/kimi-k2",
-                "openai/gpt-5",
+                "gpt-5-chat",
                 "anthropic/claude-sonnet-4",
                 "qwen/qwen3-coder",
             ]

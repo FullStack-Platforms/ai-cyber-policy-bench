@@ -387,7 +387,7 @@ class TwoJudgeScorer:
                 fallback="anthropic/claude-sonnet-4",
             )
         else:
-            return "openai/gpt-4o"
+            return "google/gemini-2.5-flash"
 
     def exact_match_score(
         self, model_response: str, ideal_answer: str

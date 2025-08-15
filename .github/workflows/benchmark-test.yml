@@ -1,0 +1,74 @@
+name: Mini Benchmark Test
+
+on:
+  push:
+    branches: [ main ]
+    paths: [ 'src/**', 'data/**', 'config.cfg', 'cyber_policy_bench.py' ]
+  pull_request:
+    branches: [ main ]
+    paths: [ 'src/**', 'data/**', 'config.cfg', 'cyber_policy_bench.py' ]
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  mini-benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.11
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Create test config with API keys
+      env:
+        OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      run: |
+        cp config.example.cfg config.cfg
+        if [ ! -z "$OPENROUTER_API_KEY" ]; then
+          sed -i "s/^api_key = $/api_key = $OPENROUTER_API_KEY/" config.cfg
+        elif [ ! -z "$OPENAI_API_KEY" ]; then
+          echo "" >> config.cfg
+          echo "[OpenAI]" >> config.cfg
+          echo "api_key = $OPENAI_API_KEY" >> config.cfg
+        else
+          echo "Error: No API keys available. Please set OPENROUTER_API_KEY or OPENAI_API_KEY secrets."
+          exit 1
+        fi
+    
+    - name: Setup vector database
+      run: |
+        python cyber_policy_bench.py --setup-db --models 1 --questions 1 || echo "DB setup completed with warnings"
+    
+    - name: Run mini benchmark (2 models, 3 questions)
+      env:
+        TOKENIZERS_PARALLELISM: "false"
+      run: |
+        timeout 20m python cyber_policy_bench.py --models 2 --questions 3 || true
+      continue-on-error: true
+    
+    - name: Validate results were generated
+      run: |
+        if [ -f "experiment_results/poc_detailed_results.json" ]; then
+          echo "✓ Results file generated successfully"
+        else
+          echo "✗ No results file generated"
+          exit 1
+        fi
+    
+    - name: Upload benchmark results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: benchmark-test-results
+        path: |
+          experiment_results/
+          *.log

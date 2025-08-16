@@ -5,6 +5,7 @@ from typing import List, Dict, Optional
 from datetime import datetime
 from dataclasses import dataclass
 from enum import Enum
+import configparser
 
 try:
     from .db import VectorDatabase
@@ -12,6 +13,10 @@ try:
 except ImportError:
     from src.db import VectorDatabase
     from src.benchmark import get_eval_models, client
+
+# Load configuration
+config = configparser.ConfigParser()
+config.read("config.cfg")
 
 
 class EvaluationMode(Enum):
@@ -41,15 +46,46 @@ class CyberPolicyEvaluator:
         self.client = client
 
     def load_evaluation_questions(
-        self, questions_file: str = "data/prompts/cyber_evals.jsonl"
+        self, 
+        questions_file: str = "data/prompts/cyber_evals.jsonl",
+        filter_criteria: Dict[str, str] = None
     ) -> List[Dict]:
-        """Load evaluation questions from JSONL file."""
+        """Load evaluation questions from JSONL file with optional filtering."""
         questions = []
         with open(questions_file, "r", encoding="utf-8") as f:
             for line in f:
                 line = line.strip()
                 if line:
-                    questions.append(json.loads(line))
+                    question = json.loads(line)
+                    
+                    # Apply filters if provided
+                    if filter_criteria:
+                        metadata = question.get("metadata", {})
+                        include_question = True
+                        
+                        for key, value in filter_criteria.items():
+                            if key == "difficulty":
+                                if metadata.get("difficulty") != value:
+                                    include_question = False
+                                    break
+                            elif key == "framework":
+                                frameworks = metadata.get("framework", "").split(",")
+                                if value not in [f.strip() for f in frameworks]:
+                                    include_question = False
+                                    break
+                            elif key == "category":
+                                if metadata.get("category") != value:
+                                    include_question = False
+                                    break
+                            elif key == "question_type":
+                                if metadata.get("question_type") != value:
+                                    include_question = False
+                                    break
+                        
+                        if not include_question:
+                            continue
+                    
+                    questions.append(question)
         return questions
 
     def load_raw_framework_files(
@@ -76,21 +112,46 @@ class CyberPolicyEvaluator:
 
     async def query_model(
         self, model_name: str, prompt: str, max_retries: int = 3
-    ) -> str:
-        """Query a model with the given prompt."""
+    ) -> dict:
+        """
+        Query a model with the given prompt.
+        
+        Returns:
+            dict: {"response": str, "error": bool, "error_message": str}
+        """
         for attempt in range(max_retries):
             try:
                 response = await asyncio.to_thread(
                     self.client.chat.completions.create,
                     model=model_name,
                     messages=[{"role": "user", "content": prompt}],
-                    max_tokens=1000,
+                    max_tokens=int(config.get("Evaluation", "max_response_tokens", fallback=1000)),
                     temperature=0.1,
                 )
-                return response.choices[0].message.content.strip()
+                content = response.choices[0].message.content.strip()
+                
+                # Basic validation of response
+                if not content:
+                    return {
+                        "response": "",
+                        "error": True,
+                        "error_message": "Model returned empty response"
+                    }
+                
+                return {
+                    "response": content,
+                    "error": False, 
+                    "error_message": ""
+                }
+                
             except Exception as e:
+                error_msg = str(e)
                 if attempt == max_retries - 1:
-                    return f"Error: {str(e)}"
+                    return {
+                        "response": "",
+                        "error": True,
+                        "error_message": f"Model query failed after {max_retries} attempts: {error_msg}"
+                    }
                 await asyncio.sleep(2**attempt)  # Exponential backoff
 
     def create_prompt(self, question: str, context: Optional[str] = None) -> str:
@@ -131,10 +192,13 @@ Please provide a precise answer based on the context provided. Be specific about
 
         return detected_frameworks
 
-    def get_vector_context(self, question: str, n_results: int = 3) -> Optional[str]:
+    def get_vector_context(self, question: str, n_results: int = None) -> Optional[str]:
         """Retrieve relevant context from vector database with intelligent framework detection."""
         if not self.vector_db:
             return None
+
+        if n_results is None:
+            n_results = int(config.get("Evaluation", "vector_context_results", fallback=3))
 
         # Detect frameworks mentioned in the question
         detected_frameworks = self.detect_frameworks_in_question(question)
@@ -222,7 +286,13 @@ Please provide a precise answer based on the context provided. Be specific about
 
         # Create prompt and query model
         prompt = self.create_prompt(question, context)
-        model_response = await self.query_model(model_name, prompt)
+        query_result = await self.query_model(model_name, prompt)
+        
+        # Handle query errors properly
+        if query_result["error"]:
+            model_response = f"MODEL_FAILURE: {query_result['error_message']}"
+        else:
+            model_response = query_result["response"]
 
         return EvaluationResult(
             question=question,
@@ -340,6 +410,156 @@ Please provide a precise answer based on the context provided. Be specific about
             json.dump(detailed_results, f, indent=2, ensure_ascii=False)
 
         print(f"Detailed results saved to {output_path / 'detailed_results.json'}")
+
+    def generate_metadata_report(
+        self, results: Dict[str, List[EvaluationResult]], questions: List[Dict]
+    ) -> Dict[str, any]:
+        """Generate comprehensive report analyzing performance by metadata dimensions."""
+        report = {
+            "summary": {},
+            "by_difficulty": {},
+            "by_framework": {},
+            "by_category": {},
+            "by_question_type": {},
+            "recommendations": []
+        }
+        
+        # Create question metadata lookup
+        question_metadata = {}
+        for q in questions:
+            question_metadata[q["input"]] = q.get("metadata", {})
+        
+        all_scores = []
+        difficulty_scores = {}
+        framework_scores = {}
+        category_scores = {}
+        type_scores = {}
+        
+        for model_name, model_results in results.items():
+            for result in model_results:
+                if result.accuracy_score is not None:
+                    score = result.accuracy_score
+                    all_scores.append(score)
+                    
+                    # Get metadata for this question
+                    metadata = question_metadata.get(result.question, {})
+                    
+                    # Aggregate by difficulty
+                    difficulty = metadata.get("difficulty", "unknown")
+                    if difficulty not in difficulty_scores:
+                        difficulty_scores[difficulty] = []
+                    difficulty_scores[difficulty].append(score)
+                    
+                    # Aggregate by framework (handle multi-framework)
+                    frameworks = metadata.get("framework", "unknown").split(",")
+                    for framework in frameworks:
+                        framework = framework.strip()
+                        if framework not in framework_scores:
+                            framework_scores[framework] = []
+                        framework_scores[framework].append(score)
+                    
+                    # Aggregate by category
+                    category = metadata.get("category", "unknown")
+                    if category not in category_scores:
+                        category_scores[category] = []
+                    category_scores[category].append(score)
+                    
+                    # Aggregate by question type
+                    q_type = metadata.get("question_type", "unknown")
+                    if q_type not in type_scores:
+                        type_scores[q_type] = []
+                    type_scores[q_type].append(score)
+        
+        # Calculate summary statistics
+        if all_scores:
+            report["summary"] = {
+                "total_evaluations": len(all_scores),
+                "overall_average": sum(all_scores) / len(all_scores),
+                "median_score": sorted(all_scores)[len(all_scores) // 2],
+                "min_score": min(all_scores),
+                "max_score": max(all_scores),
+                "score_distribution": {
+                    "excellent_90_100": len([s for s in all_scores if s >= 0.9]) / len(all_scores),
+                    "good_80_89": len([s for s in all_scores if 0.8 <= s < 0.9]) / len(all_scores),
+                    "fair_70_79": len([s for s in all_scores if 0.7 <= s < 0.8]) / len(all_scores),
+                    "poor_below_70": len([s for s in all_scores if s < 0.7]) / len(all_scores),
+                }
+            }
+        
+        # Calculate performance by difficulty
+        for difficulty, scores in difficulty_scores.items():
+            if scores:
+                report["by_difficulty"][difficulty] = {
+                    "count": len(scores),
+                    "average": sum(scores) / len(scores),
+                    "min": min(scores),
+                    "max": max(scores)
+                }
+        
+        # Calculate performance by framework
+        for framework, scores in framework_scores.items():
+            if scores:
+                report["by_framework"][framework] = {
+                    "count": len(scores),
+                    "average": sum(scores) / len(scores),
+                    "min": min(scores),
+                    "max": max(scores)
+                }
+        
+        # Calculate performance by category
+        for category, scores in category_scores.items():
+            if scores:
+                report["by_category"][category] = {
+                    "count": len(scores),
+                    "average": sum(scores) / len(scores),
+                    "min": min(scores),
+                    "max": max(scores)
+                }
+        
+        # Calculate performance by question type
+        for q_type, scores in type_scores.items():
+            if scores:
+                report["by_question_type"][q_type] = {
+                    "count": len(scores),
+                    "average": sum(scores) / len(scores),
+                    "min": min(scores),
+                    "max": max(scores)
+                }
+        
+        # Generate recommendations
+        recommendations = []
+        
+        # Difficulty-based recommendations
+        if "expert" in difficulty_scores and "intermediate" in difficulty_scores:
+            expert_avg = sum(difficulty_scores["expert"]) / len(difficulty_scores["expert"])
+            intermediate_avg = sum(difficulty_scores["intermediate"]) / len(difficulty_scores["intermediate"])
+            if expert_avg < intermediate_avg - 0.1:
+                recommendations.append(
+                    f"Expert questions showing {intermediate_avg - expert_avg:.2f} point gap vs intermediate - consider expert-specific training"
+                )
+        
+        # Framework-specific recommendations
+        framework_averages = {k: sum(v)/len(v) for k, v in framework_scores.items() if v}
+        if framework_averages:
+            lowest_framework = min(framework_averages, key=framework_averages.get)
+            highest_framework = max(framework_averages, key=framework_averages.get)
+            gap = framework_averages[highest_framework] - framework_averages[lowest_framework]
+            if gap > 0.15:
+                recommendations.append(
+                    f"Significant framework gap: {lowest_framework} ({framework_averages[lowest_framework]:.2f}) vs {highest_framework} ({framework_averages[highest_framework]:.2f}) - focus training on {lowest_framework}"
+                )
+        
+        # Category-based recommendations
+        category_averages = {k: sum(v)/len(v) for k, v in category_scores.items() if v}
+        if category_averages:
+            lowest_category = min(category_averages, key=category_averages.get)
+            if category_averages[lowest_category] < 0.7:
+                recommendations.append(
+                    f"Low performance in {lowest_category} ({category_averages[lowest_category]:.2f}) - consider specialized training"
+                )
+        
+        report["recommendations"] = recommendations
+        return report
 
 
 async def run_benchmark_poc(num_models: int = 3, num_questions: int = 5):

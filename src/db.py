@@ -24,7 +24,8 @@ class VectorDatabase:
         self.client = chromadb.PersistentClient(path=str(self.db_path))
 
         # Initialize embedding model
-        self.embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
+        embedding_model_name = config.get("Vector Database", "embedding_model", fallback="all-MiniLM-L6-v2")
+        self.embedding_model = SentenceTransformer(embedding_model_name)
 
         # Store collections by framework name
         self.collections = {}
@@ -40,9 +41,10 @@ class VectorDatabase:
         try:
             collection = self.client.get_collection(collection_name)
         except Exception:
+            vector_space = config.get("Vector Database", "vector_space", fallback="cosine")
             collection = self.client.create_collection(
                 name=collection_name,
-                metadata={"hnsw:space": "cosine", "framework": framework_name},
+                metadata={"hnsw:space": vector_space, "framework": framework_name},
             )
 
         self.collections[collection_name] = collection
@@ -78,7 +80,7 @@ class VectorDatabase:
                 embeddings = self.embedding_model.encode(documents).tolist()
 
                 # Add to collection in batches
-                batch_size = 100
+                batch_size = int(config.get("Vector Database", "batch_size", fallback=100))
                 for i in range(0, len(documents), batch_size):
                     batch_docs = documents[i : i + batch_size]
                     batch_meta = metadatas[i : i + batch_size]
@@ -98,9 +100,11 @@ class VectorDatabase:
         print(f"Total chunks added: {total_chunks}")
 
     def search(
-        self, query: str, n_results: int = 5, frameworks: Optional[List[str]] = None
+        self, query: str, n_results: int = None, frameworks: Optional[List[str]] = None
     ) -> List[Dict]:
         """Search for relevant chunks across specified frameworks or all frameworks."""
+        if n_results is None:
+            n_results = int(config.get("Vector Database", "default_search_results", fallback=5))
         all_results = []
 
         # If no frameworks specified, search all available collections
@@ -141,9 +145,11 @@ class VectorDatabase:
         return all_results[:n_results]
 
     def search_framework(
-        self, query: str, framework_name: str, n_results: int = 5
+        self, query: str, framework_name: str, n_results: int = None
     ) -> List[Dict]:
         """Search within a specific framework collection."""
+        if n_results is None:
+            n_results = int(config.get("Vector Database", "default_search_results", fallback=5))
         try:
             collection = self.get_or_create_collection(framework_name)
             if collection.count() == 0:

@@ -5,6 +5,16 @@ from typing import List, Dict, Any, Optional
 from sentence_transformers import SentenceTransformer
 import configparser
 
+# Import torch for MPS cache management on macOS
+try:
+    import torch
+    # Check if MPS is available and enable memory-efficient empty cache
+    if torch.backends.mps.is_available():
+        torch.mps.empty_cache()
+except ImportError:
+    torch = None
+
+
 # Load configuration
 config = configparser.ConfigParser()
 config.read("config.cfg")

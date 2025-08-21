@@ -153,15 +153,23 @@ class ModelInfo:
 class ModelManager(BaseComponent):
     """Manager for model discovery and management."""
 
-    def __init__(self, cache_duration_hours: int = 24):
+    def __init__(self, cache_duration_hours: int = None):
         """Initialize model manager."""
         super().__init__("model_manager")
-
-        self.cache_duration_hours = cache_duration_hours
+        
+        from .utils import get_config_value
+        
+        # Load configuration values
+        self.cache_duration_hours = cache_duration_hours or get_config_value(
+            "Models", "model_cache_hours", 24, int
+        )
         self.models: Dict[str, ModelInfo] = {}
-        self.model_cache_file = Path("experiment_cache/model_cache.json")
-        self.use_dynamic_models = get_config().getboolean(
-            "Options", "use_dynamic_models", fallback=False
+        
+        cache_dir = get_config_value("Paths", "cache_dir", "./experiment_cache")
+        self.model_cache_file = Path(cache_dir) / "model_cache.json"
+        
+        self.use_dynamic_models = get_config_value(
+            "Models", "use_dynamic_models", False, bool
         )
 
         # Default model lists from config
@@ -173,44 +181,39 @@ class ModelManager(BaseComponent):
 
     def _get_default_eval_models(self) -> List[str]:
         """Get default evaluation models from config."""
-        config = get_config()
-        models_str = config.get("Models", "default_eval_models", fallback="")
-        if models_str:
-            return [model.strip() for model in models_str.split(",") if model.strip()]
-        else:
-            # Fallback if config is missing
-            return [
-                "mistralai/mistral-nemo",
-                "qwen/qwen3-30b-a3b",
-                "deepseek/deepseek-v3",
-                "qwen/qwen3-coder",
-                "z-ai/glm-4.5",
-                "gpt-5-mini",
-                "moonshotai/kimi-k2",
-                "google/gemini-2.5-flash",
-                "google/gemini-2.5-pro",
-                "gpt-5-chat",
-                "gpt-4.1",
-                "anthropic/claude-sonnet-4",
-                "x-ai/grok-4",
-                "anthropic/claude-3.7-sonnet",
-                "anthropic/claude-opus-4.1",
-            ]
+        from .utils import get_config_value, ConfigError
+        
+        models_str = get_config_value("Models", "eval_models", "")
+        if not models_str:
+            raise ConfigError(
+                "No evaluation models configured. Please set 'eval_models' in [Models] section of config.cfg"
+            )
+        
+        models = [model.strip() for model in models_str.split(",") if model.strip()]
+        if not models:
+            raise ConfigError(
+                "Invalid evaluation models configuration. Please provide comma-separated model names."
+            )
+        
+        return models
 
     def _get_default_judge_models(self) -> List[str]:
         """Get default judge models from config."""
-        config = get_config()
-        models_str = config.get("Models", "default_judge_models", fallback="")
-        if models_str:
-            return [model.strip() for model in models_str.split(",") if model.strip()]
-        else:
-            # Fallback if config is missing
-            return [
-                "moonshotai/kimi-k2",
-                "gpt-5-chat",
-                "anthropic/claude-sonnet-4",
-                "qwen/qwen3-coder",
-            ]
+        from .utils import get_config_value, ConfigError
+        
+        models_str = get_config_value("Models", "judge_models", "")
+        if not models_str:
+            raise ConfigError(
+                "No judge models configured. Please set 'judge_models' in [Models] section of config.cfg"
+            )
+        
+        models = [model.strip() for model in models_str.split(",") if model.strip()]
+        if not models:
+            raise ConfigError(
+                "Invalid judge models configuration. Please provide comma-separated model names."
+            )
+        
+        return models
 
     def _load_cached_models(self) -> None:
         """Load models from cache if available and valid."""
@@ -306,13 +309,13 @@ class ModelManager(BaseComponent):
         self, api_key: Optional[str] = None
     ) -> List[ModelInfo]:
         """Fetch available models from OpenRouter API."""
+        from .utils import get_config_value, ConfigError
+        
         if not api_key:
-            config = get_config()
-            api_key = config.get("OpenRouter", "api_key", fallback="").strip()
+            api_key = get_config_value("OpenRouter", "api_key", "")
 
         if not api_key or api_key == "your-openrouter-key":
-            self.logger.warning("No valid OpenRouter API key found")
-            return []
+            raise ConfigError("No valid OpenRouter API key found in configuration")
 
         try:
             headers = {"Authorization": f"Bearer {api_key}"}
@@ -380,27 +383,39 @@ class ModelManager(BaseComponent):
             return []
 
     def create_default_models(self) -> List[ModelInfo]:
-        """Create default model info for fallback scenarios."""
-        default_models = []
+        """Create model info from configured model lists."""
+        configured_models = []
 
         for model_id in self.default_eval_models:
             # Infer basic information from model ID
             provider = ModelProvider.UNKNOWN
-            context_length = 8192  # Conservative default
+            
+            # Get default context length from config or use conservative default
+            from .utils import get_config_value
+            default_context = get_config_value("Models", "default_context_length", 8192, int)
+            context_length = default_context
             capabilities = {ModelCapability.TEXT_GENERATION}
 
-            if "gpt-4" in model_id:
+            # Infer capabilities from model name
+            model_lower = model_id.lower()
+            if any(term in model_lower for term in ["gpt-4", "gpt-5"]):
                 context_length = 128000
                 capabilities.add(ModelCapability.LARGE_CONTEXT)
                 provider = ModelProvider.OPENAI
-            elif "claude" in model_id:
+            elif "claude" in model_lower:
                 context_length = 200000
                 capabilities.add(ModelCapability.VERY_LARGE_CONTEXT)
                 provider = ModelProvider.ANTHROPIC
-            elif "gemini" in model_id:
+            elif "gemini" in model_lower:
                 context_length = 32000
                 capabilities.add(ModelCapability.LARGE_CONTEXT)
                 provider = ModelProvider.GOOGLE
+            elif any(term in model_lower for term in ["deepseek", "qwen", "mistral"]):
+                context_length = 32000
+                capabilities.add(ModelCapability.LARGE_CONTEXT)
+
+            # Get default performance score from config
+            default_score = get_config_value("Models", "default_performance_score", 0.5, float)
 
             model_info = ModelInfo(
                 id=model_id,
@@ -408,13 +423,13 @@ class ModelManager(BaseComponent):
                 provider=provider,
                 context_length=context_length,
                 capabilities=capabilities,
-                performance_score=0.5,  # Default score
-                metadata={"source": "default"},
+                performance_score=default_score,
+                metadata={"source": "configured"},
             )
 
-            default_models.append(model_info)
+            configured_models.append(model_info)
 
-        return default_models
+        return configured_models
 
     async def refresh_models(self, force: bool = False) -> None:
         """Refresh model information from APIs."""
@@ -433,11 +448,11 @@ class ModelManager(BaseComponent):
                 for model in openrouter_models:
                     new_models[model.id] = model
 
-            # If no dynamic models or API failed, use defaults
+            # If no dynamic models obtained, create from config
             if not new_models:
-                self.logger.info("Using default model configuration")
-                default_models = self.create_default_models()
-                for model in default_models:
+                self.logger.info("Using configured model list")
+                configured_models = self.create_default_models()
+                for model in configured_models:
                     new_models[model.id] = model
 
             self.models = new_models
@@ -505,21 +520,12 @@ class ModelManager(BaseComponent):
         # Sort by performance score
         judge_models.sort(key=lambda m: m.performance_score, reverse=True)
 
-        # Ensure we have fallback models if none found
-        if not judge_models and self.default_judge_models:
-            for model_id in self.default_judge_models[:limit]:
-                if model_id not in self.models:
-                    # Create default judge model info
-                    default_model = ModelInfo(
-                        id=model_id,
-                        name=model_id.split("/")[-1] if "/" in model_id else model_id,
-                        provider=ModelProvider.UNKNOWN,
-                        context_length=32000,
-                        capabilities={ModelCapability.TEXT_GENERATION},
-                        performance_score=0.8,
-                        metadata={"source": "default_judge"},
-                    )
-                    judge_models.append(default_model)
+        # Ensure we have models from configuration
+        if not judge_models:
+            from .utils import ConfigError
+            raise ConfigError(
+                "No suitable judge models found. Please check your configuration and model availability."
+            )
 
         return judge_models[:limit]
 
@@ -600,7 +606,7 @@ def get_model_manager() -> ModelManager:
     return _model_manager
 
 
-def get_eval_models(limit: int = 20, use_cache: bool = True) -> List[str]:
+def list_eval_models(limit: int = 20, use_cache: bool = True) -> List[str]:
     """Get evaluation model IDs (backwards compatibility)."""
     manager = get_model_manager()
 
@@ -612,7 +618,7 @@ def get_eval_models(limit: int = 20, use_cache: bool = True) -> List[str]:
     return manager.get_model_ids(limit=limit)
 
 
-def get_judge_models(limit: int = 2) -> List[str]:
+def list_judge_models(limit: int = 2) -> List[str]:
     """Get judge model IDs."""
     manager = get_model_manager()
     judge_models = manager.get_judge_models(limit=limit)

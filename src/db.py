@@ -26,7 +26,7 @@ class VectorDatabase:
     def __init__(self, db_path: str = None):
         """Initialize the vector database with multi-collection support."""
         if db_path is None:
-            db_path = config.get("Vector Database", "db_path", fallback="./vector_db")
+            db_path = config.get("VectorDatabase", "db_path", fallback="./vector_db")
         self.db_path = Path(db_path)
         self.db_path.mkdir(exist_ok=True)
 
@@ -34,7 +34,7 @@ class VectorDatabase:
         self.client = chromadb.PersistentClient(path=str(self.db_path))
 
         # Initialize embedding model
-        embedding_model_name = config.get("Vector Database", "embedding_model", fallback="all-MiniLM-L6-v2")
+        embedding_model_name = config.get("VectorDatabase", "embedding_model", fallback="all-MiniLM-L6-v2")
         self.embedding_model = SentenceTransformer(embedding_model_name)
 
         # Store collections by framework name
@@ -51,7 +51,7 @@ class VectorDatabase:
         try:
             collection = self.client.get_collection(collection_name)
         except Exception:
-            vector_space = config.get("Vector Database", "vector_space", fallback="cosine")
+            vector_space = config.get("VectorDatabase", "vector_space", fallback="cosine")
             collection = self.client.create_collection(
                 name=collection_name,
                 metadata={"hnsw:space": vector_space, "framework": framework_name},
@@ -90,7 +90,7 @@ class VectorDatabase:
                 embeddings = self.embedding_model.encode(documents).tolist()
 
                 # Add to collection in batches
-                batch_size = int(config.get("Vector Database", "batch_size", fallback=100))
+                batch_size = int(config.get("VectorDatabase", "batch_size", fallback=100))
                 for i in range(0, len(documents), batch_size):
                     batch_docs = documents[i : i + batch_size]
                     batch_meta = metadatas[i : i + batch_size]
@@ -114,7 +114,10 @@ class VectorDatabase:
     ) -> List[Dict]:
         """Search for relevant chunks across specified frameworks or all frameworks."""
         if n_results is None:
-            n_results = int(config.get("Vector Database", "default_search_results", fallback=5))
+            n_results = self.config_overrides.get(
+                "default_search_results",
+                get_config_value("VectorDatabase", "default_search_results", 5, int)
+            )
         all_results = []
 
         # If no frameworks specified, search all available collections
@@ -159,7 +162,10 @@ class VectorDatabase:
     ) -> List[Dict]:
         """Search within a specific framework collection."""
         if n_results is None:
-            n_results = int(config.get("Vector Database", "default_search_results", fallback=5))
+            n_results = self.config_overrides.get(
+                "default_search_results",
+                get_config_value("VectorDatabase", "default_search_results", 5, int)
+            )
         try:
             collection = self.get_or_create_collection(framework_name)
             if collection.count() == 0:

@@ -4,13 +4,9 @@ from typing import List, Dict, Any, Optional
 from dataclasses import dataclass
 from enum import Enum
 import re
-import configparser
+import openai
 
-from .benchmark import client
-
-# Load configuration
-config = configparser.ConfigParser()
-config.read("config.cfg")
+from .utils import get_config_value, get_openai_client, ConfigError
 
 
 class ScoringMethod(Enum):
@@ -36,26 +32,41 @@ class ScoringResult:
 class AccuracyScorer:
     """Scorer for evaluating model responses against ground truth answers."""
 
-    def __init__(self, judge_model: str = None):
-        """Initialize scorer with judge model."""
+    def __init__(
+        self, 
+        judge_model: str = None,
+        client: Optional[openai.OpenAI] = None,
+        config_overrides: Optional[Dict[str, Any]] = None
+    ):
+        """Initialize scorer with injected dependencies.
+        
+        Args:
+            judge_model: Model to use for scoring
+            client: OpenAI client for API calls
+            config_overrides: Override configuration values
+        """
+        self.config_overrides = config_overrides or {}
+        
         if judge_model is None:
-            # Try to get from main config first, then from Models section default
-            judge_model = config.get(
-                "Cyber Policy Benchmark",
-                "judge_model",
-                fallback=None,
+            judge_model = self.config_overrides.get(
+                "primary_judge",
+                get_config_value("Scoring", "primary_judge", "")
             )
+            
             if not judge_model:
-                # Use first model from default judge models in config
-                default_judges = config.get(
-                    "Models", "default_judge_models", fallback=""
-                )
-                if default_judges:
-                    judge_model = default_judges.split(",")[0].strip()
-                else:
-                    judge_model = "anthropic/claude-sonnet-4"
+                # Get from judge models list
+                judge_models_str = get_config_value("Models", "judge_models", "")
+                if not judge_models_str:
+                    raise ConfigError("No judge models configured in [Models] or [Scoring] sections")
+                
+                judge_models = [m.strip() for m in judge_models_str.split(",") if m.strip()]
+                if not judge_models:
+                    raise ConfigError("Invalid judge models configuration")
+                
+                judge_model = judge_models[0]
+        
         self.judge_model = judge_model
-        self.client = client
+        self.client = client or get_openai_client()
 
     def validate_response(self, model_response: str) -> tuple[bool, str]:
         """
@@ -1179,28 +1190,60 @@ class TwoJudgeScorer:
         self,
         judge_model_1: str = None,
         judge_model_2: str = None,
-        judge_weight_1: float = 0.5,
-        judge_weight_2: float = 0.5,
+        judge_weight_1: float = None,
+        judge_weight_2: float = None,
+        client: Optional[openai.OpenAI] = None,
+        config_overrides: Optional[Dict[str, Any]] = None
     ):
-        """Initialize dual judge scorer."""
-        # Load judge models from config with fallbacks
-        self.judge_model_1 = judge_model_1 or config.get(
-            "Scoring",
-            "judge_model_1",
-            fallback=self._get_fallback_judge_model(1),
+        """Initialize dual judge scorer with dependency injection.
+        
+        Args:
+            judge_model_1: Primary judge model
+            judge_model_2: Secondary judge model  
+            judge_weight_1: Weight for primary judge
+            judge_weight_2: Weight for secondary judge
+            client: OpenAI client for API calls
+            config_overrides: Override configuration values
+        """
+        self.config_overrides = config_overrides or {}
+        
+        # Load judge models from config or overrides
+        self.judge_model_1 = (
+            judge_model_1 or 
+            self.config_overrides.get("primary_judge") or
+            get_config_value("Scoring", "primary_judge", "")
         )
-        self.judge_model_2 = judge_model_2 or config.get(
-            "Scoring", "judge_model_2", fallback=self._get_fallback_judge_model(2)
+        self.judge_model_2 = (
+            judge_model_2 or 
+            self.config_overrides.get("secondary_judge") or
+            get_config_value("Scoring", "secondary_judge", "")
         )
-
+        
+        # If models not specified, get from judge models list
+        if not self.judge_model_1 or not self.judge_model_2:
+            judge_models_str = get_config_value("Models", "judge_models", "")
+            if not judge_models_str:
+                raise ConfigError("No judge models configured")
+            
+            judge_models = [m.strip() for m in judge_models_str.split(",") if m.strip()]
+            if len(judge_models) < 2:
+                raise ConfigError("At least 2 judge models required for dual scoring")
+            
+            self.judge_model_1 = self.judge_model_1 or judge_models[0]
+            self.judge_model_2 = self.judge_model_2 or judge_models[1]
+        
         # Load weights from config
-        self.judge_weight_1 = float(
-            config.get("Scoring", "judge_weight_1", fallback=str(judge_weight_1))
+        self.judge_weight_1 = (
+            judge_weight_1 if judge_weight_1 is not None else
+            self.config_overrides.get("primary_judge_weight", 
+                get_config_value("Scoring", "primary_judge_weight", 0.5, float))
         )
-        self.judge_weight_2 = float(
-            config.get("Scoring", "judge_weight_2", fallback=str(judge_weight_2))
+        self.judge_weight_2 = (
+            judge_weight_2 if judge_weight_2 is not None else
+            self.config_overrides.get("secondary_judge_weight",
+                get_config_value("Scoring", "secondary_judge_weight", 0.5, float))
         )
-
+        
         # Normalize weights
         total_weight = self.judge_weight_1 + self.judge_weight_2
         if total_weight > 0:
@@ -1208,11 +1251,11 @@ class TwoJudgeScorer:
             self.judge_weight_2 /= total_weight
         else:
             self.judge_weight_1 = self.judge_weight_2 = 0.5
-
-        self.client = client
-        self.single_scorer_1 = AccuracyScorer(self.judge_model_1)
-        self.single_scorer_2 = AccuracyScorer(self.judge_model_2)
-
+        
+        self.client = client or get_openai_client()
+        self.single_scorer_1 = AccuracyScorer(self.judge_model_1, self.client, self.config_overrides)
+        self.single_scorer_2 = AccuracyScorer(self.judge_model_2, self.client, self.config_overrides)
+        
         # Statistics tracking
         self.judge_1_success_count = 0
         self.judge_2_success_count = 0
@@ -1240,8 +1283,8 @@ class TwoJudgeScorer:
         if judge_num == 1:
             # Try main config first, then hardcoded fallback
             return config.get(
-                "Cyber Policy Benchmark",
-                "judge_model",
+                "Scoring",
+                "primary_judge",
                 fallback="anthropic/claude-sonnet-4",
             )
         else:

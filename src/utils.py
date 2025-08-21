@@ -130,8 +130,7 @@ def validate_config() -> Dict[str, Any]:
     # Required sections
     required_sections = [
         "OpenRouter",
-        "Vector Database",
-        "Cyber Policy Benchmark",
+        "VectorDatabase",
         "Scoring",
         "Evaluation",
     ]
@@ -149,9 +148,9 @@ def validate_config() -> Dict[str, Any]:
 
     # Path validation
     required_paths = [
-        ("Vector Database", "db_path"),
-        ("Cyber Policy Benchmark", "output_dir"),
-        ("Cyber Policy Benchmark", "cache_dir"),
+        ("VectorDatabase", "db_path"),
+        ("Paths", "output_dir"),
+        ("Paths", "cache_dir"),
     ]
 
     for section, key in required_paths:
@@ -172,6 +171,20 @@ def validate_config() -> Dict[str, Any]:
             warnings.append(
                 "Dual judge mode requires both judge_model_1 and judge_model_2"
             )
+
+    # Evaluation modes validation
+    enable_no_context = get_config_value("Evaluation", "enable_no_context", True, bool)
+    enable_raw_files = get_config_value("Evaluation", "enable_raw_files", True, bool)
+    enable_vector_db = get_config_value("Evaluation", "enable_vector_db", True, bool)
+
+    if not any([enable_no_context, enable_raw_files, enable_vector_db]):
+        issues.append("At least one evaluation mode must be enabled")
+
+    # Warn if vector_db mode is enabled but no database path configured
+    if enable_vector_db:
+        db_path = get_config_value("VectorDatabase", "db_path", "")
+        if not db_path:
+            warnings.append("Vector DB mode enabled but no database path configured")
 
     return {
         "valid": len(issues) == 0,
@@ -503,3 +516,120 @@ def get_env_float(name: str, default: float = 0.0) -> float:
         return float(os.environ.get(name, str(default)))
     except ValueError:
         return default
+
+
+def clear_config_cache() -> None:
+    """Clear configuration cache for testing or config reloads."""
+    global _config_cache
+    _config_cache.clear()
+
+
+def reload_config(config_path: str = "config.cfg") -> None:
+    """Force reload configuration from file."""
+    clear_config_cache()
+    get_config(config_path, force_reload=True)
+
+
+def get_config_section(section_name: str) -> Dict[str, str]:
+    """Get all key-value pairs from a configuration section."""
+    config = get_config()
+
+    if not config.has_section(section_name):
+        raise ConfigError(f"Configuration section '{section_name}' not found")
+
+    return dict(config[section_name].items())
+
+
+def has_config_key(section: str, key: str) -> bool:
+    """Check if a configuration key exists."""
+    try:
+        config = get_config()
+        return config.has_section(section) and config.has_option(section, key)
+    except ConfigError:
+        return False
+
+
+def _convert_config_value(value: str, value_type: type, section: str, key: str) -> Any:
+    """Convert configuration value to specified type."""
+    try:
+        if value_type is bool:
+            return value.lower() in ("true", "1", "yes", "on", "enabled")
+        elif value_type is int:
+            return int(value)
+        elif value_type is float:
+            return float(value)
+        elif value_type is list:
+            # Handle comma-separated lists
+            if not value:
+                return []
+            return [item.strip() for item in value.split(",") if item.strip()]
+        else:
+            return value
+    except (ValueError, TypeError) as e:
+        raise ConfigError(f"Invalid type conversion for {section}.{key}: {e}")
+
+
+def _validate_configuration_structure(config: configparser.ConfigParser) -> None:
+    """Validate that the configuration has required sections and keys."""
+    required_sections = {
+        "Models": ["eval_models", "judge_models"],
+        "Scoring": ["scoring_method"],
+        "VectorDatabase": ["db_path", "embedding_model"],
+        "Paths": ["output_dir"],
+    }
+
+    warnings = []
+    errors = []
+
+    for section_name, required_keys in required_sections.items():
+        if not config.has_section(section_name):
+            errors.append(f"Missing required section: [{section_name}]")
+            continue
+
+        section = config[section_name]
+        for key in required_keys:
+            if key not in section or not section[key].strip():
+                warnings.append(f"Missing or empty key: {section_name}.{key}")
+
+    if errors:
+        raise ConfigError(f"Configuration validation failed: {'; '.join(errors)}")
+
+    if warnings:
+        logger = logging.getLogger(__name__)
+        for warning in warnings:
+            logger.warning(f"Configuration warning: {warning}")
+
+
+def get_enabled_evaluation_modes():
+    """
+    Get list of enabled evaluation modes from configuration.
+
+    Returns:
+        List of EvaluationMode enum values for enabled modes
+    """
+    # Import here to avoid circular dependency
+    from .evaluator import EvaluationMode
+
+    modes = []
+
+    # Check each mode configuration
+    if get_config_value("Evaluation", "enable_no_context", True, bool):
+        modes.append(EvaluationMode.NO_CONTEXT)
+
+    if get_config_value("Evaluation", "enable_raw_files", True, bool):
+        modes.append(EvaluationMode.RAW_FILES)
+
+    if get_config_value("Evaluation", "enable_vector_db", True, bool):
+        modes.append(EvaluationMode.VECTOR_DB)
+
+    # Ensure at least one mode is enabled
+    if not modes:
+        logger = logging.getLogger(__name__)
+        logger.warning("No evaluation modes enabled, defaulting to all modes")
+        return [
+            EvaluationMode.NO_CONTEXT,
+            EvaluationMode.RAW_FILES,
+            EvaluationMode.VECTOR_DB,
+        ]
+
+    return modes

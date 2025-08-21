@@ -1,67 +1,45 @@
-import openai
 from typing import List, Dict, Optional
 import requests
 from datetime import datetime, timedelta
-import configparser
 
-# Load configuration
-config = configparser.ConfigParser()
-config.read("config.cfg")
+# Use centralized config loading
+from .utils import get_config
+
+config = get_config()
 
 
-# Configure client based on config
 def get_client():
     """Get OpenAI client configured from config.cfg"""
-    openrouter_key = config.get("OpenRouter", "api_key", fallback=None)
-    openai_key = config.get("OpenAI", "api_key", fallback=None)
-    openai_url = config.get("OpenAI", "openai_compatible_url", fallback=None)
+    from .utils import get_openai_client, APIError
 
-    if openrouter_key and openrouter_key.strip():
-        return openai.OpenAI(
-            base_url="https://openrouter.ai/api/v1", api_key=openrouter_key
-        )
-    elif openai_key and openai_key.strip():
-        base_url = openai_url if openai_url and openai_url.strip() else None
-        return openai.OpenAI(api_key=openai_key, base_url=base_url)
-    else:
-        # Return client with placeholder - will fail at runtime if no key
-        return openai.OpenAI(
-            base_url="https://openrouter.ai/api/v1", api_key="your-openrouter-key"
-        )
+    try:
+        return get_openai_client()
+    except APIError as e:
+        raise RuntimeError(f"Failed to initialize API client: {e}")
 
 
 client = get_client()
 
-# Configuration options
-USE_DYNAMIC_MODELS = False  # Set to False to use FIXED_EVAL_MODELS
-CACHE_DURATION_HOURS = 24  # Cache model list for 24 hours
+# Configuration is now handled via config file - no hardcoded options
 
 
-# Function to get default model list from config
-def get_default_eval_models():
+def list_default_eval_models():
     """Get default evaluation models from config."""
-    models_str = config.get("Models", "default_eval_models", fallback="")
-    if models_str:
-        return [model.strip() for model in models_str.split(",") if model.strip()]
-    else:
-        # Fallback if config is missing
-        return [
-            "mistralai/mistral-nemo",
-            "qwen/qwen3-30b-a3b",
-            "deepseek/deepseek-v3",
-            "qwen/qwen3-coder",
-            "z-ai/glm-4.5",
-            "openai/gpt-4o-mini",
-            "moonshotai/kimi-k2",
-            "google/gemini-2.5-flash",
-            "google/gemini-2.5-pro",
-            "openai/gpt-5",
-            "openai/gpt-4o",
-            "anthropic/claude-sonnet-4",
-            "x-ai/grok-4",
-            "anthropic/claude-3.7-sonnet",
-            "anthropic/claude-opus-4.1",
-        ]
+    from .utils import get_config_value, ConfigError
+
+    models_str = get_config_value("Models", "eval_models", "")
+    if not models_str:
+        raise ConfigError(
+            "No evaluation models configured. Please set 'eval_models' in [Models] section of config.cfg"
+        )
+
+    models = [model.strip() for model in models_str.split(",") if model.strip()]
+    if not models:
+        raise ConfigError(
+            "Invalid evaluation models configuration. Please provide comma-separated model names."
+        )
+
+    return models
 
 
 # Global cache for models
@@ -115,14 +93,22 @@ def fetch_top_models_from_openrouter(
 
     Returns:
         List of model IDs sorted by performance metrics
+
+    Raises:
+        ConfigError: If API access fails and no valid configuration is available
     """
+    from .utils import get_config_value, ConfigError
+
     try:
+        # Get API key from config if not provided
+        if not api_key:
+            api_key = get_config_value("OpenRouter", "api_key", "")
+
+        if not api_key or api_key == "your-openrouter-key":
+            raise ConfigError("No valid OpenRouter API key found in configuration")
+
         # Prepare authentication headers
-        headers = {}
-        if api_key:
-            headers["Authorization"] = f"Bearer {api_key}"
-        elif hasattr(client, "api_key") and client.api_key != "your-openrouter-key":
-            headers["Authorization"] = f"Bearer {client.api_key}"
+        headers = {"Authorization": f"Bearer {api_key}"}
 
         # Fetch models from API
         response = requests.get(
@@ -149,14 +135,15 @@ def fetch_top_models_from_openrouter(
         return top_models
 
     except Exception as e:
-        print(f"Error fetching models from OpenRouter: {e}")
-        print("Falling back to default model list")
-        return get_default_eval_models()[:limit]
+        raise ConfigError(
+            f"Failed to fetch models from OpenRouter API: {e}. "
+            "Please check your API key or use static model configuration."
+        )
 
 
-def get_eval_models(use_cache: bool = True, limit: int = 20) -> List[str]:
+def list_eval_models(use_cache: bool = True, limit: int = 20) -> List[str]:
     """
-    Get the list of models to evaluate, either from OpenRouter API or default list.
+    Get the list of models to evaluate, either from OpenRouter API or config.
 
     Args:
         use_cache: Whether to use cached results if available
@@ -164,28 +151,41 @@ def get_eval_models(use_cache: bool = True, limit: int = 20) -> List[str]:
 
     Returns:
         List of model IDs to evaluate
+
+    Raises:
+        ConfigError: If no valid models can be obtained
     """
+    from .utils import get_config_value, ConfigError
+
     global _model_cache
 
-    # Use default models if dynamic fetching is disabled
-    if not USE_DYNAMIC_MODELS:
-        return get_default_eval_models()[:limit]
+    use_dynamic = get_config_value("Models", "use_dynamic_models", False, bool)
+    cache_hours = get_config_value("Models", "model_cache_hours", 24, int)
+
+    # Use static models if dynamic fetching is disabled
+    if not use_dynamic:
+        return list_default_eval_models()[:limit]
 
     # Check cache validity
     if use_cache and _model_cache["timestamp"]:
         cache_age = datetime.now() - _model_cache["timestamp"]
-        if cache_age < timedelta(hours=CACHE_DURATION_HOURS) and _model_cache["models"]:
+        if cache_age < timedelta(hours=cache_hours) and _model_cache["models"]:
             return _model_cache["models"][:limit]
 
-    # Fetch fresh data
-    models = fetch_top_models_from_openrouter(limit=limit)
+    try:
+        # Fetch fresh data from API
+        models = fetch_top_models_from_openrouter(limit=limit)
 
-    # Update cache
-    _model_cache["models"] = models
-    _model_cache["timestamp"] = datetime.now()
+        # Update cache
+        _model_cache["models"] = models
+        _model_cache["timestamp"] = datetime.now()
 
-    return models
+        return models
+
+    except ConfigError:
+        # If API fails, fall back to configured models
+        return list_default_eval_models()[:limit]
 
 
 # Initialize models list
-EVAL_MODELS = get_eval_models()
+EVAL_MODELS = list_default_eval_models()

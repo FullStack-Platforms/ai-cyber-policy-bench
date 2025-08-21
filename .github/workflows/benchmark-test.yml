@@ -1,4 +1,7 @@
 name: Mini Benchmark Test
+permissions:
+  contents: read
+  pull-requests: write
 
 on:
   push:
@@ -44,20 +47,15 @@ jobs:
           exit 1
         fi
     
-    - name: Setup vector database
-      run: |
-        python cyber_policy_bench.py --setup-db --models 1 --questions 1 || echo "DB setup completed with warnings"
-    
     - name: Run mini benchmark (2 models, 3 questions)
       env:
         TOKENIZERS_PARALLELISM: "false"
       run: |
-        timeout 20m python cyber_policy_bench.py --models 2 --questions 3 || true
-      continue-on-error: true
+        timeout 25m python cyber_policy_bench.py --setup-db --models 2 --questions 3
     
     - name: Validate results were generated
       run: |
-        if [ -f "experiment_results/poc_detailed_results.json" ]; then
+        if [ -f "reports/benchmark_metrics.json" ]; then
           echo "✓ Results file generated successfully"
         else
           echo "✗ No results file generated"
@@ -70,5 +68,5 @@ jobs:
       with:
         name: benchmark-test-results
         path: |
-          experiment_results/
+          reports/
           *.log

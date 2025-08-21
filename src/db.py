@@ -3,11 +3,22 @@ import json
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 from sentence_transformers import SentenceTransformer
-import configparser
 
-# Load configuration
-config = configparser.ConfigParser()
-config.read("config.cfg")
+# Import torch for MPS cache management on macOS
+try:
+    import torch
+
+    # Check if MPS is available and enable memory-efficient empty cache
+    if torch.backends.mps.is_available():
+        torch.mps.empty_cache()
+except ImportError:
+    torch = None
+
+
+# Use centralized config loading
+from .utils import get_config, get_config_value
+
+config = get_config()
 
 
 class VectorDatabase:
@@ -16,7 +27,7 @@ class VectorDatabase:
     def __init__(self, db_path: str = None):
         """Initialize the vector database with multi-collection support."""
         if db_path is None:
-            db_path = config.get("Vector Database", "db_path", fallback="./vector_db")
+            db_path = config.get("VectorDatabase", "db_path", fallback="./vector_db")
         self.db_path = Path(db_path)
         self.db_path.mkdir(exist_ok=True)
 
@@ -24,7 +35,10 @@ class VectorDatabase:
         self.client = chromadb.PersistentClient(path=str(self.db_path))
 
         # Initialize embedding model
-        self.embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
+        embedding_model_name = config.get(
+            "VectorDatabase", "embedding_model", fallback="all-MiniLM-L6-v2"
+        )
+        self.embedding_model = SentenceTransformer(embedding_model_name)
 
         # Store collections by framework name
         self.collections = {}
@@ -40,9 +54,12 @@ class VectorDatabase:
         try:
             collection = self.client.get_collection(collection_name)
         except Exception:
+            vector_space = config.get(
+                "VectorDatabase", "vector_space", fallback="cosine"
+            )
             collection = self.client.create_collection(
                 name=collection_name,
-                metadata={"hnsw:space": "cosine", "framework": framework_name},
+                metadata={"hnsw:space": vector_space, "framework": framework_name},
             )
 
         self.collections[collection_name] = collection
@@ -78,7 +95,9 @@ class VectorDatabase:
                 embeddings = self.embedding_model.encode(documents).tolist()
 
                 # Add to collection in batches
-                batch_size = 100
+                batch_size = int(
+                    config.get("VectorDatabase", "batch_size", fallback=100)
+                )
                 for i in range(0, len(documents), batch_size):
                     batch_docs = documents[i : i + batch_size]
                     batch_meta = metadatas[i : i + batch_size]
@@ -98,9 +117,14 @@ class VectorDatabase:
         print(f"Total chunks added: {total_chunks}")
 
     def search(
-        self, query: str, n_results: int = 5, frameworks: Optional[List[str]] = None
+        self, query: str, n_results: int = None, frameworks: Optional[List[str]] = None
     ) -> List[Dict]:
         """Search for relevant chunks across specified frameworks or all frameworks."""
+        if n_results is None:
+            n_results = self.config_overrides.get(
+                "default_search_results",
+                get_config_value("VectorDatabase", "default_search_results", 5, int),
+            )
         all_results = []
 
         # If no frameworks specified, search all available collections
@@ -141,9 +165,14 @@ class VectorDatabase:
         return all_results[:n_results]
 
     def search_framework(
-        self, query: str, framework_name: str, n_results: int = 5
+        self, query: str, framework_name: str, n_results: int = None
     ) -> List[Dict]:
         """Search within a specific framework collection."""
+        if n_results is None:
+            n_results = self.config_overrides.get(
+                "default_search_results",
+                get_config_value("VectorDatabase", "default_search_results", 5, int),
+            )
         try:
             collection = self.get_or_create_collection(framework_name)
             if collection.count() == 0:

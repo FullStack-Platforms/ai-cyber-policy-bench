@@ -160,7 +160,7 @@ async def run_custom_evaluation():
     
     # Load questions
     questions = evaluator.load_evaluation_questions()[:5]
-    models = ["openai/gpt-4o", "anthropic/claude-sonnet-4"]
+    models = ["gpt-4.1", "anthropic/claude-sonnet-4"]
     modes = [EvaluationMode.NO_CONTEXT, EvaluationMode.VECTOR_DB]
     
     # Run evaluation
@@ -345,7 +345,7 @@ Advanced scoring system with dual judge support.
 ```python
 scorer = TwoJudgeScorer(
     judge_model_1="anthropic/claude-sonnet-4",
-    judge_model_2="openai/gpt-4o"
+    judge_model_2="gpt-4.1"
 )
 scored_results = await scorer.score_evaluation_results(results)
 ```

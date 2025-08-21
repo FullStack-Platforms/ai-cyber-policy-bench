@@ -1,0 +1,685 @@
+2025-08-21 11:29:38 - cyber_benchmark - INFO - Using existing vector database...
+2025-08-21 11:29:40 - cyber_benchmark - INFO - Loaded vector database: 14957 chunks
+2025-08-21 11:29:40 - cyber_benchmark - INFO - Starting evaluation pipeline: 12 models, 19 questions
+2025-08-21 11:29:40 - cyber_benchmark - INFO - Loaded 14 models from cache
+2025-08-21 11:29:40 - cyber_benchmark - INFO - Models already loaded and cache is valid
+2025-08-21 11:29:40 - cyber_benchmark - INFO - Testing models: ['gpt-5-chat', 'mistralai/mistral-nemo', 'qwen/qwen3-30b-a3b', 'qwen/qwen3-coder', 'z-ai/glm-4.5', 'gpt-5-mini', 'moonshotai/kimi-k2', 'google/gemini-2.5-flash', 'deepseek/deepseek-v3', 'google/gemini-2.5-pro', 'anthropic/claude-sonnet-4', 'x-ai/grok-4']
+2025-08-21 11:29:40 - cyber_benchmark - INFO - Evaluation modes: ['no_context', 'vector_db']
+=== Cyber Policy Benchmark - Complete Pipeline ===
+Starting evaluation: 12 models × 19 questions × 2 modes = 456 total evaluations
+
+Evaluating model: gpt-5-chat
+  Mode: no_context
+    Completed 5/19 questions
+    Completed 10/19 questions
+    Completed 15/19 questions
+  Mode: vector_db
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['nist_csf'], found 5 results
+Detected frameworks: ['gdpr'], found 5 results
+    Completed 5/19 questions
+No specific frameworks detected, searching all collections, found 5 results
+Detected frameworks: ['hipaa'], found 5 results
+Detected frameworks: ['soc_2', 'pci_dss', 'gdpr'], found 5 results
+Detected frameworks: ['nist_csf'], found 5 results
+Detected frameworks: ['nist_csf'], found 5 results
+    Completed 10/19 questions
+Detected frameworks: ['gdpr'], found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['gdpr'], found 5 results
+Detected frameworks: ['cmmc'], found 5 results
+Detected frameworks: ['hipaa', 'gdpr'], found 5 results
+    Completed 15/19 questions
+No specific frameworks detected, searching all collections, found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['fedramp'], found 5 results
+Detected frameworks: ['soc_2', 'nist_800_53'], found 5 results
+  Completed gpt-5-chat: 38 results
+
+Evaluating model: mistralai/mistral-nemo
+  Mode: no_context
+    Completed 5/19 questions
+    Completed 10/19 questions
+    Completed 15/19 questions
+  Mode: vector_db
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['nist_csf'], found 5 results
+Detected frameworks: ['gdpr'], found 5 results
+    Completed 5/19 questions
+No specific frameworks detected, searching all collections, found 5 results
+Detected frameworks: ['hipaa'], found 5 results
+Detected frameworks: ['soc_2', 'pci_dss', 'gdpr'], found 5 results
+Detected frameworks: ['nist_csf'], found 5 results
+Detected frameworks: ['nist_csf'], found 5 results
+    Completed 10/19 questions
+Detected frameworks: ['gdpr'], found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['gdpr'], found 5 results
+Detected frameworks: ['cmmc'], found 5 results
+Detected frameworks: ['hipaa', 'gdpr'], found 5 results
+    Completed 15/19 questions
+No specific frameworks detected, searching all collections, found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['fedramp'], found 5 results
+Detected frameworks: ['soc_2', 'nist_800_53'], found 5 results
+  Completed mistralai/mistral-nemo: 38 results
+
+Evaluating model: qwen/qwen3-30b-a3b
+  Mode: no_context
+    Completed 5/19 questions
+    Completed 10/19 questions
+    Completed 15/19 questions
+  Mode: vector_db
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['nist_csf'], found 5 results
+Detected frameworks: ['gdpr'], found 5 results
+    Completed 5/19 questions
+No specific frameworks detected, searching all collections, found 5 results
+Detected frameworks: ['hipaa'], found 5 results
+Detected frameworks: ['soc_2', 'pci_dss', 'gdpr'], found 5 results
+Detected frameworks: ['nist_csf'], found 5 results
+Detected frameworks: ['nist_csf'], found 5 results
+    Completed 10/19 questions
+Detected frameworks: ['gdpr'], found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['gdpr'], found 5 results
+Detected frameworks: ['cmmc'], found 5 results
+Detected frameworks: ['hipaa', 'gdpr'], found 5 results
+    Completed 15/19 questions
+No specific frameworks detected, searching all collections, found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['fedramp'], found 5 results
+Detected frameworks: ['soc_2', 'nist_800_53'], found 5 results
+  Completed qwen/qwen3-30b-a3b: 38 results
+
+Evaluating model: qwen/qwen3-coder
+  Mode: no_context
+    Completed 5/19 questions
+    Completed 10/19 questions
+    Completed 15/19 questions
+  Mode: vector_db
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['nist_csf'], found 5 results
+Detected frameworks: ['gdpr'], found 5 results
+    Completed 5/19 questions
+No specific frameworks detected, searching all collections, found 5 results
+Detected frameworks: ['hipaa'], found 5 results
+Detected frameworks: ['soc_2', 'pci_dss', 'gdpr'], found 5 results
+Detected frameworks: ['nist_csf'], found 5 results
+Detected frameworks: ['nist_csf'], found 5 results
+    Completed 10/19 questions
+Detected frameworks: ['gdpr'], found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['gdpr'], found 5 results
+Detected frameworks: ['cmmc'], found 5 results
+Detected frameworks: ['hipaa', 'gdpr'], found 5 results
+    Completed 15/19 questions
+No specific frameworks detected, searching all collections, found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['fedramp'], found 5 results
+Detected frameworks: ['soc_2', 'nist_800_53'], found 5 results
+  Completed qwen/qwen3-coder: 38 results
+
+Evaluating model: z-ai/glm-4.5
+  Mode: no_context
+    Completed 5/19 questions
+    Completed 10/19 questions
+    Completed 15/19 questions
+  Mode: vector_db
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['nist_csf'], found 5 results
+Detected frameworks: ['gdpr'], found 5 results
+    Completed 5/19 questions
+No specific frameworks detected, searching all collections, found 5 results
+Detected frameworks: ['hipaa'], found 5 results
+Detected frameworks: ['soc_2', 'pci_dss', 'gdpr'], found 5 results
+Detected frameworks: ['nist_csf'], found 5 results
+Detected frameworks: ['nist_csf'], found 5 results
+    Completed 10/19 questions
+Detected frameworks: ['gdpr'], found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['gdpr'], found 5 results
+Detected frameworks: ['cmmc'], found 5 results
+Detected frameworks: ['hipaa', 'gdpr'], found 5 results
+    Completed 15/19 questions
+No specific frameworks detected, searching all collections, found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['fedramp'], found 5 results
+Detected frameworks: ['soc_2', 'nist_800_53'], found 5 results
+  Completed z-ai/glm-4.5: 38 results
+
+Evaluating model: gpt-5-mini
+  Mode: no_context
+    Completed 5/19 questions
+    Completed 10/19 questions
+    Completed 15/19 questions
+  Mode: vector_db
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['nist_csf'], found 5 results
+Detected frameworks: ['gdpr'], found 5 results
+    Completed 5/19 questions
+No specific frameworks detected, searching all collections, found 5 results
+Detected frameworks: ['hipaa'], found 5 results
+Detected frameworks: ['soc_2', 'pci_dss', 'gdpr'], found 5 results
+Detected frameworks: ['nist_csf'], found 5 results
+Detected frameworks: ['nist_csf'], found 5 results
+    Completed 10/19 questions
+Detected frameworks: ['gdpr'], found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['gdpr'], found 5 results
+Detected frameworks: ['cmmc'], found 5 results
+Detected frameworks: ['hipaa', 'gdpr'], found 5 results
+    Completed 15/19 questions
+No specific frameworks detected, searching all collections, found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['fedramp'], found 5 results
+Detected frameworks: ['soc_2', 'nist_800_53'], found 5 results
+  Completed gpt-5-mini: 38 results
+
+Evaluating model: moonshotai/kimi-k2
+  Mode: no_context
+    Completed 5/19 questions
+    Completed 10/19 questions
+    Completed 15/19 questions
+  Mode: vector_db
+Detected frameworks: ['soc_2'], found 5 results
+2025-08-21 14:45:11 - cyber_benchmark - INFO - Starting scoring with configured judge system
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['nist_csf'], found 5 results
+Detected frameworks: ['gdpr'], found 5 results
+    Completed 5/19 questions
+No specific frameworks detected, searching all collections, found 5 results
+Detected frameworks: ['hipaa'], found 5 results
+Detected frameworks: ['soc_2', 'pci_dss', 'gdpr'], found 5 results
+Detected frameworks: ['nist_csf'], found 5 results
+Detected frameworks: ['nist_csf'], found 5 results
+    Completed 10/19 questions
+Detected frameworks: ['gdpr'], found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['gdpr'], found 5 results
+Detected frameworks: ['cmmc'], found 5 results
+Detected frameworks: ['hipaa', 'gdpr'], found 5 results
+    Completed 15/19 questions
+No specific frameworks detected, searching all collections, found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['fedramp'], found 5 results
+Detected frameworks: ['soc_2', 'nist_800_53'], found 5 results
+  Completed moonshotai/kimi-k2: 38 results
+
+Evaluating model: google/gemini-2.5-flash
+  Mode: no_context
+    Completed 5/19 questions
+    Completed 10/19 questions
+    Completed 15/19 questions
+  Mode: vector_db
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['nist_csf'], found 5 results
+Detected frameworks: ['gdpr'], found 5 results
+    Completed 5/19 questions
+No specific frameworks detected, searching all collections, found 5 results
+Detected frameworks: ['hipaa'], found 5 results
+Detected frameworks: ['soc_2', 'pci_dss', 'gdpr'], found 5 results
+Detected frameworks: ['nist_csf'], found 5 results
+Detected frameworks: ['nist_csf'], found 5 results
+    Completed 10/19 questions
+Detected frameworks: ['gdpr'], found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['gdpr'], found 5 results
+Detected frameworks: ['cmmc'], found 5 results
+Detected frameworks: ['hipaa', 'gdpr'], found 5 results
+    Completed 15/19 questions
+No specific frameworks detected, searching all collections, found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['fedramp'], found 5 results
+Detected frameworks: ['soc_2', 'nist_800_53'], found 5 results
+  Completed google/gemini-2.5-flash: 38 results
+
+Evaluating model: deepseek/deepseek-v3
+  Mode: no_context
+    Completed 5/19 questions
+    Completed 10/19 questions
+    Completed 15/19 questions
+  Mode: vector_db
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['nist_csf'], found 5 results
+Detected frameworks: ['gdpr'], found 5 results
+    Completed 5/19 questions
+No specific frameworks detected, searching all collections, found 5 results
+Detected frameworks: ['hipaa'], found 5 results
+Detected frameworks: ['soc_2', 'pci_dss', 'gdpr'], found 5 results
+Detected frameworks: ['nist_csf'], found 5 results
+Detected frameworks: ['nist_csf'], found 5 results
+    Completed 10/19 questions
+Detected frameworks: ['gdpr'], found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['gdpr'], found 5 results
+Detected frameworks: ['cmmc'], found 5 results
+Detected frameworks: ['hipaa', 'gdpr'], found 5 results
+    Completed 15/19 questions
+No specific frameworks detected, searching all collections, found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['fedramp'], found 5 results
+Detected frameworks: ['soc_2', 'nist_800_53'], found 5 results
+  Completed deepseek/deepseek-v3: 38 results
+
+Evaluating model: google/gemini-2.5-pro
+  Mode: no_context
+    Completed 5/19 questions
+    Completed 10/19 questions
+    Completed 15/19 questions
+  Mode: vector_db
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['nist_csf'], found 5 results
+Detected frameworks: ['gdpr'], found 5 results
+    Completed 5/19 questions
+No specific frameworks detected, searching all collections, found 5 results
+Detected frameworks: ['hipaa'], found 5 results
+Detected frameworks: ['soc_2', 'pci_dss', 'gdpr'], found 5 results
+Detected frameworks: ['nist_csf'], found 5 results
+Detected frameworks: ['nist_csf'], found 5 results
+    Completed 10/19 questions
+Detected frameworks: ['gdpr'], found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['gdpr'], found 5 results
+Detected frameworks: ['cmmc'], found 5 results
+Detected frameworks: ['hipaa', 'gdpr'], found 5 results
+    Completed 15/19 questions
+No specific frameworks detected, searching all collections, found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['fedramp'], found 5 results
+Detected frameworks: ['soc_2', 'nist_800_53'], found 5 results
+  Completed google/gemini-2.5-pro: 38 results
+
+Evaluating model: anthropic/claude-sonnet-4
+  Mode: no_context
+    Completed 5/19 questions
+    Completed 10/19 questions
+    Completed 15/19 questions
+  Mode: vector_db
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['nist_csf'], found 5 results
+Detected frameworks: ['gdpr'], found 5 results
+    Completed 5/19 questions
+No specific frameworks detected, searching all collections, found 5 results
+Detected frameworks: ['hipaa'], found 5 results
+Detected frameworks: ['soc_2', 'pci_dss', 'gdpr'], found 5 results
+Detected frameworks: ['nist_csf'], found 5 results
+Detected frameworks: ['nist_csf'], found 5 results
+    Completed 10/19 questions
+Detected frameworks: ['gdpr'], found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['gdpr'], found 5 results
+Detected frameworks: ['cmmc'], found 5 results
+Detected frameworks: ['hipaa', 'gdpr'], found 5 results
+    Completed 15/19 questions
+No specific frameworks detected, searching all collections, found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['fedramp'], found 5 results
+Detected frameworks: ['soc_2', 'nist_800_53'], found 5 results
+  Completed anthropic/claude-sonnet-4: 38 results
+
+Evaluating model: x-ai/grok-4
+  Mode: no_context
+    Completed 5/19 questions
+    Completed 10/19 questions
+    Completed 15/19 questions
+  Mode: vector_db
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['nist_csf'], found 5 results
+Detected frameworks: ['gdpr'], found 5 results
+    Completed 5/19 questions
+No specific frameworks detected, searching all collections, found 5 results
+Detected frameworks: ['hipaa'], found 5 results
+Detected frameworks: ['soc_2', 'pci_dss', 'gdpr'], found 5 results
+Detected frameworks: ['nist_csf'], found 5 results
+Detected frameworks: ['nist_csf'], found 5 results
+    Completed 10/19 questions
+Detected frameworks: ['gdpr'], found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['gdpr'], found 5 results
+Detected frameworks: ['cmmc'], found 5 results
+Detected frameworks: ['hipaa', 'gdpr'], found 5 results
+    Completed 15/19 questions
+No specific frameworks detected, searching all collections, found 5 results
+Detected frameworks: ['soc_2'], found 5 results
+Detected frameworks: ['fedramp'], found 5 results
+Detected frameworks: ['soc_2', 'nist_800_53'], found 5 results
+  Completed x-ai/grok-4: 38 results
+Detailed results saved to experiment_results/detailed_results.json
+
+Evaluation complete! Results saved to experiment_results
+Model evaluation completed in 3.3h
+Scoring results for gpt-5-chat using dual judge system...
+  Scored 5/38 results
+  Scored 10/38 results
+  Scored 15/38 results
+  Scored 20/38 results
+  Scored 25/38 results
+  Scored 30/38 results
+  Scored 35/38 results
+  Completed scoring for gpt-5-chat
+  Judge statistics: J1 success: 38, J1 failures: 0, J2 success: 38, J2 failures: 0, Dual success: 38, Fallbacks used: 0
+Scoring results for mistralai/mistral-nemo using dual judge system...
+  Scored 5/38 results
+  Scored 10/38 results
+  Scored 15/38 results
+  Scored 20/38 results
+Judge 1 (moonshotai/kimi-k2) returned score 0: The model incorrectly identified CC6.4 instead of the correct control CC6.3. While CC6.4 does mention reviewing access rights, the ground truth specifically identifies CC6.3 as the relevant control for 'Reviews Access Roles and Rules'. The model's response is fundamentally wrong despite appearing detailed and relevant.
+  Scored 25/38 results
+  Scored 30/38 results
+  Scored 35/38 results
+  Completed scoring for mistralai/mistral-nemo
+  Judge statistics: J1 success: 75, J1 failures: 1, J2 success: 76, J2 failures: 0, Dual success: 75, Fallbacks used: 1
+Scoring results for qwen/qwen3-30b-a3b using dual judge system...
+  Scored 5/38 results
+  Scored 10/38 results
+  Scored 15/38 results
+  Scored 20/38 results
+  Scored 25/38 results
+  Scored 30/38 results
+  Scored 35/38 results
+  Completed scoring for qwen/qwen3-30b-a3b
+  Judge statistics: J1 success: 113, J1 failures: 1, J2 success: 114, J2 failures: 0, Dual success: 113, Fallbacks used: 1
+Scoring results for qwen/qwen3-coder using dual judge system...
+  Scored 5/38 results
+  Scored 10/38 results
+  Scored 15/38 results
+  Scored 20/38 results
+  Scored 25/38 results
+  Scored 30/38 results
+  Scored 35/38 results
+  Completed scoring for qwen/qwen3-coder
+  Judge statistics: J1 success: 151, J1 failures: 1, J2 success: 152, J2 failures: 0, Dual success: 151, Fallbacks used: 1
+Scoring results for z-ai/glm-4.5 using dual judge system...
+  Scored 5/38 results
+  Scored 10/38 results
+  Scored 15/38 results
+  Scored 20/38 results
+  Scored 25/38 results
+  Scored 30/38 results
+Judge 1 (moonshotai/kimi-k2) returned score 0: The model response explicitly states it cannot answer the question based on the provided context, which only covers CMMC Level 1 and does not contain information about CMMC Level 2 or NIST 800-161r1. While this is technically accurate regarding the provided context, it completely fails to address the actual cybersecurity compliance question about overlapping requirements and gaps between NIST 800-161r1 and CMMC Level 2. The response does not provide any of the specific overlapping requirements or gaps mentioned in the ground truth, making it entirely unhelpful for the actual question asked.
+  Scored 35/38 results
+  Completed scoring for z-ai/glm-4.5
+  Judge statistics: J1 success: 188, J1 failures: 2, J2 success: 190, J2 failures: 0, Dual success: 188, Fallbacks used: 2
+Scoring results for gpt-5-mini using dual judge system...
+  Scored 5/38 results
+  Scored 10/38 results
+  Scored 15/38 results
+  Scored 20/38 results
+  Scored 25/38 results
+  Scored 30/38 results
+  Scored 35/38 results
+  Completed scoring for gpt-5-mini
+  Judge statistics: J1 success: 226, J1 failures: 2, J2 success: 228, J2 failures: 0, Dual success: 226, Fallbacks used: 2
+Scoring results for moonshotai/kimi-k2 using dual judge system...
+  Scored 5/38 results
+  Scored 10/38 results
+  Scored 15/38 results
+  Scored 20/38 results
+  Scored 25/38 results
+  Scored 30/38 results
+Judge 1 (moonshotai/kimi-k2) returned score 0: The model response explicitly states it cannot answer the question because the provided context only covers CMMC Level 1, while the question asks about CMMC Level 2 and NIST 800-161r1. This is a complete failure to address the cybersecurity compliance question asked, making it irrelevant and unhelpful for the user's actual query.
+  Scored 35/38 results
+  Completed scoring for moonshotai/kimi-k2
+  Judge statistics: J1 success: 263, J1 failures: 3, J2 success: 266, J2 failures: 0, Dual success: 263, Fallbacks used: 3
+Scoring results for google/gemini-2.5-flash using dual judge system...
+  Scored 5/38 results
+  Scored 10/38 results
+  Scored 15/38 results
+Judge 1 (moonshotai/kimi-k2) returned score 0: The model response is fundamentally incorrect. It claims the password policy 'does not directly map to any specific SOC 2 2022 requirement' and bases this on 'provided context' that appears to be irrelevant excerpts about SOC 2 examinations rather than the actual SOC 2 2022 Trust Services Criteria. The ground truth correctly identifies CC6.1 and CC6.2 as the specific SOC 2 2022 requirements that password policies map to. The model's refusal to provide the correct mapping, based on flawed reasoning about missing context, makes this response completely inaccurate.
+  Scored 20/38 results
+Judge 1 (moonshotai/kimi-k2) returned score 0: The model explicitly states it cannot provide the required steps or timelines based on the provided text, which directly contradicts the ground truth answer that clearly outlines the specific steps and timelines under GDPR Article 20. The response is essentially a refusal to answer rather than providing the correct compliance requirements.
+  Scored 25/38 results
+Judge 1 (moonshotai/kimi-k2) returned score 0: The model response explicitly states it cannot answer the question and does not provide any information about zero trust architecture principles or their mapping to NIST CSF 2.0 subcategories. This is a complete failure to address the cybersecurity compliance question asked.
+Judge 2 (gpt-5-chat) returned score 0: Extracted from non-JSON response
+  Scored 30/38 results
+Judge 2 (gpt-5-chat) returned score 0: Extracted from non-JSON response
+  Scored 35/38 results
+  Completed scoring for google/gemini-2.5-flash
+  Judge statistics: J1 success: 298, J1 failures: 6, J2 success: 302, J2 failures: 2, Dual success: 297, Fallbacks used: 6
+Scoring results for deepseek/deepseek-v3 using dual judge system...
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+  Scored 5/38 results
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+  Scored 10/38 results
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+  Scored 15/38 results
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+  Scored 20/38 results
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+  Scored 25/38 results
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+  Scored 30/38 results
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+  Scored 35/38 results
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+  Completed scoring for deepseek/deepseek-v3
+  Judge statistics: J1 success: 298, J1 failures: 44, J2 success: 302, J2 failures: 40, Dual success: 297, Fallbacks used: 6
+Scoring results for google/gemini-2.5-pro using dual judge system...
+  Scored 5/38 results
+  Scored 10/38 results
+  Scored 15/38 results
+  Scored 20/38 results
+Judge 2 (gpt-5-chat) returned score 0: The model response failed to identify any relevant NIST CSF 2.0 subcategories for continuous monitoring of network traffic. It instead claimed that the context did not allow identification, despite the question being explicit. The correct answer should have included DE.CM-1, DE.CM-3, and GV.SC-2. The response contains no specific compliance references, no correct content, and does not address the cybersecurity question, making it completely incorrect.
+Judge 1 (moonshotai/kimi-k2) returned score 0: The model response explicitly states it cannot provide the required information because the context doesn't contain details about data portability requests under GDPR. This is a complete failure to answer the question, as the response contains no actual steps, timelines, or compliance requirements for handling a GDPR data portability request. The model essentially refused to answer based on context limitations rather than providing the correct compliance steps.
+  Scored 25/38 results
+Judge 1 (moonshotai/kimi-k2) returned score 0: The model response completely fails to address the cybersecurity compliance question. Instead of analyzing how SOC 2 CC6.7, GDPR Article 32, and PCI DSS 3.4 align or conflict for data encryption at rest, it incorrectly claims it cannot answer due to missing context. This is a fundamental failure - the question asks for an analysis of known compliance requirements, not retrieval from provided context. The response provides no analysis of the actual requirements and their alignment/conflict, making it completely irrelevant to the question asked.
+Judge 1 (moonshotai/kimi-k2) returned score 0: The model response completely fails to address the question. Instead of mapping zero trust tenets to NIST CSF 2.0 subcategories and explaining implementation priority, it claims this is impossible based on the provided context. The response does not provide any mapping, specific subcategory references, or priority guidance as requested in the question. This is a complete failure to answer the cybersecurity compliance question asked.
+  Scored 30/38 results
+Judge 2 (gpt-5-chat) returned score 0: The model response does not attempt to answer the question about overlapping supply chain risk management requirements between NIST 800-161r1 and CMMC Level 2. Instead, it claims that no information is available, focusing only on CMMC Level 1 scoping guidance. It fails to identify any of the correct compliance requirements, misses all relevant overlaps and gaps, provides no specificity, and is not relevant to the asked question.
+  Scored 35/38 results
+  Completed scoring for google/gemini-2.5-pro
+  Judge statistics: J1 success: 333, J1 failures: 47, J2 success: 338, J2 failures: 42, Dual success: 330, Fallbacks used: 11
+Scoring results for anthropic/claude-sonnet-4 using dual judge system...
+  Scored 5/38 results
+  Scored 10/38 results
+  Scored 15/38 results
+  Scored 20/38 results
+  Scored 25/38 results
+  Scored 30/38 results
+  Scored 35/38 results
+  Completed scoring for anthropic/claude-sonnet-4
+  Judge statistics: J1 success: 371, J1 failures: 47, J2 success: 376, J2 failures: 42, Dual success: 368, Fallbacks used: 11
+2025-08-21 15:34:08 - cyber_benchmark - INFO - Judge performance statistics:
+2025-08-21 15:34:08 - cyber_benchmark - INFO -   Total attempts: 456
+2025-08-21 15:34:08 - cyber_benchmark - INFO -   Success rate: 86.84%
+2025-08-21 15:34:08 - cyber_benchmark - INFO - Generating summary report
+2025-08-21 15:34:08 - cyber_benchmark - INFO - Results saved to experiment_results/
+2025-08-21 15:34:08 - cyber_benchmark - INFO - Generating comprehensive reports...
+2025-08-21 15:34:08 - cyber_benchmark - INFO - Generating comprehensive report suite...
+2025-08-21 15:34:08 - cyber_benchmark - INFO - Analyzing benchmark results...
+2025-08-21 15:34:08 - cyber_benchmark - INFO - Generating model performance reports...
+2025-08-21 15:34:08 - cyber_benchmark - INFO - Generating HTML report: benchmark_report.html
+2025-08-21 15:34:08 - cyber_benchmark - INFO - HTML report saved to reports/benchmark_report.html
+2025-08-21 15:34:08 - cyber_benchmark - INFO - Metrics exported to reports/benchmark_metrics.json
+2025-08-21 15:34:08 - cyber_benchmark - INFO - Generated 2 reports
+2025-08-21 15:34:08 - cyber_benchmark - INFO - Report generation completed in 0.0s
+Scoring results for x-ai/grok-4 using dual judge system...
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Response too short (5 chars)
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Response too short (5 chars)
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Response too short (5 chars)
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Response too short (5 chars)
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Response too short (5 chars)
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Response too short (5 chars)
+  Scored 5/38 results
+  Scored 10/38 results
+  Scored 15/38 results
+Judge 1 (moonshotai/kimi-k2) returned score 0: The model response is completely incorrect and irrelevant. It mentions physical access controls to facilities and data centers, which has nothing to do with password policies. The ground truth correctly identifies CC6.1 and CC6.2 as the relevant SOC 2 requirements for password management and logical access controls, but the model response fails to address the actual question about password policies entirely.
+  Scored 20/38 results
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+  Scored 25/38 results
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+  Scored 30/38 results
+Judge 1 (moonshotai/kimi-k2) returned score 0: Invalid response: Model returned error message
+Judge 2 (gpt-5-chat) returned score 0: Invalid response: Model returned error message
+  Scored 35/38 results
+  Completed scoring for x-ai/grok-4
+  Judge statistics: J1 success: 399, J1 failures: 57, J2 success: 405, J2 failures: 51, Dual success: 396, Fallbacks used: 12
+Result scoring completed in 48.9m
+
+============================================================
+CYBER POLICY BENCHMARK RESULTS
+============================================================
+
+Overall Performance:
+  Total Evaluations: 456
+  Average Score: 0.597
+
+Performance by Mode:
+  No Context: 0.664
+  Raw Files: 0.000
+  Vector Db: 0.530
+
+Performance by Model:
+  gpt-5-chat:
+    Average: 0.795
+    No Context: 0.804
+    Vector Db: 0.787
+  mistralai/mistral-nemo:
+    Average: 0.607
+    No Context: 0.563
+    Vector Db: 0.650
+  qwen/qwen3-30b-a3b:
+    Average: 0.641
+    No Context: 0.678
+    Vector Db: 0.605
+  qwen/qwen3-coder:
+    Average: 0.711
+    No Context: 0.686
+    Vector Db: 0.737
+  z-ai/glm-4.5:
+    Average: 0.718
+    No Context: 0.793
+    Vector Db: 0.642
+  gpt-5-mini:
+    Average: 0.774
+    No Context: 0.766
+    Vector Db: 0.782
+  moonshotai/kimi-k2:
+    Average: 0.670
+    No Context: 0.774
+    Vector Db: 0.567
+  google/gemini-2.5-flash:
+    Average: 0.514
+    No Context: 0.692
+    Vector Db: 0.337
+  deepseek/deepseek-v3:
+    Average: 0.000
+  google/gemini-2.5-pro:
+    Average: 0.557
+    No Context: 0.771
+    Vector Db: 0.343
+  anthropic/claude-sonnet-4:
+    Average: 0.629
+    No Context: 0.786
+    Vector Db: 0.472
+  x-ai/grok-4:
+    Average: 0.551
+    No Context: 0.658
+    Vector Db: 0.443
+
+Reports generated:
+  html_report: reports/benchmark_report.html
+  json_export: reports/benchmark_metrics.json
+
+=== BENCHMARK COMPLETE ===
+Complete benchmark pipeline completed in 4.1h

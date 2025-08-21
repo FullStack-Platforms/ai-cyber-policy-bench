@@ -8,6 +8,7 @@ import configparser
 # Import torch for MPS cache management on macOS
 try:
     import torch
+
     # Check if MPS is available and enable memory-efficient empty cache
     if torch.backends.mps.is_available():
         torch.mps.empty_cache()
@@ -34,7 +35,9 @@ class VectorDatabase:
         self.client = chromadb.PersistentClient(path=str(self.db_path))
 
         # Initialize embedding model
-        embedding_model_name = config.get("VectorDatabase", "embedding_model", fallback="all-MiniLM-L6-v2")
+        embedding_model_name = config.get(
+            "VectorDatabase", "embedding_model", fallback="all-MiniLM-L6-v2"
+        )
         self.embedding_model = SentenceTransformer(embedding_model_name)
 
         # Store collections by framework name
@@ -51,7 +54,9 @@ class VectorDatabase:
         try:
             collection = self.client.get_collection(collection_name)
         except Exception:
-            vector_space = config.get("VectorDatabase", "vector_space", fallback="cosine")
+            vector_space = config.get(
+                "VectorDatabase", "vector_space", fallback="cosine"
+            )
             collection = self.client.create_collection(
                 name=collection_name,
                 metadata={"hnsw:space": vector_space, "framework": framework_name},
@@ -90,7 +95,9 @@ class VectorDatabase:
                 embeddings = self.embedding_model.encode(documents).tolist()
 
                 # Add to collection in batches
-                batch_size = int(config.get("VectorDatabase", "batch_size", fallback=100))
+                batch_size = int(
+                    config.get("VectorDatabase", "batch_size", fallback=100)
+                )
                 for i in range(0, len(documents), batch_size):
                     batch_docs = documents[i : i + batch_size]
                     batch_meta = metadatas[i : i + batch_size]
@@ -116,7 +123,7 @@ class VectorDatabase:
         if n_results is None:
             n_results = self.config_overrides.get(
                 "default_search_results",
-                get_config_value("VectorDatabase", "default_search_results", 5, int)
+                get_config_value("VectorDatabase", "default_search_results", 5, int),
             )
         all_results = []
 
@@ -164,7 +171,7 @@ class VectorDatabase:
         if n_results is None:
             n_results = self.config_overrides.get(
                 "default_search_results",
-                get_config_value("VectorDatabase", "default_search_results", 5, int)
+                get_config_value("VectorDatabase", "default_search_results", 5, int),
             )
         try:
             collection = self.get_or_create_collection(framework_name)

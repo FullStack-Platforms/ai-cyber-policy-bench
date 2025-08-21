@@ -156,18 +156,18 @@ class ModelManager(BaseComponent):
     def __init__(self, cache_duration_hours: int = None):
         """Initialize model manager."""
         super().__init__("model_manager")
-        
+
         from .utils import get_config_value
-        
+
         # Load configuration values
         self.cache_duration_hours = cache_duration_hours or get_config_value(
             "Models", "model_cache_hours", 24, int
         )
         self.models: Dict[str, ModelInfo] = {}
-        
+
         cache_dir = get_config_value("Paths", "cache_dir", "./experiment_cache")
         self.model_cache_file = Path(cache_dir) / "model_cache.json"
-        
+
         self.use_dynamic_models = get_config_value(
             "Models", "use_dynamic_models", False, bool
         )
@@ -182,37 +182,37 @@ class ModelManager(BaseComponent):
     def _get_default_eval_models(self) -> List[str]:
         """Get default evaluation models from config."""
         from .utils import get_config_value, ConfigError
-        
+
         models_str = get_config_value("Models", "eval_models", "")
         if not models_str:
             raise ConfigError(
                 "No evaluation models configured. Please set 'eval_models' in [Models] section of config.cfg"
             )
-        
+
         models = [model.strip() for model in models_str.split(",") if model.strip()]
         if not models:
             raise ConfigError(
                 "Invalid evaluation models configuration. Please provide comma-separated model names."
             )
-        
+
         return models
 
     def _get_default_judge_models(self) -> List[str]:
         """Get default judge models from config."""
         from .utils import get_config_value, ConfigError
-        
+
         models_str = get_config_value("Models", "judge_models", "")
         if not models_str:
             raise ConfigError(
                 "No judge models configured. Please set 'judge_models' in [Models] section of config.cfg"
             )
-        
+
         models = [model.strip() for model in models_str.split(",") if model.strip()]
         if not models:
             raise ConfigError(
                 "Invalid judge models configuration. Please provide comma-separated model names."
             )
-        
+
         return models
 
     def _load_cached_models(self) -> None:
@@ -310,7 +310,7 @@ class ModelManager(BaseComponent):
     ) -> List[ModelInfo]:
         """Fetch available models from OpenRouter API."""
         from .utils import get_config_value, ConfigError
-        
+
         if not api_key:
             api_key = get_config_value("OpenRouter", "api_key", "")
 
@@ -389,10 +389,13 @@ class ModelManager(BaseComponent):
         for model_id in self.default_eval_models:
             # Infer basic information from model ID
             provider = ModelProvider.UNKNOWN
-            
+
             # Get default context length from config or use conservative default
             from .utils import get_config_value
-            default_context = get_config_value("Models", "default_context_length", 8192, int)
+
+            default_context = get_config_value(
+                "Models", "default_context_length", 8192, int
+            )
             context_length = default_context
             capabilities = {ModelCapability.TEXT_GENERATION}
 
@@ -415,7 +418,9 @@ class ModelManager(BaseComponent):
                 capabilities.add(ModelCapability.LARGE_CONTEXT)
 
             # Get default performance score from config
-            default_score = get_config_value("Models", "default_performance_score", 0.5, float)
+            default_score = get_config_value(
+                "Models", "default_performance_score", 0.5, float
+            )
 
             model_info = ModelInfo(
                 id=model_id,
@@ -523,6 +528,7 @@ class ModelManager(BaseComponent):
         # Ensure we have models from configuration
         if not judge_models:
             from .utils import ConfigError
+
             raise ConfigError(
                 "No suitable judge models found. Please check your configuration and model availability."
             )

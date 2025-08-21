@@ -176,10 +176,10 @@ def validate_config() -> Dict[str, Any]:
     enable_no_context = get_config_value("Evaluation", "enable_no_context", True, bool)
     enable_raw_files = get_config_value("Evaluation", "enable_raw_files", True, bool)
     enable_vector_db = get_config_value("Evaluation", "enable_vector_db", True, bool)
-    
+
     if not any([enable_no_context, enable_raw_files, enable_vector_db]):
         issues.append("At least one evaluation mode must be enabled")
-    
+
     # Warn if vector_db mode is enabled but no database path configured
     if enable_vector_db:
         db_path = get_config_value("VectorDatabase", "db_path", "")
@@ -533,10 +533,10 @@ def reload_config(config_path: str = "config.cfg") -> None:
 def get_config_section(section_name: str) -> Dict[str, str]:
     """Get all key-value pairs from a configuration section."""
     config = get_config()
-    
+
     if not config.has_section(section_name):
         raise ConfigError(f"Configuration section '{section_name}' not found")
-    
+
     return dict(config[section_name].items())
 
 
@@ -577,23 +577,23 @@ def _validate_configuration_structure(config: configparser.ConfigParser) -> None
         "VectorDatabase": ["db_path", "embedding_model"],
         "Paths": ["output_dir"],
     }
-    
+
     warnings = []
     errors = []
-    
+
     for section_name, required_keys in required_sections.items():
         if not config.has_section(section_name):
             errors.append(f"Missing required section: [{section_name}]")
             continue
-            
+
         section = config[section_name]
         for key in required_keys:
             if key not in section or not section[key].strip():
                 warnings.append(f"Missing or empty key: {section_name}.{key}")
-    
+
     if errors:
         raise ConfigError(f"Configuration validation failed: {'; '.join(errors)}")
-    
+
     if warnings:
         logger = logging.getLogger(__name__)
         for warning in warnings:
@@ -603,29 +603,33 @@ def _validate_configuration_structure(config: configparser.ConfigParser) -> None
 def get_enabled_evaluation_modes():
     """
     Get list of enabled evaluation modes from configuration.
-    
+
     Returns:
         List of EvaluationMode enum values for enabled modes
     """
     # Import here to avoid circular dependency
     from .evaluator import EvaluationMode
-    
+
     modes = []
-    
+
     # Check each mode configuration
     if get_config_value("Evaluation", "enable_no_context", True, bool):
         modes.append(EvaluationMode.NO_CONTEXT)
-    
+
     if get_config_value("Evaluation", "enable_raw_files", True, bool):
         modes.append(EvaluationMode.RAW_FILES)
-    
+
     if get_config_value("Evaluation", "enable_vector_db", True, bool):
         modes.append(EvaluationMode.VECTOR_DB)
-    
+
     # Ensure at least one mode is enabled
     if not modes:
         logger = logging.getLogger(__name__)
         logger.warning("No evaluation modes enabled, defaulting to all modes")
-        return [EvaluationMode.NO_CONTEXT, EvaluationMode.RAW_FILES, EvaluationMode.VECTOR_DB]
-    
+        return [
+            EvaluationMode.NO_CONTEXT,
+            EvaluationMode.RAW_FILES,
+            EvaluationMode.VECTOR_DB,
+        ]
+
     return modes

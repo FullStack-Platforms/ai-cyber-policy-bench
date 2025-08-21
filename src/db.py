@@ -3,7 +3,6 @@ import json
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 from sentence_transformers import SentenceTransformer
-import configparser
 
 # Import torch for MPS cache management on macOS
 try:
@@ -16,9 +15,10 @@ except ImportError:
     torch = None
 
 
-# Load configuration
-config = configparser.ConfigParser()
-config.read("config.cfg")
+# Use centralized config loading
+from .utils import get_config, get_config_value
+
+config = get_config()
 
 
 class VectorDatabase:

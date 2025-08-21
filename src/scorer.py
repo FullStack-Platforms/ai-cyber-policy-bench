@@ -6,7 +6,10 @@ from enum import Enum
 import re
 import openai
 
-from .utils import get_config_value, get_openai_client, ConfigError
+from .utils import get_config_value, get_openai_client, get_config, ConfigError
+
+# Load configuration
+config = get_config()
 
 
 class ScoringMethod(Enum):

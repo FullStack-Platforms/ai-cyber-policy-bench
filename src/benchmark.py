@@ -1,8 +1,6 @@
-import openai
 from typing import List, Dict, Optional
 import requests
 from datetime import datetime, timedelta
-import configparser
 
 # Use centralized config loading
 from .utils import get_config
@@ -190,4 +188,4 @@ def list_eval_models(use_cache: bool = True, limit: int = 20) -> List[str]:
 
 
 # Initialize models list
-EVAL_MODELS = get_eval_models()
+EVAL_MODELS = list_default_eval_models()

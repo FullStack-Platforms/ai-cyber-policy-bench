@@ -14,7 +14,6 @@ from enum import Enum
 from pathlib import Path
 
 from .utils import (
-    get_config,
     retry_with_backoff,
     save_json,
     load_json,

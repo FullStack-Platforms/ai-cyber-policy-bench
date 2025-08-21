@@ -10,9 +10,11 @@ import openai
 try:
     from .db import VectorDatabase
     from .utils import get_config_value, get_openai_client
+    from .benchmark import list_default_eval_models
 except ImportError:
     from src.db import VectorDatabase
     from src.utils import get_config_value, get_openai_client
+    from src.benchmark import list_default_eval_models
 
 
 class EvaluationMode(Enum):
@@ -598,7 +600,7 @@ async def run_benchmark_poc(num_models: int = 3, num_questions: int = 5):
     evaluator = CyberPolicyEvaluator()
 
     # Get subset of models and questions
-    all_models = get_eval_models()
+    all_models = list_default_eval_models()
     models = all_models[:num_models]
 
     questions = evaluator.load_evaluation_questions()

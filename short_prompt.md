@@ -16,9 +16,9 @@ Output
 ## Review Cycle  
 
 ## Appendices  
-### Appendix A: Glossary
-### Framework-Specific Requirements (as many and if any are necessary)
-### Framework Mappings 
+# Appendix A: Glossary
+## Framework-Specific Requirements (as many and if any are necessary)
+## Framework Mappings 
 | Policy | Control ID | Description
 
 Use concise, actionable language, that all personnel can understand and read; align with stated compliance.

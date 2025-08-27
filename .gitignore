@@ -16,6 +16,7 @@ venv/
 # IDE-specific files
 .vscode/
 .idea/
+.ruff_cache/
 
 # System files
 .DS_Store
@@ -31,3 +32,4 @@ nohup.out
 
 #config files
 config.cfg
+experiment_cache/model_cache.json

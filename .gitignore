@@ -27,6 +27,7 @@ output/
 vector_db/
 experiment_results/
 reports/
+nohup.out
 
 #config files
 config.cfg

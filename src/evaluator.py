@@ -444,7 +444,7 @@ Please provide a precise answer based on the context provided. Be specific about
                 results[model_name].append(result)
 
         # Print completion summary
-        print(f"\nParallel evaluation completed!")
+        print("\nParallel evaluation completed!")
         for model_name, model_results in results.items():
             successful = len([r for r in model_results if not r.model_response.startswith("TASK_FAILURE")])
             total = len(model_results)

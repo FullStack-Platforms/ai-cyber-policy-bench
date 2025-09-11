@@ -15,6 +15,7 @@ Usage:
 import os
 import asyncio
 import argparse
+import json
 import sys
 from pathlib import Path
 from typing import Dict
@@ -85,7 +86,15 @@ def setup_vector_database() -> VectorDatabase:
         logger.info("No existing chunks found. Processing frameworks...")
 
         with Timer("Framework processing"):
-            framework_processor = FrameworkProcessor()
+            # Try to use optimized framework processor if available
+            try:
+                from src.rag_optimizer import OptimizedFrameworkProcessor
+                framework_processor = OptimizedFrameworkProcessor()
+                logger.info("Using optimized framework processor with smart chunking")
+            except ImportError:
+                framework_processor = FrameworkProcessor()
+                logger.info("Using standard framework processor")
+            
             all_chunks = framework_processor.process_all_frameworks()
             framework_processor.save_chunks(all_chunks)
 
@@ -93,6 +102,22 @@ def setup_vector_database() -> VectorDatabase:
 
     with Timer("Vector database initialization"):
         vector_db = VectorDatabase.initialize_from_chunks()
+        
+        # Use optimized chunks if available
+        chunks_path = Path(chunks_dir)
+        if chunks_path.exists():
+            all_chunks = {}
+            for chunk_file in chunks_path.glob("*_chunks.json"):
+                with open(chunk_file, "r", encoding="utf-8") as f:
+                    framework_data = json.load(f)
+                    framework_name = framework_data["metadata"]["framework"]["name"]
+                    all_chunks[framework_name] = framework_data
+            
+            # Use optimized add method if available
+            if hasattr(vector_db, 'add_optimized_chunks'):
+                vector_db.add_optimized_chunks(all_chunks)
+            else:
+                vector_db.add_chunks(all_chunks)
 
     stats = vector_db.get_collection_stats()
     logger.info(

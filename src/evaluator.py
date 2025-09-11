@@ -220,15 +220,24 @@ Please provide a precise answer based on the context provided. Be specific about
 
         # If specific frameworks detected, search those collections
         if detected_frameworks:
-            results = self.vector_db.search(
-                question, n_results=n_results, frameworks=detected_frameworks
-            )
+            # Use enhanced_search if available, fall back to regular search
+            if hasattr(self.vector_db, 'enhanced_search'):
+                results = self.vector_db.enhanced_search(
+                    question, n_results=n_results, frameworks=detected_frameworks
+                )
+            else:
+                results = self.vector_db.search(
+                    question, n_results=n_results, frameworks=detected_frameworks
+                )
             print(
                 f"Detected frameworks: {detected_frameworks}, found {len(results)} results"
             )
         else:
             # Fall back to searching all frameworks
-            results = self.vector_db.search(question, n_results=n_results)
+            if hasattr(self.vector_db, 'enhanced_search'):
+                results = self.vector_db.enhanced_search(question, n_results=n_results)
+            else:
+                results = self.vector_db.search(question, n_results=n_results)
             print(
                 f"No specific frameworks detected, searching all collections, found {len(results)} results"
             )

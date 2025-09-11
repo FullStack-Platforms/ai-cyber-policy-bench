@@ -14,6 +14,14 @@ try:
 except ImportError:
     torch = None
 
+# Import RAG optimization modules when available
+try:
+    from .rag_optimizer import create_optimized_chunks, OptimizedFrameworkProcessor
+    from .hybrid_search import HybridRetriever, BM25Index, SearchResult
+    from .reranker import CrossEncoderReranker, RankedResult
+    RAG_OPTIMIZATIONS_AVAILABLE = True
+except ImportError:
+    RAG_OPTIMIZATIONS_AVAILABLE = False
 
 # Use centralized config loading
 from .utils import get_config, get_config_value
@@ -22,10 +30,17 @@ config = get_config()
 
 
 class VectorDatabase:
-    """Vector database for storing and retrieving cybersecurity framework chunks."""
+    """Vector database for storing and retrieving cybersecurity framework chunks with RAG optimizations."""
 
-    def __init__(self, db_path: str = None):
-        """Initialize the vector database with multi-collection support."""
+    def __init__(self, db_path: str = None, enable_hybrid_search: bool = None, enable_reranking: bool = None):
+        """
+        Initialize the vector database with multi-collection support and optional RAG optimizations.
+        
+        Args:
+            db_path: Path to database storage
+            enable_hybrid_search: Enable hybrid search (BM25 + semantic)
+            enable_reranking: Enable cross-encoder reranking
+        """
         if db_path is None:
             db_path = config.get("VectorDatabase", "db_path", fallback="./vector_db")
         self.db_path = Path(db_path)
@@ -42,6 +57,41 @@ class VectorDatabase:
 
         # Store collections by framework name
         self.collections = {}
+        
+        # Initialize RAG optimization features if available
+        self.enable_hybrid_search = False
+        self.enable_reranking = False
+        self.hybrid_retriever = None
+        self.reranker = None
+        self.config_overrides = {}
+        
+        if RAG_OPTIMIZATIONS_AVAILABLE:
+            # Feature flags from config or parameters
+            if enable_hybrid_search is None:
+                enable_hybrid_search = get_config_value("HybridSearch", "enable_hybrid_search", True, bool)
+            if enable_reranking is None:
+                enable_reranking = get_config_value("Reranking", "enable_reranking", True, bool)
+            
+            self.enable_hybrid_search = enable_hybrid_search
+            self.enable_reranking = enable_reranking
+            
+            # Initialize hybrid retriever
+            if self.enable_hybrid_search:
+                try:
+                    self.hybrid_retriever = HybridRetriever(vector_db=self)
+                    print("✓ Hybrid search enabled")
+                except Exception as e:
+                    print(f"Warning: Failed to initialize hybrid search: {e}")
+                    self.enable_hybrid_search = False
+            
+            # Initialize reranker
+            if self.enable_reranking:
+                try:
+                    self.reranker = CrossEncoderReranker()
+                    print("✓ Reranking enabled")
+                except Exception as e:
+                    print(f"Warning: Failed to initialize reranker: {e}")
+                    self.enable_reranking = False
 
     def get_or_create_collection(self, framework_name: str) -> chromadb.Collection:
         """Get or create a collection for a specific framework."""
@@ -64,6 +114,25 @@ class VectorDatabase:
 
         self.collections[collection_name] = collection
         return collection
+
+    def add_optimized_chunks(self, chunks_data: Dict[str, Any]) -> None:
+        """Add optimized chunks to both vector and BM25 indexes."""
+        if RAG_OPTIMIZATIONS_AVAILABLE:
+            print("Adding optimized chunks to enhanced database...")
+            
+            # Add to vector database (parent class method)
+            self.add_chunks(chunks_data)
+            
+            # Build BM25 index if hybrid search is enabled
+            if self.enable_hybrid_search and self.hybrid_retriever:
+                try:
+                    self.hybrid_retriever.build_bm25_index(chunks_data)
+                    print("✓ BM25 index built successfully")
+                except Exception as e:
+                    print(f"Warning: Failed to build BM25 index: {e}")
+        else:
+            # Fall back to regular chunk handling
+            self.add_chunks(chunks_data)
 
     def add_chunks(self, chunks_data: Dict[str, Any]) -> None:
         """Add framework chunks to separate collections by framework."""
@@ -164,6 +233,114 @@ class VectorDatabase:
         all_results.sort(key=lambda x: x.get("distance", float("inf")))
         return all_results[:n_results]
 
+    def enhanced_search(self, query: str, n_results: int = None, frameworks: Optional[List[str]] = None, 
+                       use_hybrid: bool = None, use_reranking: bool = None) -> List[Dict]:
+        """
+        Enhanced search with hybrid retrieval and reranking when available.
+        Falls back to regular search if RAG optimizations are not available.
+        
+        Args:
+            query: Search query
+            n_results: Number of results to return
+            frameworks: Specific frameworks to search
+            use_hybrid: Override hybrid search setting
+            use_reranking: Override reranking setting
+        
+        Returns:
+            List of enhanced search results
+        """
+        if n_results is None:
+            n_results = self.config_overrides.get(
+                "default_search_results",
+                get_config_value("VectorDatabase", "default_search_results", 7, int)
+            )
+        
+        # If RAG optimizations are not available, fall back to regular search
+        if not RAG_OPTIMIZATIONS_AVAILABLE:
+            return self.search(query, n_results=n_results, frameworks=frameworks)
+        
+        # Determine which features to use
+        use_hybrid = use_hybrid if use_hybrid is not None else self.enable_hybrid_search
+        use_reranking = use_reranking if use_reranking is not None else self.enable_reranking
+        
+        search_results = []
+        
+        if use_hybrid and self.hybrid_retriever:
+            # Use hybrid search
+            try:
+                hybrid_results = self.hybrid_retriever.hybrid_search(
+                    query, n_results=n_results*2, frameworks=frameworks  # Get more results for reranking
+                )
+                
+                # Convert to standard format
+                for result in hybrid_results:
+                    search_results.append({
+                        "text": result.text,
+                        "metadata": result.metadata,
+                        "framework": result.framework,
+                        "distance": 1.0 - result.hybrid_score if result.hybrid_score else 0.5,
+                        "hybrid_score": result.hybrid_score,
+                        "retrieval_method": "hybrid"
+                    })
+                
+                print(f"Hybrid search returned {len(search_results)} results")
+                
+            except Exception as e:
+                print(f"Hybrid search failed, falling back to semantic: {e}")
+                use_hybrid = False
+        
+        if not use_hybrid:
+            # Fall back to semantic search only
+            search_results = self.search(query, n_results=n_results*2, frameworks=frameworks)
+            
+            # Add retrieval method info
+            for result in search_results:
+                result["retrieval_method"] = "semantic"
+        
+        # Apply reranking if enabled
+        if use_reranking and self.reranker and search_results:
+            try:
+                # Convert to SearchResult objects
+                search_result_objects = []
+                for result in search_results:
+                    sr = SearchResult(
+                        chunk_id=result["metadata"].get("chunk_id", ""),
+                        text=result["text"],
+                        metadata=result["metadata"],
+                        framework=result.get("framework", ""),
+                        semantic_score=1.0 - result.get("distance", 0.5),
+                        hybrid_score=result.get("hybrid_score"),
+                        retrieval_method=result.get("retrieval_method", "unknown")
+                    )
+                    search_result_objects.append(sr)
+                
+                # Rerank results
+                ranked_results = self.reranker.rerank_results(query, search_result_objects, top_k=n_results)
+                
+                # Convert back to standard format
+                final_results = []
+                for ranked_result in ranked_results:
+                    result_dict = {
+                        "text": ranked_result.search_result.text,
+                        "metadata": ranked_result.search_result.metadata,
+                        "framework": ranked_result.search_result.framework,
+                        "distance": 1.0 - ranked_result.rerank_score,
+                        "rerank_score": ranked_result.rerank_score,
+                        "confidence": ranked_result.confidence,
+                        "rank_change": ranked_result.rank_change,
+                        "retrieval_method": ranked_result.search_result.retrieval_method + "+rerank"
+                    }
+                    final_results.append(result_dict)
+                
+                print(f"Reranking refined results to {len(final_results)} items")
+                return final_results
+                
+            except Exception as e:
+                print(f"Reranking failed, returning unranked results: {e}")
+        
+        # Return top n_results without reranking
+        return search_results[:n_results]
+
     def search_framework(
         self, query: str, framework_name: str, n_results: int = None
     ) -> List[Dict]:
@@ -237,6 +414,28 @@ class VectorDatabase:
             "collections": collection_details,
             "num_collections": len(collection_details),
         }
+
+    def save_indexes(self, index_dir: str = None) -> None:
+        """Save BM25 indexes to disk if hybrid search is enabled."""
+        if RAG_OPTIMIZATIONS_AVAILABLE and self.enable_hybrid_search and self.hybrid_retriever:
+            try:
+                if index_dir is None:
+                    index_dir = str(self.db_path / "indexes")
+                self.hybrid_retriever.save_indexes(index_dir)
+                print(f"✓ Indexes saved to {index_dir}")
+            except Exception as e:
+                print(f"Warning: Failed to save indexes: {e}")
+
+    def load_indexes(self, index_dir: str = None) -> None:
+        """Load BM25 indexes from disk if hybrid search is enabled."""
+        if RAG_OPTIMIZATIONS_AVAILABLE and self.enable_hybrid_search and self.hybrid_retriever:
+            try:
+                if index_dir is None:
+                    index_dir = str(self.db_path / "indexes")
+                self.hybrid_retriever.load_indexes(index_dir)
+                print(f"✓ Indexes loaded from {index_dir}")
+            except Exception as e:
+                print(f"Warning: Failed to load indexes: {e}")
 
     @classmethod
     def initialize_from_chunks(

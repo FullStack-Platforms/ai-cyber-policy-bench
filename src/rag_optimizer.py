@@ -210,7 +210,7 @@ class SmartChunker:
     
     def chunk_document(self, doc: DoclingDocument, framework_name: str, document_name: str) -> List[OptimizedChunk]:
         """Chunk a document using the smart chunking strategy."""
-        text = doc.text
+        text = doc.export_to_markdown()
         
         # Pre-processing: clean up excessive whitespace
         text = re.sub(r'\n\s*\n\s*\n+', '\n\n', text)
@@ -342,6 +342,20 @@ class OptimizedFrameworkProcessor:
             ]) / self.processing_stats['total_chunks']
         
         return self.processing_stats.copy()
+    
+    def process_all_frameworks(self, frameworks_dir="data/cyber-frameworks"):
+        """Process all frameworks - compatibility wrapper."""
+        return create_optimized_chunks(frameworks_dir)
+
+    def save_chunks(self, all_chunks, output_dir="output/chunks"):
+        """Save chunks - compatibility wrapper."""
+        output_path = Path(output_dir)
+        output_path.mkdir(parents=True, exist_ok=True)
+        
+        for framework_name, data in all_chunks.items():
+            framework_file = output_path / f"{framework_name.lower().replace(' ', '_')}_chunks.json"
+            with open(framework_file, "w", encoding="utf-8") as f:
+                json.dump(data, f, indent=2, ensure_ascii=False)
 
 
 def create_optimized_chunks(frameworks_dir: str = "data/cyber-frameworks") -> Dict[str, Any]:

@@ -51,9 +51,18 @@ class VectorDatabase:
 
         # Initialize embedding model
         embedding_model_name = config.get(
-            "VectorDatabase", "embedding_model", fallback="all-MiniLM-L6-v2"
+            "VectorDatabase", "embedding_model", fallback="all-mpnet-base-v2"
         )
         self.embedding_model = SentenceTransformer(embedding_model_name)
+        
+        # Validate embedding dimensions match config
+        expected_dim = config.get("VectorDatabase", "embedding_dimensions", fallback="768")
+        actual_dim = self.embedding_model.get_sentence_embedding_dimension()
+        if str(actual_dim) != str(expected_dim):
+            print(f"Warning: Embedding model dimension ({actual_dim}) doesn't match config ({expected_dim})")
+            print(f"Using model: {embedding_model_name}")
+        
+        print(f"Initialized embedding model: {embedding_model_name} ({actual_dim} dimensions)")
 
         # Store collections by framework name
         self.collections = {}
@@ -104,12 +113,17 @@ class VectorDatabase:
         try:
             collection = self.client.get_collection(collection_name)
         except Exception:
+            # Create new collection with proper embedding function
             vector_space = config.get(
                 "VectorDatabase", "vector_space", fallback="cosine"
             )
+            embedding_model_name = config.get("VectorDatabase", "embedding_model", fallback="all-mpnet-base-v2")
             collection = self.client.create_collection(
                 name=collection_name,
                 metadata={"hnsw:space": vector_space, "framework": framework_name},
+                embedding_function=chromadb.utils.embedding_functions.SentenceTransformerEmbeddingFunction(
+                    model_name=embedding_model_name
+                )
             )
 
         self.collections[collection_name] = collection
@@ -226,7 +240,14 @@ class VectorDatabase:
                             }
                         )
             except Exception as e:
-                print(f"Warning: Could not search {framework_name} collection: {e}")
+                error_msg = str(e)
+                if "embedding with dimension" in error_msg:
+                    print(f"Warning: Could not search {framework_name} collection: {e}")
+                    print(f"This indicates a dimension mismatch. The collection was likely created with a different embedding model.")
+                    print(f"Current model: {self.embedding_model.get_sentence_embedding_dimension()} dimensions")
+                    print(f"Consider recreating the vector database or using the correct embedding model.")
+                else:
+                    print(f"Warning: Could not search {framework_name} collection: {e}")
                 continue
 
         # Sort by distance (lower is better) and limit to n_results

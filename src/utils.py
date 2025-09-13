@@ -275,7 +275,7 @@ async def retry_with_backoff(
                 raise
 
             # Calculate delay with exponential backoff
-            delay = min(base_delay * (exponential_base ** attempt), max_delay)
+            delay = min(base_delay * (exponential_base**attempt), max_delay)
 
             logging.warning(
                 f"Attempt {attempt + 1}/{max_retries + 1} failed: {e}. "

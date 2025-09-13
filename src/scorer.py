@@ -640,7 +640,7 @@ Respond with JSON in this format:
                         explanation=f"Error in LLM judge: {str(e)}",
                         details={"error": str(e)},
                     )
-                await asyncio.sleep(2 ** attempt)  # Exponential backoff
+                await asyncio.sleep(2**attempt)  # Exponential backoff
 
     def conciseness_score(
         self, model_response: str, question: str = None

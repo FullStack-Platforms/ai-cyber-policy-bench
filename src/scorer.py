@@ -477,9 +477,11 @@ class AccuracyScorer:
             # Check SOC 2 controls
             soc2_match = re.match(r"([A-Z]{1,3})(\d+)\.(\d+)", control)
             if soc2_match:
-                prefix, _, minor = (
-                    soc2_match.groups()
-                )  # major not used in current logic
+                (
+                    prefix,
+                    _,
+                    minor,
+                ) = soc2_match.groups()  # major not used in current logic
                 if (
                     prefix in valid_patterns["SOC2"]
                     and int(minor) in valid_patterns["SOC2"][prefix]
@@ -638,7 +640,7 @@ Respond with JSON in this format:
                         explanation=f"Error in LLM judge: {str(e)}",
                         details={"error": str(e)},
                     )
-                await asyncio.sleep(2**attempt)  # Exponential backoff
+                await asyncio.sleep(2 ** attempt)  # Exponential backoff
 
     def conciseness_score(
         self, model_response: str, question: str = None

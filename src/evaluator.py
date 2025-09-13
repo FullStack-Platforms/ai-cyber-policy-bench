@@ -54,11 +54,11 @@ class CyberPolicyEvaluator:
         self.vector_db = vector_db
         self.client = client or get_openai_client()
         self.config_overrides = config_overrides or {}
-        
+
         # Initialize semaphore for rate limiting parallel requests
         parallel_requests = get_config_value("Evaluation", "parallel_requests", 5, int)
         self.semaphore = asyncio.Semaphore(parallel_requests)
-        
+
         # Initialize async lock for progress tracking
         self.progress_lock = asyncio.Lock()
 
@@ -346,34 +346,42 @@ Please provide a precise answer based on the context provided. Be specific about
     ) -> EvaluationResult:
         """Evaluate a single question with async-safe progress tracking."""
         # Initialize completed counter as class attribute if not exists
-        if not hasattr(self, '_completed_evaluations'):
+        if not hasattr(self, "_completed_evaluations"):
             self._completed_evaluations = 0
-        
+
         try:
             # Perform the actual evaluation
             result = await self.evaluate_single_question(
                 question_data, model_name, evaluation_mode, framework_files
             )
-            
+
             # Update progress with thread safety
             async with self.progress_lock:
                 self._completed_evaluations += 1
                 completed = self._completed_evaluations
-                
+
                 # Print progress every 10 completions or at significant milestones
                 if completed % 10 == 0 or completed == total_evaluations:
-                    progress_percent = (completed / total_evaluations * 100) if total_evaluations > 0 else 0
-                    print(f"Progress: {completed}/{total_evaluations} ({progress_percent:.1f}%) - Latest: {model_name}/{evaluation_mode.value}")
-            
+                    progress_percent = (
+                        (completed / total_evaluations * 100)
+                        if total_evaluations > 0
+                        else 0
+                    )
+                    print(
+                        f"Progress: {completed}/{total_evaluations} ({progress_percent:.1f}%) - Latest: {model_name}/{evaluation_mode.value}"
+                    )
+
             return result
-            
+
         except Exception as e:
             # Update progress even for failed evaluations
             async with self.progress_lock:
                 self._completed_evaluations += 1
                 completed = self._completed_evaluations
-                print(f"Failed evaluation {completed}/{total_evaluations}: {model_name}/{evaluation_mode.value} - {str(e)}")
-            
+                print(
+                    f"Failed evaluation {completed}/{total_evaluations}: {model_name}/{evaluation_mode.value} - {str(e)}"
+                )
+
             raise
 
     async def run_evaluation(
@@ -396,10 +404,10 @@ Please provide a precise answer based on the context provided. Be specific about
             self.vector_db = VectorDatabase.initialize_from_chunks()
 
         total_evaluations = len(models) * len(questions) * len(modes)
-        
+
         # Initialize progress tracking
         self._completed_evaluations = 0
-        
+
         print(
             f"Starting parallel evaluation: {len(models)} models × {len(questions)} questions × {len(modes)} modes = {total_evaluations} total evaluations"
         )
@@ -408,12 +416,16 @@ Please provide a precise answer based on the context provided. Be specific about
         # Create all evaluation tasks
         tasks = []
         task_metadata = []  # Track model/question/mode for each task
-        
+
         for model_name in models:
             for mode in modes:
                 for question_data in questions:
                     task = self._evaluate_single_question_with_progress(
-                        question_data, model_name, mode, framework_files, total_evaluations
+                        question_data,
+                        model_name,
+                        mode,
+                        framework_files,
+                        total_evaluations,
                     )
                     tasks.append(task)
                     task_metadata.append((model_name, mode, question_data["input"]))
@@ -431,10 +443,10 @@ Please provide a precise answer based on the context provided. Be specific about
         results = {}
         for i, result in enumerate(all_results):
             model_name, mode, question = task_metadata[i]
-            
+
             if model_name not in results:
                 results[model_name] = []
-            
+
             # Handle exceptions from individual tasks
             if isinstance(result, Exception):
                 print(f"Task failed for {model_name}/{mode.value}: {result}")
@@ -455,7 +467,13 @@ Please provide a precise answer based on the context provided. Be specific about
         # Print completion summary
         print("\nParallel evaluation completed!")
         for model_name, model_results in results.items():
-            successful = len([r for r in model_results if not r.model_response.startswith("TASK_FAILURE")])
+            successful = len(
+                [
+                    r
+                    for r in model_results
+                    if not r.model_response.startswith("TASK_FAILURE")
+                ]
+            )
             total = len(model_results)
             print(f"  {model_name}: {successful}/{total} successful evaluations")
 

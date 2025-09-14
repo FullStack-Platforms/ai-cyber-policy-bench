@@ -4,12 +4,10 @@ Provides second-stage ranking to optimize retrieval results quality.
 """
 
 import torch
-from typing import List, Dict, Any, Optional, Tuple
+from typing import List, Dict, Any, Tuple
 from dataclasses import dataclass
 from sentence_transformers import CrossEncoder
 import numpy as np
-from pathlib import Path
-import json
 
 try:
     from .hybrid_search import SearchResult
@@ -390,7 +388,7 @@ if __name__ == "__main__":
 
         # Test statistics
         stats = reranker.get_reranking_statistics(ranked_results)
-        print(f"\nReranking statistics:")
+        print("\nReranking statistics:")
         print(f"Mean score: {stats['score_stats']['mean']:.3f}")
         print(
             f"High confidence results: {stats['confidence_stats']['high_confidence_count']}"

@@ -262,13 +262,13 @@ class VectorDatabase:
                 if "embedding with dimension" in error_msg:
                     print(f"Warning: Could not search {framework_name} collection: {e}")
                     print(
-                        f"This indicates a dimension mismatch. The collection was likely created with a different embedding model."
+                        "This indicates a dimension mismatch. The collection was likely created with a different embedding model."
                     )
                     print(
                         f"Current model: {self.embedding_model.get_sentence_embedding_dimension()} dimensions"
                     )
                     print(
-                        f"Consider recreating the vector database or using the correct embedding model."
+                        "Consider recreating the vector database or using the correct embedding model."
                     )
                 else:
                     print(f"Warning: Could not search {framework_name} collection: {e}")

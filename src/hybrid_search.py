@@ -4,14 +4,12 @@ Provides keyword-based search alongside vector similarity for improved retrieval
 """
 
 import math
-import json
 import pickle
 import re
 from pathlib import Path
 from typing import List, Dict, Any, Optional, Tuple, Set
 from dataclasses import dataclass
-from collections import defaultdict, Counter
-import sqlite3
+from collections import Counter
 
 try:
     from .utils import get_config, get_config_value

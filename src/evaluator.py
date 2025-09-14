@@ -167,7 +167,7 @@ class CyberPolicyEvaluator:
                         "error": True,
                         "error_message": f"Model query failed after {max_retries} attempts: {error_msg}",
                     }
-                await asyncio.sleep(2**attempt)  # Exponential backoff
+                await asyncio.sleep(2 ** attempt)  # Exponential backoff
 
     def create_prompt(self, question: str, context: Optional[str] = None) -> str:
         """Create evaluation prompt with optional context."""

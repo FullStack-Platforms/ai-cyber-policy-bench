@@ -15,7 +15,7 @@ from docling_core.types.doc import DoclingDocument
 try:
     from .utils import get_config, get_config_value
 except ImportError:
-    from src.utils import get_config, get_config_value
+    from src.utils import get_config
 
 
 @dataclass
@@ -436,7 +436,7 @@ def create_optimized_chunks(
 
     # Print processing summary
     stats = processor.get_processing_summary()
-    print(f"\n=== Processing Summary ===")
+    print("\n=== Processing Summary ===")
     print(f"Documents processed: {stats['total_documents']}")
     print(f"Total chunks created: {stats['total_chunks']}")
     print(f"Oversized chunks (skipped): {stats['oversized_chunks']}")

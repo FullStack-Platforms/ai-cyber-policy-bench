@@ -167,15 +167,15 @@ class CyberPolicyEvaluator:
 
                     return {"response": content, "error": False, "error_message": ""}
 
-            except Exception as e:
-                error_msg = str(e)
-                if attempt == max_retries - 1:
-                    return {
-                        "response": "",
-                        "error": True,
-                        "error_message": f"Model query failed after {max_retries} attempts: {error_msg}",
-                    }
-                await asyncio.sleep(2 ** attempt)  # Exponential backoff
+                except Exception as e:
+                    error_msg = str(e)
+                    if attempt == max_retries - 1:
+                        return {
+                            "response": "",
+                            "error": True,
+                            "error_message": f"Model query failed after {max_retries} attempts: {error_msg}",
+                        }
+                    await asyncio.sleep(2 ** attempt)  # Exponential backoff
 
     def create_prompt(self, question: str, context: Optional[str] = None) -> str:
         """Create evaluation prompt with optional context."""

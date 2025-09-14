@@ -13,7 +13,7 @@ from docling.document_converter import DocumentConverter
 from docling_core.types.doc import DoclingDocument
 
 try:
-    from .utils import get_config, get_config_value
+    from .utils import get_config
 except ImportError:
     from src.utils import get_config
 

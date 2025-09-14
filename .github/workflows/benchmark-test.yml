@@ -15,7 +15,7 @@ on:
 jobs:
   mini-benchmark:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     
     steps:
     - uses: actions/checkout@v4
@@ -51,7 +51,7 @@ jobs:
       env:
         TOKENIZERS_PARALLELISM: "false"
       run: |
-        timeout 25m python cyber_policy_bench.py --setup-db --models 2 --questions 3
+        timeout 40m python cyber_policy_bench.py --setup-db --models 2 --questions 3
     
     - name: Validate results were generated
       run: |

@@ -504,7 +504,6 @@ class HybridRetriever:
         self, query: str, n_results: int = 10, frameworks: Optional[List[str]] = None
     ) -> List[SearchResult]:
         """Perform hybrid search combining semantic and keyword-based retrieval."""
-        enhanced_query = self.enhance_query(query)
         results = []
 
         # Perform semantic search
@@ -581,7 +580,7 @@ class HybridRetriever:
                             metadata = vr["metadata"]
                             framework = vr.get("framework", "")
                             break
-                except:
+                except Exception:
                     continue
 
             if doc_text:

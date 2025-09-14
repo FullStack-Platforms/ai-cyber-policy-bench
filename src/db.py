@@ -16,9 +16,8 @@ except ImportError:
 
 # Import RAG optimization modules when available
 try:
-    from .rag_optimizer import create_optimized_chunks, OptimizedFrameworkProcessor
-    from .hybrid_search import HybridRetriever, BM25Index, SearchResult
-    from .reranker import CrossEncoderReranker, RankedResult
+    from .hybrid_search import HybridRetriever, SearchResult
+    from .reranker import CrossEncoderReranker
 
     RAG_OPTIMIZATIONS_AVAILABLE = True
 except ImportError:

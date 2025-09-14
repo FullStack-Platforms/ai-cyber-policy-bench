@@ -89,12 +89,13 @@ def setup_vector_database() -> VectorDatabase:
             # Try to use optimized framework processor if available
             try:
                 from src.rag_optimizer import OptimizedFrameworkProcessor
+
                 framework_processor = OptimizedFrameworkProcessor()
                 logger.info("Using optimized framework processor with smart chunking")
             except ImportError:
                 framework_processor = FrameworkProcessor()
                 logger.info("Using standard framework processor")
-            
+
             all_chunks = framework_processor.process_all_frameworks()
             framework_processor.save_chunks(all_chunks)
 
@@ -102,7 +103,7 @@ def setup_vector_database() -> VectorDatabase:
 
     with Timer("Vector database initialization"):
         vector_db = VectorDatabase.initialize_from_chunks()
-        
+
         # Use optimized chunks if available
         chunks_path = Path(chunks_dir)
         if chunks_path.exists():
@@ -112,9 +113,9 @@ def setup_vector_database() -> VectorDatabase:
                     framework_data = json.load(f)
                     framework_name = framework_data["metadata"]["framework"]["name"]
                     all_chunks[framework_name] = framework_data
-            
+
             # Use optimized add method if available
-            if hasattr(vector_db, 'add_optimized_chunks'):
+            if hasattr(vector_db, "add_optimized_chunks"):
                 vector_db.add_optimized_chunks(all_chunks)
             else:
                 vector_db.add_chunks(all_chunks)

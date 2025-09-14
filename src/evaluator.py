@@ -55,6 +55,13 @@ class CyberPolicyEvaluator:
         self.client = client or get_openai_client()
         self.config_overrides = config_overrides or {}
 
+        # Initialize semaphore for rate limiting parallel requests
+        parallel_requests = get_config_value("Evaluation", "parallel_requests", 5, int)
+        self.semaphore = asyncio.Semaphore(parallel_requests)
+
+        # Initialize async lock for progress tracking
+        self.progress_lock = asyncio.Lock()
+
     def load_evaluation_questions(
         self, questions_file: str = None, filter_criteria: Dict[str, str] = None
     ) -> List[Dict]:
@@ -139,35 +146,36 @@ class CyberPolicyEvaluator:
         Returns:
             dict: {"response": str, "error": bool, "error_message": str}
         """
-        for attempt in range(max_retries):
-            try:
-                response = await asyncio.to_thread(
-                    self.client.chat.completions.create,
-                    model=model_name,
-                    messages=[{"role": "user", "content": prompt}],
-                    temperature=0.1,
-                )
-                content = response.choices[0].message.content.strip()
+        async with self.semaphore:  # Rate limiting with semaphore
+            for attempt in range(max_retries):
+                try:
+                    response = await asyncio.to_thread(
+                        self.client.chat.completions.create,
+                        model=model_name,
+                        messages=[{"role": "user", "content": prompt}],
+                        temperature=0.1,
+                    )
+                    content = response.choices[0].message.content.strip()
 
-                # Basic validation of response
-                if not content:
-                    return {
-                        "response": "",
-                        "error": True,
-                        "error_message": "Model returned empty response",
-                    }
+                    # Basic validation of response
+                    if not content:
+                        return {
+                            "response": "",
+                            "error": True,
+                            "error_message": "Model returned empty response",
+                        }
 
-                return {"response": content, "error": False, "error_message": ""}
+                    return {"response": content, "error": False, "error_message": ""}
 
-            except Exception as e:
-                error_msg = str(e)
-                if attempt == max_retries - 1:
-                    return {
-                        "response": "",
-                        "error": True,
-                        "error_message": f"Model query failed after {max_retries} attempts: {error_msg}",
-                    }
-                await asyncio.sleep(2**attempt)  # Exponential backoff
+                except Exception as e:
+                    error_msg = str(e)
+                    if attempt == max_retries - 1:
+                        return {
+                            "response": "",
+                            "error": True,
+                            "error_message": f"Model query failed after {max_retries} attempts: {error_msg}",
+                        }
+                    await asyncio.sleep(2**attempt)  # Exponential backoff
 
     def create_prompt(self, question: str, context: Optional[str] = None) -> str:
         """Create evaluation prompt with optional context."""
@@ -319,6 +327,54 @@ Please provide a precise answer based on the context provided. Be specific about
             timestamp=datetime.now().isoformat(),
         )
 
+    async def _evaluate_single_question_with_progress(
+        self,
+        question_data: Dict,
+        model_name: str,
+        evaluation_mode: EvaluationMode,
+        framework_files: Optional[Dict[str, str]] = None,
+        total_evaluations: int = 0,
+    ) -> EvaluationResult:
+        """Evaluate a single question with async-safe progress tracking."""
+        # Initialize completed counter as class attribute if not exists
+        if not hasattr(self, "_completed_evaluations"):
+            self._completed_evaluations = 0
+
+        try:
+            # Perform the actual evaluation
+            result = await self.evaluate_single_question(
+                question_data, model_name, evaluation_mode, framework_files
+            )
+
+            # Update progress with thread safety
+            async with self.progress_lock:
+                self._completed_evaluations += 1
+                completed = self._completed_evaluations
+
+                # Print progress every 10 completions or at significant milestones
+                if completed % 10 == 0 or completed == total_evaluations:
+                    progress_percent = (
+                        (completed / total_evaluations * 100)
+                        if total_evaluations > 0
+                        else 0
+                    )
+                    print(
+                        f"Progress: {completed}/{total_evaluations} ({progress_percent:.1f}%) - Latest: {model_name}/{evaluation_mode.value}"
+                    )
+
+            return result
+
+        except Exception as e:
+            # Update progress even for failed evaluations
+            async with self.progress_lock:
+                self._completed_evaluations += 1
+                completed = self._completed_evaluations
+                print(
+                    f"Failed evaluation {completed}/{total_evaluations}: {model_name}/{evaluation_mode.value} - {str(e)}"
+                )
+
+            raise
+
     async def run_evaluation(
         self,
         models: List[str],
@@ -326,8 +382,7 @@ Please provide a precise answer based on the context provided. Be specific about
         modes: List[EvaluationMode],
         output_dir: str = "experiment_results",
     ) -> Dict[str, List[Dict]]:
-        """Run complete evaluation across models, questions, and modes."""
-        results = {}
+        """Run complete evaluation across models, questions, and modes with parallel execution."""
         framework_files = None
 
         # Load framework files if needed
@@ -340,40 +395,78 @@ Please provide a precise answer based on the context provided. Be specific about
             self.vector_db = VectorDatabase.initialize_from_chunks()
 
         total_evaluations = len(models) * len(questions) * len(modes)
-        completed = 0
+
+        # Initialize progress tracking
+        self._completed_evaluations = 0
 
         print(
-            f"Starting evaluation: {len(models)} models × {len(questions)} questions × {len(modes)} modes = {total_evaluations} total evaluations"
+            f"Starting parallel evaluation: {len(models)} models × {len(questions)} questions × {len(modes)} modes = {total_evaluations} total evaluations"
         )
+        print(f"Parallel requests limit: {self.semaphore._value}")
+
+        # Create all evaluation tasks
+        tasks = []
+        task_metadata = []  # Track model/question/mode for each task
 
         for model_name in models:
-            model_results = []
-            print(f"\nEvaluating model: {model_name}")
-
             for mode in modes:
-                print(f"  Mode: {mode.value}")
+                for question_data in questions:
+                    task = self._evaluate_single_question_with_progress(
+                        question_data,
+                        model_name,
+                        mode,
+                        framework_files,
+                        total_evaluations,
+                    )
+                    tasks.append(task)
+                    task_metadata.append((model_name, mode, question_data["input"]))
 
-                for i, question_data in enumerate(questions):
-                    try:
-                        result = await self.evaluate_single_question(
-                            question_data, model_name, mode, framework_files
-                        )
-                        model_results.append(result)
-                        completed += 1
+        print(f"Created {len(tasks)} parallel evaluation tasks")
 
-                        if (i + 1) % 5 == 0:  # Progress update every 5 questions
-                            print(f"    Completed {i + 1}/{len(questions)} questions")
+        # Execute all tasks in parallel with semaphore rate limiting
+        try:
+            all_results = await asyncio.gather(*tasks, return_exceptions=True)
+        except Exception as e:
+            print(f"Error in parallel execution: {e}")
+            raise
 
-                    except Exception as e:
-                        print(f"    Error evaluating question {i + 1}: {e}")
-                        completed += 1
-                        continue
+        # Group results by model
+        results = {}
+        for i, result in enumerate(all_results):
+            model_name, mode, question = task_metadata[i]
 
-                    # Small delay to avoid rate limiting
-                    await asyncio.sleep(0.5)
+            if model_name not in results:
+                results[model_name] = []
 
-            results[model_name] = model_results
-            print(f"  Completed {model_name}: {len(model_results)} results")
+            # Handle exceptions from individual tasks
+            if isinstance(result, Exception):
+                print(f"Task failed for {model_name}/{mode.value}: {result}")
+                # Create a failure result
+                failure_result = EvaluationResult(
+                    question=question,
+                    ideal_answer="N/A",
+                    model_response=f"TASK_FAILURE: {str(result)}",
+                    model_name=model_name,
+                    evaluation_mode=mode,
+                    context_provided=None,
+                    timestamp=datetime.now().isoformat(),
+                )
+                results[model_name].append(failure_result)
+            else:
+                results[model_name].append(result)
+
+        # Print completion summary
+        print("\nParallel evaluation completed!")
+        for model_name, model_results in results.items():
+            successful = len(
+                [
+                    r
+                    for r in model_results
+                    if not r.model_response.startswith("TASK_FAILURE")
+                ]
+            )
+            total = len(model_results)
+            print(f"  {model_name}: {successful}/{total} successful evaluations")
 
         # Convert results to dict format for downstream compatibility
         dict_results = {}
@@ -394,7 +487,7 @@ Please provide a precise answer based on the context provided. Be specific about
 
         # Save results
         self.save_results(results, output_dir)
-        print(f"\nEvaluation complete! Results saved to {output_dir}")
+        print(f"Results saved to {output_dir}")
 
         return dict_results
 

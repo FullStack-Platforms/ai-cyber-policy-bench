@@ -477,9 +477,11 @@ class AccuracyScorer:
             # Check SOC 2 controls
             soc2_match = re.match(r"([A-Z]{1,3})(\d+)\.(\d+)", control)
             if soc2_match:
-                prefix, _, minor = (
-                    soc2_match.groups()
-                )  # major not used in current logic
+                (
+                    prefix,
+                    _,
+                    minor,
+                ) = soc2_match.groups()  # major not used in current logic
                 if (
                     prefix in valid_patterns["SOC2"]
                     and int(minor) in valid_patterns["SOC2"][prefix]

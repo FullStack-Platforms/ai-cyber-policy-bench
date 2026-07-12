@@ -252,7 +252,7 @@ def test_question_loading():
         frameworks = q["metadata"].get("framework", "N/A")
         industry = q["metadata"].get("industry", "N/A")
         difficulty = q["metadata"].get("difficulty", "N/A")
-        print(f"  {q['question_id']}: {frameworks} ({industry}, {difficulty})")
+print(f"  {q[\"question_id\"]}: {frameworks} ({industry}, {difficulty})")
 
 
 if __name__ == "__main__":

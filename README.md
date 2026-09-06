@@ -34,7 +34,8 @@ A comprehensive benchmarking suite for evaluating AI models on cybersecurity pol
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Python 3.9+
+- Python 3.10-3.12
+- uv
 - API keys for OpenRouter and/or OpenAI
 - Git
 
@@ -44,36 +45,31 @@ A comprehensive benchmarking suite for evaluating AI models on cybersecurity pol
 git clone https://github.com/your-org/cyber-policy-bench.git
 cd cyber-policy-bench
 
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
+# Create a locked virtual environment
+uv sync
 
 # Configure the benchmark
 cp config.example.cfg config.cfg
 # Edit config.cfg with your API keys
 
 # Run a quick test
-python cyber_policy_bench.py --models 2 --questions 3 --setup-db
+uv run python cyber_policy_bench.py --models 2 --questions 3 --setup-db
 ```
 
 ## 📦 Installation
 
 ### Standard Installation
 ```bash
-pip install -r requirements.txt
+uv sync
 ```
 
 ### Development Installation
 ```bash
-# Install with development dependencies
-pip install -r requirements.txt
-pip install black
+# Install runtime and development dependencies from uv.lock
+uv sync --dev
 
 # Install pre-commit hooks (optional)
-pre-commit install
+uv run pre-commit install
 ```
 
 ### Dependencies
@@ -131,13 +127,13 @@ export BENCHMARK_OUTPUT_DIR="./results"
 ### Basic Evaluation
 ```bash
 # Run with default settings (2 models, 3 questions)
-python cyber_policy_bench.py --setup-db
+uv run python cyber_policy_bench.py --setup-db
 
 # Custom evaluation
-python cyber_policy_bench.py --models 5 --questions 10 --setup-db
+uv run python cyber_policy_bench.py --models 5 --questions 10 --setup-db
 
 # Use existing vector database
-python cyber_policy_bench.py --models 3 --questions 5
+uv run python cyber_policy_bench.py --models 3 --questions 5
 ```
 
 ### Command Line Options
@@ -217,13 +213,13 @@ The benchmark uses an advanced dual judge system for reliable scoring:
 ### Code Quality
 ```bash
 # Linting
-ruff check src/
+uv run ruff check src/
 
 # Formatting
-black src/
+uv run black src/
 
 # Type checking
-mypy src/ --ignore-missing-imports
+uv run mypy src/ --ignore-missing-imports
 ```
 
 ### Project Structure

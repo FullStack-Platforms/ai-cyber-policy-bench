@@ -1,0 +1,36 @@
+[project]
+name = "cyber-policy-bench"
+version = "0.1.0"
+description = "Benchmark AI models on cybersecurity policy and compliance questions."
+readme = "README.md"
+requires-python = ">=3.10,<3.13"
+dependencies = [
+    "chromadb>=1.0.16",
+    "docling>=2.44.0",
+    "docling-core[chunking]>=2.44.1",
+    "numpy>=2.2.6",
+    "openai>=1.99.9",
+    "requests>=2.32.4",
+    "scikit-learn>=1.7.2",
+    "sentence-transformers>=5.1.0",
+    "toml>=0.10.2",
+    "torch>=2.8.0",
+]
+
+[dependency-groups]
+dev = [
+    "black>=25.1.0",
+    "mypy>=1.17.0",
+    "pre-commit>=4.3.0",
+    "ruff>=0.12.0",
+    "types-requests>=2.32.4.20250809",
+]
+
+[tool.uv]
+package = false
+
+[tool.black]
+target-version = ["py310", "py311"]
+
+[tool.ruff]
+target-version = "py310"

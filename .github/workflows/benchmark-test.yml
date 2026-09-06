@@ -21,14 +21,17 @@ jobs:
     - uses: actions/checkout@v4
     
     - name: Set up Python 3.11
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: 3.11
+
+    - name: Set up uv
+      uses: astral-sh/setup-uv@v5
+      with:
+        enable-cache: true
     
     - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+      run: uv sync --locked
     
     - name: Create test config with API keys
       env:
@@ -51,7 +54,7 @@ jobs:
       env:
         TOKENIZERS_PARALLELISM: "false"
       run: |
-        timeout 40m python cyber_policy_bench.py --setup-db --models 2 --questions 3
+        timeout 40m uv run python cyber_policy_bench.py --setup-db --models 2 --questions 3
     
     - name: Validate results were generated
       run: |

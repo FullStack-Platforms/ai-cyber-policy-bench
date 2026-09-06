@@ -186,7 +186,7 @@ async def score_evaluation_results(evaluation_results: Dict) -> Dict:
         # Print judge statistics if available
         if hasattr(scorer, "get_judge_statistics"):
             judge_stats = scorer.get_judge_statistics()
-            logger.info(f"Judge performance statistics:")
+            logger.info("Judge performance statistics:")
             logger.info(f"  Total attempts: {judge_stats['total_scoring_attempts']}")
             if "dual_success_rate" in judge_stats:
                 logger.info(f"  Success rate: {judge_stats['dual_success_rate']:.2%}")
@@ -280,18 +280,18 @@ def save_results(scored_results: Dict, summary: Dict) -> Path:
 def print_summary_report(summary: Dict) -> None:
     """Print formatted summary report."""
     print(f"\n{'='*60}")
-    print(f"CYBER POLICY BENCHMARK RESULTS")
+    print("CYBER POLICY BENCHMARK RESULTS")
     print(f"{'='*60}")
 
-    print(f"\nOverall Performance:")
+    print("\nOverall Performance:")
     print(f"  Total Evaluations: {summary['overall_stats']['total_evaluations']}")
     print(f"  Average Score: {summary['overall_stats']['average_score']:.3f}")
 
-    print(f"\nPerformance by Mode:")
+    print("\nPerformance by Mode:")
     for mode, score in summary["mode_performance"].items():
         print(f"  {mode.replace('_', ' ').title()}: {score:.3f}")
 
-    print(f"\nPerformance by Model:")
+    print("\nPerformance by Model:")
     for model_name, stats in summary["models"].items():
         print(f"  {model_name}:")
         print(f"    Average: {stats['average_score']:.3f}")
@@ -374,11 +374,11 @@ async def main() -> None:
             reporter = create_benchmark_reporter(output_dir=str(output_dir))
             report_paths = reporter.generate_all_reports(scored_results, summary)
 
-            print(f"\nReports generated:")
+            print("\nReports generated:")
             for report_type, path in report_paths.items():
                 print(f"  {report_type}: {path}")
 
-            print(f"\n=== BENCHMARK COMPLETE ===")
+            print("\n=== BENCHMARK COMPLETE ===")
 
     except KeyboardInterrupt:
         logger.info("Benchmark interrupted by user")

@@ -1,5 +1,7 @@
 # Cybersecurity Evaluations Validation Report
 
+> Historical, unverified report. Its six-item dataset and 100% quality claims do not describe the current 101-item JSONL and must not be cited as current validation. The [recomputed archive audit](reports/legacy-audit.md) establishes structural/provenance facts only; [expert source review](doc/refresh-protocol.md) is still required for factual validity.
+
 ## Executive Summary
 
 This report documents the comprehensive evaluation of the `cyber_evals.jsonl` file against ground truth cybersecurity frameworks available in the `data/cyber-frameworks` directory. The analysis identified significant issues with framework grounding and syntax consistency, resulting in a refined evaluation set.

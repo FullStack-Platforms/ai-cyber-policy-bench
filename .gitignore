@@ -27,7 +27,13 @@ convert_to_json.sh
 output/
 vector_db/
 experiment_results/
-reports/
+reports/*
+!reports/legacy-audit.json
+!reports/legacy-audit.md
+# Preserve raw evidence locally; publishing third-party context needs rights review.
+data/legacy/8-19-run/*/*.json
+# Pilot outputs and blind-review identity keys are private by default.
+pilot-runs/
 nohup.out
 
 #config files

@@ -5,6 +5,26 @@
 
 A comprehensive benchmarking suite for evaluating AI models on cybersecurity policy and compliance questions. This tool evaluates model performance across different contexts including no context, raw framework documents, and vector database retrieval.
 
+## Retrospective refresh
+
+Start with the [preserved-export audit](reports/legacy-audit.md), not a new model leaderboard. The local archive contains 710 response records from three August 29–30, 2025 runs over 20 distinct questions. Its summaries include an unrun condition as zero, and the legacy scorer conflates zero grades with judge failures. The audit retains that ambiguity rather than calling score filtering an improvement.
+
+- [Run the offline audit and opt-in 15-question pilot](doc/refresh-workflow.md): standard-library Python, no model calls by default.
+- [Evaluation protocol, human rubric, budget, and limitations](doc/refresh-protocol.md).
+- [Release checklist, paper abstract, classroom lesson, X/LinkedIn/Substack drafts](doc/release-and-teaching.md).
+- [Project citation and third-party license notices](THIRD_PARTY_NOTICES.md), with [framework sources](data/cyber-frameworks/SOURCES.md) and [software/model credits](doc/software-and-model-credits.md).
+
+```sh
+python3 scripts/legacy_audit.py verify
+python3 scripts/legacy_audit.py audit
+python3 scripts/refresh_pilot.py plan
+python3 -m unittest discover -s tests -p 'test_*.py' -v
+```
+
+The audit and pilot require the authorized local exports; a public checkout contains their manifest and aggregate reports, not the copied raw export JSON. Framework documents already bundled elsewhere in this repository still require a separate rights review before distribution. See the workflow for import instructions. The tests need no exports or API keys. No contemporary model gains or classroom learning gains have yet been established.
+
+The sections below describe the **legacy application**, retained for historical use. They are not validation of its scoring, current model availability, or reproducibility. Use the refresh workflow for new comparisons.
+
 ## 🚀 Features
 
 ### Core Functionality
@@ -415,15 +435,21 @@ export PYTHONPATH=. LOGLEVEL=DEBUG python cyber_policy_bench.py
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+The existing [LICENSE](LICENSE) is **custom Apache-derived text with additional dataset-use restrictions**, not MIT or unmodified Apache-2.0. This refresh does not change those terms. Third-party standards, software, model weights, and hosted-service/output terms remain separate; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Attribution alone does not clear bundled framework documents for redistribution or LLM use.
+
+## Citation
+
+Please cite **Jason M. Rodriguez, _Cyber Policy Benchmark_**, using [CITATION.cff](CITATION.cff) or `rodriguez_cyber_policy_bench` in [doc/references.bib](doc/references.bib). The canonical repository is [FullStack-Platforms/ai-cyber-policy-bench](https://github.com/FullStack-Platforms/ai-cyber-policy-bench). Record the exact release/commit and artifact hashes used; no paper or release DOI is claimed.
+
+Also cite the original documents and components actually used: [framework bibliography](doc/framework-references.bib), [source/rights register](data/cyber-frameworks/SOURCES.md), and [software/model credits](doc/software-and-model-credits.md). Cite a source's edition and control/article/section, not just the benchmark's converted copy.
 
 ## 🙏 Acknowledgments
 
 - [OpenRouter](https://openrouter.ai/) for model access
 - [ChromaDB](https://www.trychroma.com/) for vector database functionality
 - [Docling](https://github.com/DS4SD/docling) for document processing
-- The cybersecurity community for framework documentation
-- [EQ-Bench](https://github.com/EQ-bench/EQ-Bench) for the initial inspiration, 
+- The original standards publishers and authors, individually identified in the [framework source register](data/cyber-frameworks/SOURCES.md)
+- [Samuel J. Paech's EQ-Bench](https://arxiv.org/abs/2312.06281) for the acknowledged initial inspiration; its upstream MIT terms are distinct from this project's terms
 
 ## 📞 Support
 

@@ -1,0 +1,42 @@
+{
+  "files": [
+    {
+      "bytes": 3471675,
+      "path": "11-chunks/detailed_results.json",
+      "sha256": "7655b106bb58e1187903ddc8158002650e4730a890eb089e4fe1e51b1ce130d6",
+      "source": "11-chunks/experiment_results/detailed_results.json"
+    },
+    {
+      "bytes": 2100,
+      "path": "11-chunks/summary.json",
+      "sha256": "1c16fbf46fa51f34029bda670d5dcf1e62fab338880eb88b75d6d48a7f8fb8e7",
+      "source": "11-chunks/experiment_results/summary.json"
+    },
+    {
+      "bytes": 14341405,
+      "path": "67-chunks/detailed_results.json",
+      "sha256": "22ec1d80a26d3362476801bdc25a80ee560a7a2656fa25de20d1ae54fc3825ba",
+      "source": "67-chunks/experiment_results/detailed_results.json"
+    },
+    {
+      "bytes": 2139,
+      "path": "67-chunks/summary.json",
+      "sha256": "9d10cc6871dee03dd5a6293a1357b2a13ed358e190648256cfb05f0bc2e0be79",
+      "source": "67-chunks/experiment_results/summary.json"
+    },
+    {
+      "bytes": 3885615,
+      "path": "root/detailed_results.json",
+      "sha256": "299fd6d07855b51820947f8a7e206473e4def357299b386951d931345637a5b6",
+      "source": "experiment_results/detailed_results.json"
+    },
+    {
+      "bytes": 1668,
+      "path": "root/summary.json",
+      "sha256": "c4d825bd6e975692c5ccdb95a94b8b727bf5b962d3c45219f4120ea2eb8a6a68",
+      "source": "experiment_results/summary.json"
+    }
+  ],
+  "schema_version": 1,
+  "source_labels_relative_to": "original 8-19-run directory (not a claimed run date)"
+}

@@ -1,5 +1,7 @@
 # AI Cyber Policy Benchmark Evaluation Methodology
 
+> Historical methodology, not evidence that every listed validation was performed. For the refreshed experiment use [the evidence-aware protocol](doc/refresh-protocol.md) and [runnable workflow](doc/refresh-workflow.md). Legacy judge-score labels can conflate a genuine zero with a failed judge; do not use historical averages as directly comparable contemporary scores.
+
 ## Overview
 
 This document outlines the comprehensive methodology for evaluating Large Language Models (LLMs) on their knowledge and application of cybersecurity frameworks and policies. The benchmark system assesses models across multiple dimensions to understand their capability in providing accurate, practical cybersecurity guidance.
@@ -69,7 +71,7 @@ The benchmark encompasses 11 major cybersecurity frameworks and regulations:
 - Direct knowledge queries about specific controls or requirements
 - Single-framework focus with clear, verifiable answers
 - Test basic comprehension and recall capabilities
-- Example: "What are the five core functions of the NIST Cybersecurity Framework?"
+- Example: "What are the six core Functions of the NIST Cybersecurity Framework 2.0?"
 
 **Complex Reasoning Questions**
 - Multi-step analysis requiring synthesis of multiple concepts

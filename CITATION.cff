@@ -1,0 +1,75 @@
+cff-version: 1.2.0
+type: software
+title: "Cyber Policy Benchmark"
+message: >-
+  Please cite this project when using its code, original evaluation questions,
+  audit methodology, or teaching materials. Also cite the original standards,
+  research, software, and models actually used; see THIRD_PARTY_NOTICES.md and
+  the bibliographies in doc/. Record the exact release or commit and artifact
+  hashes in your methods. No paper or release DOI is asserted by this file.
+authors:
+  - family-names: Rodriguez
+    given-names: "Jason M."
+repository-code: "https://github.com/FullStack-Platforms/ai-cyber-policy-bench"
+url: "https://github.com/FullStack-Platforms/ai-cyber-policy-bench"
+license-url: "https://github.com/FullStack-Platforms/ai-cyber-policy-bench/blob/HEAD/LICENSE"
+abstract: >-
+  A cybersecurity policy and compliance evaluation project with historical
+  context-condition experiments, a provenance-aware export audit, and an
+  opt-in paired contemporary comparison and classroom-review protocol.
+keywords:
+  - cybersecurity
+  - compliance
+  - language-model evaluation
+  - reproducibility
+  - cybersecurity education
+# The root LICENSE is custom Apache-derived text with additional restrictions.
+# Do not mislabel it with the SPDX identifier Apache-2.0 or MIT.
+# Add version, date-released, commit, and DOI only for an actual identified release.
+references:
+  - type: report
+    title: "Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile"
+    authors:
+      - family-names: Autio
+        given-names: Chloe
+      - family-names: Schwartz
+        given-names: Reva
+      - family-names: Dunietz
+        given-names: Jesse
+      - family-names: Jain
+        given-names: Shomik
+      - family-names: Stanley
+        given-names: Martin
+      - family-names: Tabassi
+        given-names: Elham
+      - family-names: Hall
+        given-names: Patrick
+      - family-names: Roberts
+        given-names: Kamie
+    year: 2024
+    doi: "10.6028/NIST.AI.600-1"
+  - type: report
+    title: "Expanding the AI Evaluation Toolbox with Statistical Models"
+    authors:
+      - family-names: Keller
+        given-names: Andrew
+      - family-names: Kwegyir-Aggrey
+        given-names: Kweku
+      - family-names: Steed
+        given-names: Ryan
+      - family-names: Rao
+        given-names: Anita
+      - family-names: Sharp
+        given-names: Julia
+      - family-names: Bergman
+        given-names: Amanda
+    year: 2026
+    doi: "10.6028/NIST.AI.800-3"
+  - type: article
+    title: "EQ-Bench: An Emotional Intelligence Benchmark for Large Language Models"
+    authors:
+      - family-names: Paech
+        given-names: "Samuel J."
+    year: 2023
+    url: "https://arxiv.org/abs/2312.06281"
+    notes: "Acknowledged as inspiration in the project README; not a cybersecurity source or proof of code reuse."

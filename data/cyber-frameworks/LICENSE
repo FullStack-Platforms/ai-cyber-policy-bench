@@ -1,44 +1,48 @@
-# Cybersecurity Frameworks License and Attribution
+# Third-party framework rights and attribution notice
 
-## Important Notice
+This file is a project notice, **not a license grant for the documents in this
+directory**. The original authors and publishers retain their applicable rights.
+The repository's first-party license does not relicense these materials.
 
-All cybersecurity frameworks, standards, and related documents contained within this directory and its subdirectories are **NOT** the property of this project. These documents have been converted from their original formats using docling for research and educational purposes.
+## Source-specific terms and citations
 
-## Original Ownership and Licensing
+See [SOURCES.md](SOURCES.md) for each bundled document's title, edition, original
+publisher, authoritative source, citation key, rights evidence, and release
+disposition. The corresponding bibliography is
+[doc/framework-references.bib](../../doc/framework-references.bib).
 
-Each framework retains its original licensing terms, copyright, and ownership. The converted documents are subject to the terms and conditions of their respective original publishers.
+Preserve the original copyright, attribution, license, and other required notices.
+Where an applicable government-work exception exists, assess its scope and
+jurisdiction and any separately protected third-party content. Do not apply one
+blanket license or noncommercial-use rule to this mixed corpus.
 
-## Conversion Notice
+Educational, research, or noncommercial intent does not itself grant permission
+to copy, convert, upload to model services, include in a retrieval system, or
+redistribute a publisher's material. Check terms for the intended activity.
+Citation is required scholarly attribution, not a substitute for permission.
+See [THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md) for the project-wide
+licensing distinctions and publication gate.
 
-These documents have been processed using docling (document conversion tool) to convert from their original formats (typically PDF) into Markdown format for improved accessibility and machine readability. The conversion process:
+## Conversion and accuracy
 
-- May introduce formatting changes from the original documents
-- Preserves the substantive content to the best extent possible
-- Does not alter the legal meaning or requirements of the original frameworks
+The repository records conversion from original documents to Markdown using
+[Docling](https://github.com/docling-project/docling), for evaluation research.
+Converted text may contain formatting changes, omissions, or errors. Conversion
+does not transfer ownership, create reuse rights, or establish that meaning and
+requirements have been preserved accurately.
 
-## Usage Rights
+Credit the source publisher and conversion tool separately. Verify important
+claims against the authoritative original, retain the source edition/as-of date,
+and distinguish proposals, historical versions, and guidance from current law.
+No publisher endorsement or legal/compliance advice is implied.
 
-Users of these converted documents must:
+## Publication status
 
-1. **Respect Original Rights**: Comply with all original licensing terms and copyright restrictions
-2. **Attribute Properly**: Credit the original publishers and authors when using or referencing these materials
-3. **Check for Updates**: Refer to original sources for the most current versions of these frameworks
-4. **Non-Commercial Use**: Use these materials for educational, research, and compliance purposes
+The presence of a document in this repository is not proof that its redistribution
+has been cleared. Review the source-specific register before releasing a source
+snapshot, excerpts, retrieval contexts, or model outputs containing source text.
+The raw-export ignore rules do not remove framework files already in the
+repository or its history. Do not redistribute uncleared material merely because
+this notice accompanies it.
 
-## Disclaimer
-
-This project:
-- Does NOT claim ownership of any cybersecurity framework or standard
-- Does NOT guarantee the accuracy of converted documents
-- Does NOT provide legal advice regarding compliance with these frameworks
-- RECOMMENDS consulting original sources for authoritative guidance
-
-## Questions or Concerns
-
-For questions about specific framework licensing or to report conversion errors, please refer to the original publishing organizations listed above.
-
----
-
-**Last Updated**: 2025
-**Conversion Method**: docling
-**Purpose**: Educational and research use within Cyber-Policy-Bench project
+Updated for the citation and attribution review: 2026-10-13.
